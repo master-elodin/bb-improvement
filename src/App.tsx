@@ -138,25 +138,30 @@ function App() {
   });
   const [allBranches, setAllBranches] = useState<string[]>([]);
 
-  const refresh = async (resetSort = false) => {
-    setLoading(true);
-    const pullRequests = await getData();
-    const commits = pullRequests.map((pr) => pr.source.commit.hash);
+  const addBuildStatus = async (commits: string[]) => {
     try {
       const statuses = await getStatuses(commits);
-      pullRequests.forEach((pr) => {
-        const status = statuses[pr.source.commit.hash];
-        if (status?.state === 'SUCCESSFUL') {
-          pr.buildStatus = 'success';
-        } else if (status?.state === 'INPROGRESS') {
-          pr.buildStatus = 'in_progress';
-        } else if (status?.state === 'FAILED') {
-          pr.buildStatus = 'fail';
-        }
+      setSortedRows(prevState => {
+        prevState.forEach((pr) => {
+          const status = statuses[pr.source.commit.hash];
+          if (status?.state === 'SUCCESSFUL') {
+            pr.buildStatus = 'success';
+          } else if (status?.state === 'INPROGRESS') {
+            pr.buildStatus = 'in_progress';
+          } else if (status?.state === 'FAILED') {
+            pr.buildStatus = 'fail';
+          }
+        });
+        return [...prevState];
       });
     } catch (e) {
       console.error('Could not add status', e);
     }
+  }
+
+  const refresh = async (resetSort = false) => {
+    setLoading(true);
+    const pullRequests = await getData();
     const branches = [...new Set(pullRequests.map((row) => row.destination.branch.name))].sort();
     filters.branch = {
       any: () => true,
@@ -175,6 +180,8 @@ function App() {
     }
     setSortedRows(getSortedRows(pullRequests, sortColumn, nextSortType.split(':')[1] === 'asc'));
     setLoading(false);
+
+    await addBuildStatus(pullRequests.map((pr) => pr.source.commit.hash));
   };
 
   useEffect(() => {
