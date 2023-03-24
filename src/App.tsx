@@ -24,14 +24,15 @@ InlineStyle({
     width: '100%',
   },
   '.root': {
-    padding: '20px',
+    padding: '20px 0',
     'font-family':
       '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Fira Sans,Droid Sans,Helvetica Neue,sans-serif',
     height: 'calc(100vh - 40px)',
   },
   '.content': {
     height: 'calc(100% - 70px)',
-    padding: '0 12px 12px 0',
+    padding: '0 20px 20px 20px',
+    width: 'calc(100vw - 40px)',
   },
   '.spinner': {
     border: '6px solid rgba(0, 0, 0, 0.15)',
@@ -44,27 +45,29 @@ InlineStyle({
   // TODO: don't copy padding
   '.name-col': {
     padding: '4px 8px',
-    width: '30%',
+    width: '40%',
   },
   '.tasks-col': {
     padding: '4px 8px',
-    width: '80px',
+    'text-align': 'right',
+    width: '100px',
   },
   '.comments-col': {
     padding: '4px 8px',
-    width: '10%',
+    'text-align': 'right',
+    width: '130px',
   },
   '.build-col': {
     padding: '4px 8px',
-    width: '10%',
+    width: '100px',
   },
   '.reviewers-col': {
     padding: '4px 8px',
-    width: '10%',
+    width: '20%',
   },
   '.activity-col': {
     padding: '4px 8px',
-    width: '10%',
+    width: '180px',
   },
   '.reviewerAvatar': {
     position: 'absolute',
@@ -86,7 +89,7 @@ const pageHeaderStyle: React.CSSProperties = {
   display: 'flex',
   justifyContent: 'space-between',
   marginBottom: '20px',
-  paddingBottom: '20px',
+  padding: '0 20px 20px 20px',
 };
 
 const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
@@ -137,17 +140,23 @@ function App() {
 
   const refresh = async (resetSort = false) => {
     setLoading(true);
-    const [pullRequests, statuses] = await Promise.all([getData(), getStatuses()]);
-    pullRequests.forEach((pr) => {
-      const status = statuses[pr.source.commit.hash];
-      if (status?.state === 'SUCCESSFUL') {
-        pr.buildStatus = 'success';
-      } else if (status?.state === 'INPROGRESS') {
-        pr.buildStatus = 'in_progress';
-      } else if (status?.state === 'FAILED') {
-        pr.buildStatus = 'fail';
-      }
-    });
+    const pullRequests = await getData();
+    const commits = pullRequests.map((pr) => pr.source.commit.hash);
+    try {
+      const statuses = await getStatuses(commits);
+      pullRequests.forEach((pr) => {
+        const status = statuses[pr.source.commit.hash];
+        if (status?.state === 'SUCCESSFUL') {
+          pr.buildStatus = 'success';
+        } else if (status?.state === 'INPROGRESS') {
+          pr.buildStatus = 'in_progress';
+        } else if (status?.state === 'FAILED') {
+          pr.buildStatus = 'fail';
+        }
+      });
+    } catch (e) {
+      console.error('Could not add status', e);
+    }
     const branches = [...new Set(pullRequests.map((row) => row.destination.branch.name))].sort();
     filters.branch = {
       any: () => true,
@@ -245,9 +254,13 @@ function App() {
         </div>
       </div>
       <div className={'content'}>
-        {loading && <div className={'spinner'} />}
+        {loading && (
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <div className={'spinner'} />
+          </div>
+        )}
         {!loading && (
-          <div style={{ height: '100%' }}>
+          <div style={{ height: '100%', width: '100%' }}>
             <div style={{ display: 'flex', justifyContent: 'space-around', width: '100%' }}>
               {columns.map((col) => (
                 <div key={col.label} className={col.colClass} onClick={() => onHeaderClick(col.label)}>
@@ -258,7 +271,7 @@ function App() {
                 </div>
               ))}
             </div>
-            <div style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
+            <div style={{ width: '100%', height: 'calc(100% - 40px)', overflowY: 'scroll', overflowX: 'hidden' }}>
               {visibleRows.map((val, index) => (
                 <Row key={index} val={val} index={index} />
               ))}

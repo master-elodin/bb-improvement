@@ -29,10 +29,18 @@ export const getData = async () => {
   return (json.values ?? []) as IRow[];
 };
 
-export const getStatuses = async (): Promise<IStatusResponse> => {
+export const getStatuses = async (commits: string[]): Promise<IStatusResponse> => {
   if (!IS_PROD) {
     return statuses as IStatusResponse;
   }
-  const res = await fetch(`https://bitbucket.org/!api/internal/workspaces/${workspace}/commits/statuses`);
+  const res = await fetch(`https://bitbucket.org/!api/internal/workspaces/${workspace}/commits/statuses`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json; charset=UTF-8',
+      'X-Bitbucket-Frontend': 'frontbucket',
+      'X-CSRFToken': '??', // TODO
+    },
+    body: JSON.stringify({ commits }),
+  });
   return (await res.json()) as IStatusResponse;
 };
