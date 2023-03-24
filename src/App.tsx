@@ -175,7 +175,7 @@ const filters: Record<string, Record<string, IFilter>> = {
 
 function App() {
   const [loading, setLoading] = useState(true);
-  const [sortType, setSortType] = useState<string>(`${columns[columns.length - 1].label}:desc`);
+  const [sortType, setSortType] = useState<string>(`${columns[columns.length - 1].label}:asc`);
   const [sortedRows, setSortedRows] = useState<IRow[]>([]);
   const [currentFilters, setCurrentFilters] = useState<Record<string, IFilter>>({
     tasks: filters.tasks.any,
@@ -221,7 +221,7 @@ function App() {
     let sortColumn = nextSortType.split(':')[0];
     if (resetSort) {
       sortColumn = columns[columns.length - 1].label;
-      nextSortType = `${sortColumn}:desc`;
+      nextSortType = `${sortColumn}:asc`;
       setSortType(nextSortType);
     }
     setSortedRows(getSortedRows(pullRequests, sortColumn, nextSortType.split(':')[1] === 'asc'));
@@ -234,14 +234,14 @@ function App() {
     refresh(true);
   }, []);
 
-  useEffect(() => {
-    setSortedRows((prevState) => {
-      prevState.forEach((row) => {
-        row.hidden = !(currentFilters.tasks(row) && currentFilters.needsReview(row) && currentFilters.branch(row));
-      });
-      return [...prevState];
-    });
-  }, [currentFilters]);
+  // useEffect(() => {
+  //   setSortedRows((prevState) => {
+  //     prevState.forEach((row) => {
+  //       row.hidden = !(currentFilters.tasks(row) && currentFilters.needsReview(row) && currentFilters.branch(row));
+  //     });
+  //     return [...prevState];
+  //   });
+  // }, [currentFilters]);
 
   const onHeaderClick = (colType: string) => {
     const isAsc = sortType === `${colType}:asc`;
@@ -261,7 +261,7 @@ function App() {
   const onTaskFilterSelect = (e: React.ChangeEvent<HTMLSelectElement>) => onFilterSelect(e, 'tasks');
   const onBranchFilterSelect = (e: React.ChangeEvent<HTMLSelectElement>) => onFilterSelect(e, 'branch');
 
-  const visibleRows = sortedRows.filter((row) => !row.hidden);
+  const visibleRows = sortedRows.filter((row) => currentFilters.tasks(row) && currentFilters.needsReview(row) && currentFilters.branch(row));
   return (
     <div className={'root'}>
       <div style={pageHeaderStyle}>

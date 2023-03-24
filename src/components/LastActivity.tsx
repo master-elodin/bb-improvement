@@ -9,7 +9,9 @@ interface IProps {
 const LastActivity = ({ val }: IProps) => {
   return (
     <>
-      <div style={{ fontSize: '.9em' }}>{formatDate(val.updated_on)}</div>
+      <div style={{ fontSize: '.9em' }} title={formatDate(val.updated_on)}>
+        {msToTime(Date.now() - new Date(val.updated_on).getTime())} ago
+      </div>
       <div style={{ fontSize: '.7em' }}>Open for {msToTime(Date.now() - new Date(val.created_on).getTime())}</div>
     </>
   );
