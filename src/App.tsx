@@ -101,12 +101,16 @@ InlineStyle({
     position: 'relative',
   },
   '.activity-col': {
-    width: '180px',
+    'min-width': '190px',
+    width: '190px',
   },
   '.row-col.activity-col': {
     display: 'flex',
     'flex-direction': 'column',
     'padding-top': '4px',
+  },
+  '.last-activity': {
+    'padding-left': '8px',
   },
   '.reviewerAvatar': {
     position: 'absolute',
@@ -233,15 +237,6 @@ function App() {
   useEffect(() => {
     refresh(true);
   }, []);
-
-  // useEffect(() => {
-  //   setSortedRows((prevState) => {
-  //     prevState.forEach((row) => {
-  //       row.hidden = !(currentFilters.tasks(row) && currentFilters.needsReview(row) && currentFilters.branch(row));
-  //     });
-  //     return [...prevState];
-  //   });
-  // }, [currentFilters]);
 
   const onHeaderClick = (colType: string) => {
     const isAsc = sortType === `${colType}:asc`;
