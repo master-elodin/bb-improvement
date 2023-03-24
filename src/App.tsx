@@ -6,6 +6,8 @@ import Row, { columns } from './Row';
 import { InlineStyle } from './inlineStyles';
 import { getData, getStatuses } from './api';
 
+const fullWidth = 'calc(100vw - 50px)'
+
 InlineStyle({
   body: {
     'background-color': 'rgba(236, 240, 241, .2)',
@@ -17,22 +19,17 @@ InlineStyle({
     height: '24px',
     cursor: 'pointer',
   },
-  table: {
-    'border-collapse': 'collapse',
-    'overflow-y': 'auto',
-    'table-layout': 'fixed',
-    width: '100%',
-  },
   '.root': {
     padding: '20px 0',
     'font-family':
       '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Fira Sans,Droid Sans,Helvetica Neue,sans-serif',
     height: 'calc(100vh - 40px)',
+    overflow: 'hidden',
   },
   '.content': {
-    height: 'calc(100% - 70px)',
+    height: 'calc(100% - 60px)',
     padding: '0 20px 20px 20px',
-    width: 'calc(100vw - 40px)',
+    width: fullWidth,
   },
   '.spinner': {
     border: '6px solid rgba(0, 0, 0, 0.15)',
@@ -42,38 +39,87 @@ InlineStyle({
     'border-top-color': 'rgba(0, 0, 0, 0.5)',
     animation: 'rotate 1s linear infinite',
   },
-  // TODO: don't copy padding
-  '.name-col': {
+  '.content-header': {
+    display: 'flex',
+    height: '35px',
+    'justify-content': 'space-around',
+    'padding-bottom': '5px',
+    width: fullWidth,
+  },
+  '.row': {
     padding: '4px 8px',
-    width: '40%',
+    display: 'flex',
+    height: '40px',
+    'justify-content': 'space-around',
+    width: fullWidth,
+  },
+  '.row:nth-child(odd)': {
+    'background-color': 'rgba(236, 240, 241, .6)',
+  },
+  '.row-col': {
+    overflow: 'hidden',
+    'text-overflow': 'ellipsis',
+    'white-space': 'nowrap',
+  },
+  '.name-col': {
+    'flex-grow': 1,
+    'min-width': '750px',
   },
   '.tasks-col': {
-    padding: '4px 8px',
-    'text-align': 'right',
     width: '100px',
+  },
+  '.row-col.tasks-col': {
+    'line-height': '40px;',
+  },
+  '.row-col.tasks-col span': {
+    'padding-left': '12px;',
   },
   '.comments-col': {
-    padding: '4px 8px',
-    'text-align': 'right',
     width: '130px',
   },
+  '.row-col.comments-col': {
+    'line-height': '40px;',
+  },
+  '.row-col.comments-col span': {
+    'padding-left': '12px;',
+  },
   '.build-col': {
-    padding: '4px 8px',
     width: '100px',
   },
+  '.row .build-col': {
+    'position': 'relative',
+  },
+  '.row .build-col svg': {
+    left: 'calc(50% - 20px)',
+    position: 'absolute',
+    top: '10px',
+  },
   '.reviewers-col': {
-    padding: '4px 8px',
     width: '20%',
   },
+  '.row-col.reviewers-col': {
+    position: 'relative',
+  },
   '.activity-col': {
-    padding: '4px 8px',
     width: '180px',
+  },
+  '.row-col.activity-col': {
+    display: 'flex',
+    'flex-direction': 'column',
+    'padding-top': '4px',
   },
   '.reviewerAvatar': {
     position: 'absolute',
     display: 'inline-block',
-    top: '3px',
+    top: '7px',
   },
+  '.reviewerAvatar img': {
+    'clip-path': 'circle()',
+    height: '24px',
+    width: '24px',
+    border: '1px solid black',
+    'border-radius': '12px',
+  }
 });
 
 const headerStyle: React.CSSProperties = {
@@ -141,7 +187,7 @@ function App() {
   const addBuildStatus = async (commits: string[]) => {
     try {
       const statuses = await getStatuses(commits);
-      setSortedRows(prevState => {
+      setSortedRows((prevState) => {
         prevState.forEach((pr) => {
           const status = statuses[pr.source.commit.hash];
           if (status?.state === 'SUCCESSFUL') {
@@ -157,7 +203,7 @@ function App() {
     } catch (e) {
       console.error('Could not add status', e);
     }
-  }
+  };
 
   const refresh = async (resetSort = false) => {
     setLoading(true);
@@ -262,13 +308,13 @@ function App() {
       </div>
       <div className={'content'}>
         {loading && (
-          <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+          <div style={{ width: fullWidth, display: 'flex', justifyContent: 'center' }}>
             <div className={'spinner'} />
           </div>
         )}
         {!loading && (
-          <div style={{ height: '100%', width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-around', width: '100%' }}>
+          <>
+            <div className={'content-header'}>
               {columns.map((col) => (
                 <div key={col.label} className={col.colClass} onClick={() => onHeaderClick(col.label)}>
                   <div style={headerStyle}>
@@ -278,12 +324,12 @@ function App() {
                 </div>
               ))}
             </div>
-            <div style={{ width: '100%', height: 'calc(100% - 40px)', overflowY: 'scroll', overflowX: 'hidden' }}>
+            <div style={{ width: fullWidth, height: 'calc(100% - 40px)', overflowY: 'scroll', overflowX: 'hidden' }}>
               {visibleRows.map((val, index) => (
                 <Row key={index} val={val} index={index} />
               ))}
             </div>
-          </div>
+          </>
         )}
       </div>
     </div>

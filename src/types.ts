@@ -62,6 +62,5 @@ export interface ICol {
   getValue: (val: IRow) => string | number;
   getRendered?: (val: IRow) => React.ReactNode;
   label: string;
-  colSpan?: number;
   colClass?: string;
 }
