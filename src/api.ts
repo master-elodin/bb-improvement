@@ -1,6 +1,6 @@
 import { IS_PROD, userUuid } from './constants';
-import { rawData, statuses } from './data';
-import { IRow, IStatusResponse } from './types';
+import { allUsers as mockUsers, rawData, statuses } from './data';
+import { IRow, IStatusResponse, IUser } from './types';
 
 const workspace = process.env.REACT_APP_BB_WORKSPACE ?? 'my-workspace';
 
@@ -43,4 +43,27 @@ export const getStatuses = async (commits: string[]): Promise<IStatusResponse> =
     body: JSON.stringify({ commits }),
   });
   return (await res.json()) as IStatusResponse;
+};
+
+interface IMemberResponse {
+  values: IUser[];
+  next?: string;
+}
+
+export const getAllUsers = async (): Promise<IUser[]> => {
+  if (!IS_PROD) {
+    return mockUsers.values as IUser[];
+  }
+  const getUsers = async (allUsers: IUser[], next?: string) => {
+    const res = await fetch(next ?? `https://bitbucket.org/!api/internal/workspaces/${workspace}/members/?pagelen=100`);
+    const data = (await res.json()) as IMemberResponse;
+    allUsers.push(...data.values);
+    if (data.next) {
+      await getUsers(allUsers, data.next);
+    }
+  };
+  // TODO: this can probably be improved
+  const allUsers: IUser[] = [];
+  await getUsers(allUsers);
+  return allUsers;
 };

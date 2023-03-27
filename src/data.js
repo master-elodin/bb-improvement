@@ -26,3 +26,7 @@ export const statuses = {
     total_count: 1,
   },
 };
+
+export const allUsers = {
+  values: [],
+};

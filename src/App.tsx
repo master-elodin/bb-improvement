@@ -1,130 +1,12 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { userUuid } from './constants';
-import { IRow } from './types';
+import { IRow, IUser } from './types';
 import Row, { columns } from './Row';
-import { InlineStyle } from './inlineStyles';
 import { getData, getStatuses } from './api';
-
-const fullWidth = 'calc(100vw - 50px)'
-
-InlineStyle({
-  body: {
-    'background-color': 'rgba(236, 240, 241, .2)',
-  },
-  select: {
-    height: '24px',
-  },
-  button: {
-    height: '24px',
-    cursor: 'pointer',
-  },
-  '.root': {
-    padding: '20px 0',
-    'font-family':
-      '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Fira Sans,Droid Sans,Helvetica Neue,sans-serif',
-    height: 'calc(100vh - 40px)',
-    overflow: 'hidden',
-  },
-  '.content': {
-    height: 'calc(100% - 60px)',
-    padding: '0 20px 20px 20px',
-    width: fullWidth,
-  },
-  '.spinner': {
-    border: '6px solid rgba(0, 0, 0, 0.15)',
-    'border-radius': '50%',
-    width: '64px',
-    height: '64px',
-    'border-top-color': 'rgba(0, 0, 0, 0.5)',
-    animation: 'rotate 1s linear infinite',
-  },
-  '.content-header': {
-    display: 'flex',
-    height: '35px',
-    'justify-content': 'space-around',
-    'padding-bottom': '5px',
-    width: fullWidth,
-  },
-  '.row': {
-    padding: '4px 8px',
-    display: 'flex',
-    height: '40px',
-    'justify-content': 'space-around',
-    width: fullWidth,
-  },
-  '.row:nth-child(odd)': {
-    'background-color': 'rgba(236, 240, 241, .6)',
-  },
-  '.row-col': {
-    overflow: 'hidden',
-    'text-overflow': 'ellipsis',
-    'white-space': 'nowrap',
-  },
-  '.name-col': {
-    'flex-grow': 1,
-    'min-width': '750px',
-  },
-  '.tasks-col': {
-    width: '100px',
-  },
-  '.row-col.tasks-col': {
-    'line-height': '40px;',
-  },
-  '.row-col.tasks-col span': {
-    'padding-left': '12px;',
-  },
-  '.comments-col': {
-    width: '130px',
-  },
-  '.row-col.comments-col': {
-    'line-height': '40px;',
-  },
-  '.row-col.comments-col span': {
-    'padding-left': '12px;',
-  },
-  '.build-col': {
-    width: '100px',
-  },
-  '.row .build-col': {
-    'position': 'relative',
-  },
-  '.row .build-col svg': {
-    left: 'calc(50% - 20px)',
-    position: 'absolute',
-    top: '10px',
-  },
-  '.reviewers-col': {
-    width: '20%',
-  },
-  '.row-col.reviewers-col': {
-    position: 'relative',
-  },
-  '.activity-col': {
-    'min-width': '190px',
-    width: '190px',
-  },
-  '.row-col.activity-col': {
-    display: 'flex',
-    'flex-direction': 'column',
-    'padding-top': '4px',
-  },
-  '.last-activity': {
-    'padding-left': '8px',
-  },
-  '.reviewerAvatar': {
-    position: 'absolute',
-    display: 'inline-block',
-    top: '7px',
-  },
-  '.reviewerAvatar img': {
-    'clip-path': 'circle()',
-    height: '24px',
-    width: '24px',
-    border: '1px solid black',
-    'border-radius': '12px',
-  }
-});
+import UserSelector from './components/UserSelector';
+import { fullWidth } from './styles';
+import { DownArrow, UpArrow } from './components/Icons';
 
 const headerStyle: React.CSSProperties = {
   cursor: 'pointer',
@@ -174,7 +56,6 @@ const filters: Record<string, Record<string, IFilter>> = {
   },
 };
 
-// TODO: table should be fixed so only tbody scrolls
 // TODO: don't reset sort on refresh
 
 function App() {
@@ -187,6 +68,7 @@ function App() {
     branch: filters.branch.any,
   });
   const [allBranches, setAllBranches] = useState<string[]>([]);
+  const [currentUser, setCurrentUser] = useState<IUser>({ uuid: userUuid, display_name: 'Me' } as IUser);
 
   const addBuildStatus = async (commits: string[]) => {
     try {
@@ -256,17 +138,22 @@ function App() {
   const onTaskFilterSelect = (e: React.ChangeEvent<HTMLSelectElement>) => onFilterSelect(e, 'tasks');
   const onBranchFilterSelect = (e: React.ChangeEvent<HTMLSelectElement>) => onFilterSelect(e, 'branch');
 
-  const visibleRows = sortedRows.filter((row) => currentFilters.tasks(row) && currentFilters.needsReview(row) && currentFilters.branch(row));
+  const visibleRows = sortedRows.filter(
+    (row) => currentFilters.tasks(row) && currentFilters.needsReview(row) && currentFilters.branch(row),
+  );
   return (
     <div className={'root'}>
       <div style={pageHeaderStyle}>
         <div style={{ display: 'flex' }}>
-          <h3 style={{ margin: '5px 10px 0 10px' }}>
-            My PRs
+          <div style={{ margin: '0 10px', display: 'flex', lineHeight: '25px' }}>
+            <div style={{display: 'flex'}}>
+              <span style={{paddingRight: '8px'}}>View PRs for:</span>
+              <UserSelector currentUser={currentUser} onUserChange={setCurrentUser} />
+            </div>
             <span style={{ fontSize: '.8em', fontWeight: 'normal', paddingLeft: '20px' }}>
               {visibleRows.length} of {sortedRows.length} visible
             </span>
-          </h3>
+          </div>
         </div>
         <div style={{ display: 'flex', gap: '20px', height: '24px' }}>
           <div>
@@ -335,14 +222,11 @@ interface ISortArrowProps {
   sort?: 'asc' | 'desc';
 }
 
-const UpArrow = (selected: boolean) => <span style={{ opacity: selected ? 1 : 0.2 }}>&#x25B2;</span>;
-const DownArrow = (selected: boolean) => <span style={{ opacity: selected ? 1 : 0.2 }}>&#x25BC;</span>;
-
 const SortArrow = ({ sort }: ISortArrowProps) => {
   return (
     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-      {UpArrow(sort === 'asc')}
-      {DownArrow(sort === 'desc')}
+      {<UpArrow selected={sort === 'asc'} />}
+      {<DownArrow selected={sort === 'desc'} />}
     </div>
   );
 };

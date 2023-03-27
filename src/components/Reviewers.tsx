@@ -18,7 +18,11 @@ const Reviewers = ({ val }: IProps) => {
   return (
     <>
       {reviewers.map((reviewer, index) => (
-        <div className={'reviewerAvatar'} key={reviewer.user.uuid} style={{ left: `${(index ?? 0) * 15 + 5}px` }}>
+        <div
+          className={'reviewerAvatar'}
+          key={reviewer.user.uuid}
+          style={{ left: `${(index ?? 0) * 15 + 5}px` }}
+          title={reviewer.user.display_name}>
           <img src={reviewer.user.links.avatar.href} alt={reviewer.user.display_name} />
           {reviewer.approved && (
             <span style={{ position: 'absolute', left: '-5px', bottom: '-5px' }}>

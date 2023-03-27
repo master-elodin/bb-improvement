@@ -3,7 +3,7 @@ import * as React from 'react';
 interface ILink {
   href: string;
 }
-interface IUser {
+export interface IUser {
   display_name: string;
   nickname: string;
   uuid: string;
