@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { ICol, IRow } from './types';
-import RowTitle from './RowTitle';
+import { ICol, IRow, IUser } from './types';
+import RowTitle from './components/RowTitle';
 import LastActivity from './components/LastActivity';
 import Reviewers from './components/Reviewers';
 import BuildStatus from './components/BuildStatus';
@@ -33,7 +33,7 @@ export const columns: ICol[] = [
   {
     label: 'Reviewers',
     getValue: (val: IRow) => val.participants.filter((p) => p.role === 'REVIEWER' && p.approved).length,
-    getRendered: (val: IRow) => <Reviewers val={val} />,
+    getRendered: (val: IRow, currentUser: IUser) => <Reviewers val={val} currentUser={currentUser} />,
     colClass: 'reviewers-col',
   },
   {
@@ -48,15 +48,15 @@ export const columns: ICol[] = [
 
 interface IProps {
   val: IRow;
-  index?: number;
+  currentUser: IUser;
 }
 
-const Row = ({ val, index }: IProps) => {
+const Row = ({ val, currentUser }: IProps) => {
   return (
     <div className={'row'}>
       {columns.map((col) => (
         <div key={col.label} className={`row-col ${col.colClass}`}>
-          {(col.getRendered ?? col.getValue)(val)}
+          {(col.getRendered ?? col.getValue)(val, currentUser)}
         </div>
       ))}
     </div>

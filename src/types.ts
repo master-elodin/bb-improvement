@@ -3,13 +3,14 @@ import * as React from 'react';
 interface ILink {
   href: string;
 }
+
 export interface IUser {
   display_name: string;
   nickname: string;
   uuid: string;
   links: {
     avatar: ILink;
-  }
+  };
 }
 
 export interface IPullRequest {
@@ -18,8 +19,8 @@ export interface IPullRequest {
   source: {
     commit: {
       hash: string;
-    }
-  }
+    };
+  };
   destination: {
     branch: {
       name: string;
@@ -49,8 +50,8 @@ export interface IStatusResponse {
       STOPPED: number;
       INPROGRESS: number;
       SUCCESSFUL: number;
-    }
-  }
+    };
+  };
 }
 
 export interface IRow extends IPullRequest {
@@ -60,7 +61,9 @@ export interface IRow extends IPullRequest {
 
 export interface ICol {
   getValue: (val: IRow) => string | number;
-  getRendered?: (val: IRow) => React.ReactNode;
+  getRendered?: (val: IRow, currentUser: IUser) => React.ReactNode;
   label: string;
   colClass?: string;
 }
+
+export type IFilter = (row: IRow) => boolean;

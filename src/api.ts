@@ -1,4 +1,4 @@
-import { IS_PROD, userUuid } from './constants';
+import { IS_PROD, loggedInUserUuid } from './constants';
 import { allUsers as mockUsers, rawData, statuses } from './data';
 import { IRow, IStatusResponse, IUser } from './types';
 
@@ -11,7 +11,7 @@ const queryParams: Record<string, string> = {
     '-values.summary',
   page: '1',
   pagelen: '50',
-  q: `state="OPEN" AND reviewers.uuid="${userUuid}"`,
+  q: `state="OPEN" AND reviewers.uuid="${loggedInUserUuid}"`,
 };
 
 const url =

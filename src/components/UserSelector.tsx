@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import Dropdown, { IOption } from './Dropdown';
+import { IOption } from './Dropdown';
 import { getAllUsers } from '../api';
 import { IUser } from '../types';
+import FilterDropdown from './FilterDropdown';
+import { loggedInUserUuid } from '../constants';
 
 interface IProps {
   currentUser: IUser;
@@ -26,14 +28,17 @@ const UserSelector = ({ currentUser, onUserChange }: IProps) => {
   }, []);
 
   useEffect(() => {
-    setUserOptions(Object.values(allUsers).map((u) => ({ label: u.display_name, value: u.uuid })));
+    const options = Object.values(allUsers).map((u) => ({ label: u.display_name, value: u.uuid }));
+    options.unshift({ label: 'Me', value: loggedInUserUuid });
+    setUserOptions(options);
   }, [allUsers]);
 
   return (
-    <Dropdown
-      selected={{ label: currentUser.display_name, value: currentUser.uuid }}
+    <FilterDropdown
+      label={'Reviewer'}
       onSelect={(newId: string) => onUserChange(allUsers[newId])}
       options={userOptions}
+      allowFilter={true}
     />
   );
 };

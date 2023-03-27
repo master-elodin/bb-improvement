@@ -1,15 +1,27 @@
 import { ApprovedIcon } from '../img/icons';
-import { IRow } from '../types';
+import { IRow, IUser } from '../types';
 import * as React from 'react';
 
 interface IProps {
   val: IRow;
+  currentUser: IUser;
 }
 
-const Reviewers = ({ val }: IProps) => {
+const Reviewers = ({ val, currentUser }: IProps) => {
   const reviewers = val.participants
     .filter((p) => p.role === 'REVIEWER')
+    .map((p) => {
+      // remove stupid curly braces from user ID
+      p.user.uuid = p.user.uuid.replace(/(^{)|(}$)/g, '');
+      return p;
+    })
     .sort((a, b) => {
+      if (a.user.uuid === currentUser.uuid) {
+        return -1;
+      }
+      if (b.user.uuid === currentUser.uuid) {
+        return 1;
+      }
       if (a.approved === b.approved) {
         return a.user.display_name.localeCompare(b.user.display_name);
       }

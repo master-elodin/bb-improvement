@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import * as React from 'react';
 import { DownArrow, UpArrow } from './Icons';
 
@@ -7,31 +7,48 @@ export interface IOption {
   label: string;
 }
 
-interface IProps {
-  selected?: IOption;
+export interface IProps {
   options: IOption[];
   onSelect: (newVal: string) => void;
+  allowFilter?: boolean;
+  width?: string;
 }
 
-const Dropdown = ({ selected, options, onSelect }: IProps) => {
+const Dropdown = ({ options, onSelect, allowFilter = false, width = '200px' }: IProps) => {
   // TODO: filter
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const onOptionSelect = (newVal: string) => {
+  const [selected, setSelected] = useState<IOption>();
+  const show = useCallback(() => setDropdownVisible(true), []);
+  const hide = useCallback(() => setDropdownVisible(false), []);
+
+  useEffect(() => {
+    if (!selected) {
+      setSelected(options[0]);
+    }
+  }, [options]);
+
+  const onOptionSelect = (option: IOption) => {
+    setSelected(option);
     setDropdownVisible(false);
-    onSelect(newVal);
+    onSelect(option.value);
   };
-  // TODO: onBlur hide
+
+  // TODO: onblur isn't working any more
+
   return (
-    <div className={'dropdown-root'}>
+    <div className={'dropdown-root'} style={{ width }}>
       <div className={'dropdown-input'}>
-        <input value={selected?.label} />
-        {dropdownVisible && <UpArrow onClick={() => setDropdownVisible(false)} />}
-        {!dropdownVisible && <DownArrow onClick={() => setDropdownVisible(true)} />}
+        <input defaultValue={selected?.label} readOnly={!allowFilter} onClick={allowFilter ? undefined : show} />
+        {dropdownVisible && <UpArrow onClick={hide} />}
+        {!dropdownVisible && <DownArrow onClick={show} />}
       </div>
       {dropdownVisible && (
-        <div className={'dropdown-dropdown'}>
-          {options.map((option) => (
-            <div key={option.value} className={'dropdown-option'} onClick={() => onOptionSelect(option.value)}>
+        <div className={'dropdown-dropdown'} onBlur={() => console.log('blurrrr')} tabIndex={0}>
+          {options.map((option, index) => (
+            <div
+              key={option.value}
+              className={'dropdown-option'}
+              onClick={() => onOptionSelect(option)}>
               {option.label}
             </div>
           ))}

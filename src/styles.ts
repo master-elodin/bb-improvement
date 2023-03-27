@@ -1,6 +1,8 @@
 import { InlineStyle } from './inlineStyles';
-
-const fullWidth = 'calc(100vw - 50px)';
+import { rowTitleStyles } from './components/RowTitle-style';
+import { headerOptionsStyle } from './components/HeaderOptions-style';
+import { dropdownStyle } from './components/Dropdown-style';
+import { FULL_WIDTH, HOVER_COLOR } from './style-constants';
 
 InlineStyle({
   body: {
@@ -14,7 +16,7 @@ InlineStyle({
     cursor: 'pointer',
   },
   '.root': {
-    padding: '20px 0',
+    padding: '10px 0',
     'font-family':
       '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Fira Sans,Droid Sans,Helvetica Neue,sans-serif',
     height: 'calc(100vh - 40px)',
@@ -23,7 +25,7 @@ InlineStyle({
   '.content': {
     height: 'calc(100% - 60px)',
     padding: '0 20px 20px 20px',
-    width: fullWidth,
+    width: FULL_WIDTH,
   },
   '.spinner': {
     border: '6px solid rgba(0, 0, 0, 0.15)',
@@ -38,17 +40,17 @@ InlineStyle({
     height: '35px',
     'justify-content': 'space-around',
     'padding-bottom': '5px',
-    width: fullWidth,
+    width: FULL_WIDTH,
   },
   '.row': {
     padding: '4px 8px',
     display: 'flex',
     height: '40px',
     'justify-content': 'space-around',
-    width: fullWidth,
+    width: FULL_WIDTH,
   },
   '.row:nth-child(odd)': {
-    'background-color': 'rgba(236, 240, 241, .6)',
+    'background-color': HOVER_COLOR,
   },
   '.row-col': {
     overflow: 'hidden',
@@ -118,40 +120,9 @@ InlineStyle({
     border: '1px solid black',
     'border-radius': '12px',
   },
-  // Dropdown
-  '.dropdown-root': {
-    cursor: 'pointer',
-    position: 'relative',
-    width: '300px',
-    'z-index': 2,
-  },
-  '.dropdown-root .icon': {
-    position: 'absolute',
-    right: '5px',
-    'z-index': 2,
-  },
-  '.dropdown-root input': {
-    padding: '3px 8px',
-    width: '100%',
-  },
-  '.dropdown-dropdown': {
-    'box-shadow': '0 0 10px 1px grey',
-    background: 'white',
-    display: 'flex',
-    position: 'absolute',
-    'flex-direction': 'column',
-    padding: '5px 0',
-    right: 0,
-    top: '30px',
-  },
-  '.dropdown-input': {
-    display: 'flex',
-    'justify-content': 'space-between',
-    position: 'relative',
-  },
-  '.dropdown-option': {
-    padding: '2px 8px',
-  },
+  ...dropdownStyle,
+  ...rowTitleStyles,
+  ...headerOptionsStyle,
 });
 
-export { fullWidth };
+export { FULL_WIDTH };
