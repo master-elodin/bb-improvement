@@ -12,10 +12,6 @@ export const dropdownStyle = {
     top: '3px',
     'z-index': 2,
   },
-  '.dropdown-root input': {
-    padding: '3px 8px',
-    width: '100%',
-  },
   '.dropdown-dropdown': {
     'box-shadow': '0 0 10px 1px grey',
     background: 'white',
@@ -34,6 +30,12 @@ export const dropdownStyle = {
     'justify-content': 'space-between',
     position: 'relative',
   },
+  '.dropdown-input input': {
+    overflow: 'hidden',
+    padding: '3px 20px 3px 8px',
+    'text-overflow': 'ellipsis',
+    width: '100%',
+  },
   '.dropdown-input input:read-only': {
     cursor: 'pointer',
   },
@@ -45,5 +47,5 @@ export const dropdownStyle = {
   },
   '.dropdown-option:hover': {
     'background-color': HOVER_COLOR,
-  }
+  },
 };

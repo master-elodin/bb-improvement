@@ -10,11 +10,6 @@ interface IProps {
 const Reviewers = ({ val, currentUser }: IProps) => {
   const reviewers = val.participants
     .filter((p) => p.role === 'REVIEWER')
-    .map((p) => {
-      // remove stupid curly braces from user ID
-      p.user.uuid = p.user.uuid.replace(/(^{)|(}$)/g, '');
-      return p;
-    })
     .sort((a, b) => {
       if (a.user.uuid === currentUser.uuid) {
         return -1;
