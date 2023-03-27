@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { FilterType } from '../filters';
 import FilterDropdown from './FilterDropdown';
+import Button from './Button/Button';
 
 interface IProps {
   allBranches: string[];
@@ -42,9 +43,9 @@ const HeaderOptions = ({ allBranches, onFilterSelect, onRefreshClick }: IProps) 
         onSelect={(newVal: string) => onFilterSelect(newVal, 'needsReview')}
         width={'170px'}
       />
-      <button className={'header-options__refresh'} onClick={() => onRefreshClick()} title={'Refresh'}>
-        <span>&#8635;</span>
-      </button>
+      <Button onClick={onRefreshClick} className={'header-options__refresh-button'}>
+        <span title={'Refresh'}>&#8635;</span>
+      </Button>
     </div>
   );
 };

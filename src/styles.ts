@@ -3,6 +3,7 @@ import { rowTitleStyles } from './components/RowTitle-style';
 import { headerOptionsStyle } from './components/HeaderOptions-style';
 import { dropdownStyle } from './components/Dropdown-style';
 import { FULL_WIDTH, HOVER_COLOR } from './style-constants';
+import { buttonStyle } from './components/Button/Button-style';
 
 InlineStyle({
   body: {
@@ -123,6 +124,7 @@ InlineStyle({
   ...dropdownStyle,
   ...rowTitleStyles,
   ...headerOptionsStyle,
+  ...buttonStyle,
 });
 
 export { FULL_WIDTH };
