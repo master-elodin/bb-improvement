@@ -23,10 +23,14 @@ const Dropdown = ({ options, onSelect, allowFilter = false, width = '200px' }: I
   const show = useCallback(() => setDropdownVisible(true), []);
   const hide = useCallback(() => setDropdownVisible(false), []);
 
+  const setNextFilter = (newVal: string) => {
+    setFilterVal(newVal);
+    setPrevFilterVal(newVal);
+  }
+
   useEffect(() => {
-    const selectedLabel = selected?.label ?? '';
-    setFilterVal(selectedLabel);
-    setPrevFilterVal(selectedLabel);
+    // needs to exist to populate after the first render
+    setNextFilter(selected?.label ?? '');
   }, [selected?.label]);
 
   useEffect(() => {
@@ -47,6 +51,9 @@ const Dropdown = ({ options, onSelect, allowFilter = false, width = '200px' }: I
   const onOptionSelect = (e: React.MouseEvent<HTMLDivElement>, option: IOption) => {
     e.stopPropagation();
     setSelected(option);
+    // need to set here too, in case the same option was selected again
+    setNextFilter(option.label);
+
     setDropdownVisible(false);
     onSelect(option.value);
   };
@@ -67,7 +74,11 @@ const Dropdown = ({ options, onSelect, allowFilter = false, width = '200px' }: I
 
   let filterInput: React.ReactNode;
   if (allowFilter) {
-    filterInput = <input ref={inputRef} value={filterVal} onChange={onFilterChange} onFocus={show} />;
+    const onInputFocus = () => {
+      setFilterVal('');
+      show();
+    }
+    filterInput = <input ref={inputRef} value={filterVal} onChange={onFilterChange} onFocus={onInputFocus} />;
   } else {
     filterInput = <input defaultValue={selected?.label} readOnly={true} onClick={show} />;
   }
