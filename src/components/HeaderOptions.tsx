@@ -6,6 +6,7 @@ import Button from './Button/Button';
 interface IProps {
   allBranches: string[];
   onFilterSelect: (newVal: string, filterType: FilterType) => void;
+  onPRTypeChange: (newVal: string) => void;
   onRefreshClick: () => void;
 }
 
@@ -21,11 +22,16 @@ const reviewOptions = [
   { label: 'I have not approved', value: 'no' },
 ];
 
-const HeaderOptions = ({ allBranches, onFilterSelect, onRefreshClick }: IProps) => {
+const HeaderOptions = ({ allBranches, onFilterSelect, onPRTypeChange, onRefreshClick }: IProps) => {
   const targets = allBranches.map((b) => ({ label: b, value: b }));
   targets.unshift({ label: 'All', value: 'any' });
   return (
     <div className={'header-options__root'}>
+      <FilterDropdown
+        label={'I am...'}
+        options={[{label: 'Reviewing', value: 'reviewer'}, {label: 'Author', value: 'author'}]}
+        onSelect={onPRTypeChange}
+      />
       <FilterDropdown
         label={'Target'}
         options={targets}

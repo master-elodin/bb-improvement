@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { loggedInUserUuid } from './constants';
 import { IFilter, IRow, IUser } from './types';
 import Row, { columns } from './Row';
-import { getData, getStatuses } from './api';
+import { getPullRequests, getStatuses } from './api';
 import UserSelector from './components/UserSelector';
 import { FULL_WIDTH } from './styles';
 import { DownArrow, UpArrow } from './components/Icons';
@@ -53,6 +53,7 @@ function App() {
   });
   const [allBranches, setAllBranches] = useState<string[]>([]);
   const [currentUser, setCurrentUser] = useState<IUser>({ uuid: loggedInUserUuid, display_name: 'Me' } as IUser);
+  const [isReviewing, setIsReviewing] = useState(true); // TODO
 
   const addBuildStatus = async (commits: string[]) => {
     try {
@@ -75,9 +76,9 @@ function App() {
     }
   };
 
-  const refresh = async (resetSort = false) => {
+  const refresh = async (userUuid: string, resetSort = false) => {
     setLoading(true);
-    const pullRequests = await getData();
+    const pullRequests = await getPullRequests(userUuid, isReviewing);
     const branches = [...new Set(pullRequests.map((row) => row.destination.branch.name))].sort();
     filters.branch = {
       any: () => true,
@@ -101,8 +102,8 @@ function App() {
   };
 
   useEffect(() => {
-    refresh(true);
-  }, []);
+    refresh(currentUser.uuid, true);
+  }, [currentUser, isReviewing]);
 
   const onHeaderClick = (colType: string) => {
     const isAsc = sortType === `${colType}:asc`;
@@ -127,12 +128,19 @@ function App() {
         <div style={{ display: 'flex' }}>
           <div style={{ margin: '0 10px', display: 'flex' }}>
             <UserSelector currentUser={currentUser} onUserChange={setCurrentUser} />
-            <span style={{ paddingLeft: '20px', lineHeight: '60px', height: '40px' }}>
-              {visibleRows.length} of {sortedRows.length} visible
-            </span>
+            {!loading && (
+              <span style={{ paddingLeft: '20px', lineHeight: '60px', height: '40px' }}>
+                {visibleRows.length} of {sortedRows.length} visible
+              </span>
+            )}
           </div>
         </div>
-        <HeaderOptions allBranches={allBranches} onFilterSelect={onFilterSelect} onRefreshClick={refresh} />
+        <HeaderOptions
+          allBranches={allBranches}
+          onFilterSelect={onFilterSelect}
+          onRefreshClick={() => refresh(currentUser.uuid)}
+          onPRTypeChange={(newVal) => setIsReviewing(newVal === 'reviewer')}
+        />
       </div>
       <div className={'content'}>
         {loading && (

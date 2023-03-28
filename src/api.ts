@@ -4,7 +4,7 @@ import { IRow, IStatusResponse, IUser } from './types';
 
 const workspace = process.env.REACT_APP_BB_WORKSPACE ?? 'my-workspace';
 
-const queryParams: Record<string, string> = {
+const reviewingPRs: Record<string, string> = {
   fields:
     '-values.closed_by,-values.description,+values.destination.branch.name,+values.destination.repository.*,' +
     '-values.reviewers,+values.source.branch.name,+values.source.repository.*,+values.source.commit.hash,' +
@@ -14,17 +14,24 @@ const queryParams: Record<string, string> = {
   q: `state="OPEN" AND reviewers.uuid="${loggedInUserUuid}"`,
 };
 
-const url =
-  `https://bitbucket.org/!api/internal/workspaces/${workspace}/pullrequests/?` +
-  Object.keys(queryParams)
-    .map((key: string) => `${key}=${encodeURIComponent(queryParams[key])}`)
-    .join('&');
+const getUrl = (currentUserUuid: string, isReviewing: boolean) => {
+  const params: Record<string, string> = {
+    ...reviewingPRs,
+    q: `state="OPEN" AND ${isReviewing ? 'reviewers' : 'author'}.uuid="${currentUserUuid}"`,
+  };
+  return (
+    `https://bitbucket.org/!api/internal/workspaces/${workspace}/pullrequests/?` +
+    Object.keys(params)
+      .map((key: string) => `${key}=${encodeURIComponent(params[key])}`)
+      .join('&')
+  );
+};
 
-export const getData = async () => {
+export const getPullRequests = async (currentUserUuid: string, isReviewing: boolean) => {
   if (!IS_PROD) {
     return rawData.values as IRow[];
   }
-  const res = await fetch(url);
+  const res = await fetch(getUrl(currentUserUuid, isReviewing));
   const json = await res.json();
   return (json.values ?? []) as IRow[];
 };
