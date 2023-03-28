@@ -2,13 +2,26 @@ import * as React from 'react';
 import { FilterType } from '../filters';
 import FilterDropdown from './FilterDropdown';
 import Button from './Button/Button';
+import { PRState } from '../types';
 
 interface IProps {
   allBranches: string[];
   onFilterSelect: (newVal: string, filterType: FilterType) => void;
   onPRTypeChange: (newVal: string) => void;
+  onPRStateChange: (newVal: PRState) => void;
   onRefreshClick: () => void;
 }
+
+const prTypeOptions = [
+  { label: 'Reviewing', value: 'reviewer' },
+  { label: 'Author', value: 'author' },
+];
+
+const prStateOptions = [
+  { label: 'Open', value: 'OPEN' },
+  { label: 'Merged', value: 'MERGED' },
+  { label: 'Declined', value: 'DECLINED' },
+];
 
 const taskOptions = [
   { label: 'Any tasks', value: 'any' },
@@ -22,15 +35,17 @@ const reviewOptions = [
   { label: 'I have not approved', value: 'yes' },
 ];
 
-const HeaderOptions = ({ allBranches, onFilterSelect, onPRTypeChange, onRefreshClick }: IProps) => {
+const HeaderOptions = ({ allBranches, onFilterSelect, onPRTypeChange, onPRStateChange, onRefreshClick }: IProps) => {
   const targets = allBranches.map((b) => ({ label: b, value: b }));
   targets.unshift({ label: 'All', value: 'any' });
   return (
     <div className={'header-options__root'}>
+      <FilterDropdown label={'I am...'} options={prTypeOptions} onSelect={onPRTypeChange} />
       <FilterDropdown
-        label={'I am...'}
-        options={[{label: 'Reviewing', value: 'reviewer'}, {label: 'Author', value: 'author'}]}
-        onSelect={onPRTypeChange}
+        label={'PR state'}
+        options={prStateOptions}
+        onSelect={(newVal) => onPRStateChange(newVal as PRState)}
+        width={'110px'}
       />
       <FilterDropdown
         label={'Target'}

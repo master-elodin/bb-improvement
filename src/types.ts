@@ -13,9 +13,12 @@ export interface IUser {
   };
 }
 
+export type PRState = 'OPEN';
+
 export interface IPullRequest {
   id: number;
   title: string;
+  state: PRState;
   source: {
     commit: {
       hash: string;

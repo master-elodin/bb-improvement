@@ -1,6 +1,6 @@
 import { IS_PROD, loggedInUserUuid } from './constants';
 import { allUsers as mockUsers, rawData, statuses } from './data';
-import { IRow, IStatusResponse, IUser } from './types';
+import { IRow, IStatusResponse, IUser, PRState } from './types';
 
 const workspace = process.env.REACT_APP_BB_WORKSPACE ?? 'my-workspace';
 
@@ -14,10 +14,10 @@ const reviewingPRs: Record<string, string> = {
   q: `state="OPEN" AND reviewers.uuid="${loggedInUserUuid}"`,
 };
 
-const getUrl = (currentUserUuid: string, isReviewing: boolean) => {
+const getUrl = (currentUserUuid: string, isReviewing: boolean, prState: PRState) => {
   const params: Record<string, string> = {
     ...reviewingPRs,
-    q: `state="OPEN" AND ${isReviewing ? 'reviewers' : 'author'}.uuid="${currentUserUuid}"`,
+    q: `state="${prState}" AND ${isReviewing ? 'reviewers' : 'author'}.uuid="${currentUserUuid}"`,
   };
   return (
     `https://bitbucket.org/!api/internal/workspaces/${workspace}/pullrequests/?` +
@@ -27,11 +27,11 @@ const getUrl = (currentUserUuid: string, isReviewing: boolean) => {
   );
 };
 
-export const getPullRequests = async (currentUserUuid: string, isReviewing: boolean) => {
+export const getPullRequests = async (currentUserUuid: string, isReviewing: boolean, prState: PRState) => {
   if (!IS_PROD) {
     return rawData.values as IRow[];
   }
-  const res = await fetch(getUrl(currentUserUuid, isReviewing));
+  const res = await fetch(getUrl(currentUserUuid, isReviewing, prState));
   const json = await res.json();
   return (json.values ?? []) as IRow[];
 };

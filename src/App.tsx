@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { loggedInUserUuid } from './constants';
-import { IFilter, IRow, IUser } from './types';
+import { IFilter, IRow, IUser, PRState } from './types';
 import Row, { columns } from './Row';
 import { getPullRequests, getStatuses } from './api';
 import UserSelector from './components/UserSelector';
 import { FULL_WIDTH } from './styles';
 import { DownArrow, UpArrow } from './components/Icons/Icons';
 import HeaderOptions from './components/HeaderOptions';
-import { filters } from './filters';
+import { filters, FilterType } from './filters';
 
 const headerStyle: React.CSSProperties = {
   cursor: 'pointer',
@@ -54,6 +54,7 @@ function App() {
   const [allBranches, setAllBranches] = useState<string[]>([]);
   const [currentUser, setCurrentUser] = useState<IUser>({ uuid: loggedInUserUuid, display_name: 'Me' } as IUser);
   const [isReviewing, setIsReviewing] = useState(true);
+  const [prState, setPRState] = useState<PRState>('OPEN');
 
   const addBuildStatus = async (commits: string[]) => {
     try {
@@ -78,7 +79,7 @@ function App() {
 
   const refresh = async (userUuid: string, resetSort = false) => {
     setLoading(true);
-    const pullRequests = await getPullRequests(userUuid, isReviewing);
+    const pullRequests = await getPullRequests(userUuid, isReviewing, prState);
     const branches = [...new Set(pullRequests.map((row) => row.destination.branch.name))].sort();
     filters.branch = {
       any: () => true,
@@ -103,7 +104,7 @@ function App() {
 
   useEffect(() => {
     refresh(currentUser.uuid, true);
-  }, [currentUser, isReviewing]);
+  }, [currentUser, isReviewing, prState]);
 
   const onHeaderClick = (colType: string) => {
     const isAsc = sortType === `${colType}:asc`;
@@ -112,7 +113,7 @@ function App() {
     setSortType(`${colType}:${isAsc ? 'desc' : 'asc'}`);
   };
 
-  const onFilterSelect = (newVal: string, filterType: 'needsReview' | 'tasks' | 'branch') => {
+  const onFilterSelect = (newVal: string, filterType: FilterType) => {
     setCurrentFilters((prevState) => {
       prevState[filterType] = filters[filterType][newVal];
       return { ...prevState };
@@ -140,6 +141,7 @@ function App() {
           onFilterSelect={onFilterSelect}
           onRefreshClick={() => refresh(currentUser.uuid)}
           onPRTypeChange={(newVal) => setIsReviewing(newVal === 'reviewer')}
+          onPRStateChange={(newVal) => setPRState(newVal)}
         />
       </div>
       <div className={'content'}>
