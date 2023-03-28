@@ -16,8 +16,8 @@ export const headerOptionsStyle = {
     'margin-top': '19px',
   },
   '.header-options__refresh-button': {
-    height: '17px',
+    height: '18px',
     'margin-top': '20px',
-    width: '17px',
+    width: '18px',
   }
 }

@@ -18,8 +18,8 @@ const taskOptions = [
 
 const reviewOptions = [
   { label: 'All', value: 'any' },
-  { label: 'I have approved', value: 'yes' },
-  { label: 'I have not approved', value: 'no' },
+  { label: 'I have approved', value: 'no' },
+  { label: 'I have not approved', value: 'yes' },
 ];
 
 const HeaderOptions = ({ allBranches, onFilterSelect, onPRTypeChange, onRefreshClick }: IProps) => {

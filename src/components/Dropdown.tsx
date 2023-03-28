@@ -29,8 +29,6 @@ const Dropdown = ({ options, onSelect, allowFilter = false, width = '200px' }: I
     setPrevFilterVal(selectedLabel);
   }, [selected?.label]);
 
-  useEffect(() => {}, [filterVal]);
-
   useEffect(() => {
     if (!selected) {
       setSelected(options[0]);
@@ -74,6 +72,9 @@ const Dropdown = ({ options, onSelect, allowFilter = false, width = '200px' }: I
     filterInput = <input defaultValue={selected?.label} readOnly={true} onClick={show} />;
   }
 
+  let filteredOptions = options.filter(
+    (option) => !allowFilter || option.label.toLowerCase().indexOf(filterVal.toLowerCase()) > -1,
+  );
   return (
     <div className={'dropdown-root'} style={{ width }} onBlur={handleBlur} tabIndex={-1}>
       <div className={'dropdown-input'}>
@@ -88,18 +89,19 @@ const Dropdown = ({ options, onSelect, allowFilter = false, width = '200px' }: I
       </div>
       {dropdownVisible && (
         <div className={'dropdown-dropdown'}>
-          {options
-            .filter((option) => !allowFilter || option.label.toLowerCase().indexOf(filterVal.toLowerCase()) > -1)
-            .map((option, index) => (
-              <div
-                key={option.value}
-                className={'dropdown-option'}
-                onClick={(e) => onOptionSelect(e, option)}
-                tabIndex={index}
-                title={option.label}>
-                {option.label}
-              </div>
-            ))}
+          {filteredOptions.length === 0 && (
+            <div className={'dropdown-option dropdown-option--no-results'}>No results</div>
+          )}
+          {filteredOptions.map((option, index) => (
+            <div
+              key={option.value}
+              className={'dropdown-option'}
+              onClick={(e) => onOptionSelect(e, option)}
+              tabIndex={index}
+              title={option.label}>
+              {option.label}
+            </div>
+          ))}
         </div>
       )}
     </div>

@@ -56,7 +56,11 @@ export const dropdownStyle = {
     'text-overflow': 'ellipsis',
     'white-space': 'nowrap',
   },
-  '.dropdown-option:hover': {
+  '.dropdown-option:not(.dropdown-option--no-results):hover': {
     'background-color': HOVER_COLOR,
+  },
+  '.dropdown-option--no-results': {
+    cursor: 'default',
+    opacity: 0.5,
   },
 };

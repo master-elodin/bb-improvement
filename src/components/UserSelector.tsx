@@ -17,19 +17,25 @@ const UserSelector = ({ currentUser, onUserChange }: IProps) => {
   const [allUsers, setAllUsers] = useState<UserRecord>({});
   const [userOptions, setUserOptions] = useState<IOption[]>([]);
   useEffect(() => {
-    getAllUsers().then((data) =>
-      setAllUsers(
-        data.reduce((acc, val) => {
-          acc[val.uuid] = val;
-          return acc;
-        }, {} as UserRecord),
-      ),
-    );
+    getAllUsers().then((data) => {
+      const usersById = data.reduce((acc, val) => {
+        acc[val.uuid] = val;
+        return acc;
+      }, {} as UserRecord);
+      const realCurrentUser = usersById[currentUser.uuid];
+      if (realCurrentUser) onUserChange(realCurrentUser);
+      setAllUsers(usersById);
+    });
   }, []);
 
   useEffect(() => {
-    const options = Object.values(allUsers).map((u) => ({ label: u.display_name, value: u.uuid }));
-    options.unshift({ label: 'Me', value: loggedInUserUuid });
+    const options = Object.values(allUsers)
+      .filter((u) => u.uuid !== currentUser.uuid) // only add logged-in user at the start of the list
+      .map((u) => ({ label: u.display_name, value: u.uuid }));
+    const realCurrentUser = allUsers[currentUser.uuid];
+    // handle hardcoded data
+    const meLabel = !realCurrentUser ? 'Me' : `Me (${realCurrentUser.display_name})`;
+    options.unshift({ label: meLabel, value: currentUser.uuid });
     setUserOptions(options);
   }, [allUsers]);
 
