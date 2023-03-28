@@ -6,7 +6,7 @@ import Row, { columns } from './Row';
 import { getPullRequests, getStatuses } from './api';
 import UserSelector from './components/UserSelector';
 import { FULL_WIDTH } from './styles';
-import { DownArrow, UpArrow } from './components/Icons';
+import { DownArrow, UpArrow } from './components/Icons/Icons';
 import HeaderOptions from './components/HeaderOptions';
 import { filters } from './filters';
 

@@ -39,6 +39,16 @@ export const dropdownStyle = {
   '.dropdown-input input:read-only': {
     cursor: 'pointer',
   },
+  '.dropdown__clear-btn': {
+    'line-height': '22px',
+    opacity: '.5',
+    padding: '0 5px',
+    position: 'absolute',
+    right: '21px',
+  },
+  '.dropdown__clear-btn:hover': {
+    opacity: 1,
+  },
   '.dropdown-option': {
     'flex-shrink': 0,
     padding: '2px 8px',

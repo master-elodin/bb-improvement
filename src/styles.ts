@@ -4,6 +4,7 @@ import { headerOptionsStyle } from './components/HeaderOptions-style';
 import { dropdownStyle } from './components/Dropdown-style';
 import { FULL_WIDTH, HOVER_COLOR } from './style-constants';
 import { buttonStyle } from './components/Button/Button-style';
+import { iconsStyle } from './components/Icons/Icons.style';
 
 InlineStyle({
   body: {
@@ -42,6 +43,9 @@ InlineStyle({
     'justify-content': 'space-around',
     'padding-bottom': '5px',
     width: FULL_WIDTH,
+  },
+  '.content-header .icon': {
+    opacity: .2,
   },
   '.row': {
     padding: '4px 8px',
@@ -125,6 +129,7 @@ InlineStyle({
   ...rowTitleStyles,
   ...headerOptionsStyle,
   ...buttonStyle,
+  ...iconsStyle,
 });
 
 export { FULL_WIDTH };

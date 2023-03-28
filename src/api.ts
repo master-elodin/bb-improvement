@@ -69,7 +69,6 @@ export const getAllUsers = async (): Promise<IUser[]> => {
       await getUsers(allUsers, data.next);
     }
   };
-  // TODO: this can probably be improved
   const allUsers: IUser[] = [];
   await getUsers(allUsers);
   return allUsers;

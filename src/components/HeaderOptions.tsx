@@ -36,6 +36,7 @@ const HeaderOptions = ({ allBranches, onFilterSelect, onPRTypeChange, onRefreshC
         label={'Target'}
         options={targets}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'branch')}
+        allowFilter={true}
       />
       <FilterDropdown
         label={'Open tasks'}
