@@ -53,7 +53,7 @@ function App() {
   });
   const [allBranches, setAllBranches] = useState<string[]>([]);
   const [currentUser, setCurrentUser] = useState<IUser>({ uuid: loggedInUserUuid, display_name: 'Me' } as IUser);
-  const [isReviewing, setIsReviewing] = useState(true); // TODO
+  const [isReviewing, setIsReviewing] = useState(true);
 
   const addBuildStatus = async (commits: string[]) => {
     try {

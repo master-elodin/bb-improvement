@@ -11,16 +11,16 @@ const Reviewers = ({ val, currentUser }: IProps) => {
   const reviewers = val.participants
     .filter((p) => p.role === 'REVIEWER')
     .sort((a, b) => {
+      if (a.approved !== b.approved) {
+        return a.approved ? -1 : 1;
+      }
       if (a.user.uuid === currentUser.uuid) {
         return -1;
       }
       if (b.user.uuid === currentUser.uuid) {
         return 1;
       }
-      if (a.approved === b.approved) {
-        return a.user.display_name.localeCompare(b.user.display_name);
-      }
-      return a.approved ? -1 : 1;
+      return a.user.display_name.localeCompare(b.user.display_name);
     });
   return (
     <>

@@ -40,6 +40,7 @@ export const dropdownStyle = {
     cursor: 'pointer',
   },
   '.dropdown-option': {
+    'flex-shrink': 0,
     padding: '2px 8px',
     'overflow-x': 'hidden',
     'text-overflow': 'ellipsis',
