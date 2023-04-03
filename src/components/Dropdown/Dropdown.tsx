@@ -1,6 +1,6 @@
 import { FocusEvent, useCallback, useEffect, useRef, useState } from 'react';
 import * as React from 'react';
-import { DownArrow, UpArrow } from './Icons/Icons';
+import { DownArrow, UpArrow } from '../Icons/Icons';
 
 export interface IOption {
   value: string;

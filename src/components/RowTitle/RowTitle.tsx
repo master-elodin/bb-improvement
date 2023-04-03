@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { IRow } from '../types';
-import { formatDate } from '../utils';
+import { IRow } from '../../types';
+import { formatDate } from '../../utils';
 
 interface IProps {
   val: IRow;

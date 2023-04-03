@@ -1,4 +1,4 @@
-import { HOVER_COLOR } from '../style-constants';
+import { HOVER_COLOR } from '../../style-constants';
 
 export const dropdownStyle = {
   '.dropdown-root': {

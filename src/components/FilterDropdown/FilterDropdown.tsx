@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { FilterIcon } from '../../icons';
+import { FilterIcon } from '../icons';
 
 interface IProps {
   onFilterChange: (filterVal: string) => void;

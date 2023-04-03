@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { FilterType } from '../filters';
-import FilterDropdown from './FilterDropdown';
-import Button from './Button/Button';
-import { PRState } from '../types';
-import { FILTER_KEY } from '../api';
+import { FilterType } from '../../filters';
+import FilterDropdown from '../FilterDropdown';
+import Button from '../Button/Button';
+import { PRState } from '../../types';
+import { FILTER_KEY } from '../../api';
 
 interface IProps {
   allBranches: string[];

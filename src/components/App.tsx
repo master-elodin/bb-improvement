@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { loggedInUserUuid } from './constants';
-import { ICol, IFilter, IRow, IUser, PRState } from './types';
+import { loggedInUserUuid } from '../constants';
+import { ICol, IFilter, IRow, IUser, PRState } from '../types';
 import Row, { columns } from './Row';
-import { FILTER_KEY, getPullRequests, getStatuses } from './api';
-import UserSelector from './components/UserSelector';
-import { FULL_WIDTH } from './styles';
-import { DownArrow, UpArrow } from './components/Icons/Icons';
-import HeaderOptions from './components/HeaderOptions';
-import { filters, FilterType } from './filters';
-import FilterDropdown from './components/FilterDropdown/FilterDropdown';
+import { FILTER_KEY, getPullRequests, getStatuses } from '../api';
+import UserSelector from './UserSelector';
+import { FULL_WIDTH } from '../styles';
+import { DownArrow, UpArrow } from './Icons/Icons';
+import HeaderOptions from './HeaderOptions/HeaderOptions';
+import { filters, FilterType } from '../filters';
+import FilterDropdown from './FilterDropdown/FilterDropdown';
 
 const headerStyle: React.CSSProperties = {
   cursor: 'pointer',

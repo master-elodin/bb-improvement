@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { ICol, IRow, IUser } from './types';
-import RowTitle from './components/RowTitle';
-import LastActivity from './components/LastActivity';
-import Reviewers from './components/Reviewers';
+import { ICol, IRow, IUser } from '../types';
+import RowTitle from './RowTitle/RowTitle';
+import LastActivity from './LastActivity';
+import Reviewers from './Reviewers';
 // import BuildStatus from './components/BuildStatus';
 
 export const columns: ICol[] = [

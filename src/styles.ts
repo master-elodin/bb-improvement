@@ -1,7 +1,7 @@
 import { InlineStyle } from './inlineStyles';
-import { rowTitleStyles } from './components/RowTitle-style';
-import { headerOptionsStyle } from './components/HeaderOptions-style';
-import { dropdownStyle } from './components/Dropdown-style';
+import { rowTitleStyles } from './components/RowTitle/RowTitle-style';
+import { headerOptionsStyle } from './components/HeaderOptions/HeaderOptions-style';
+import { dropdownStyle } from './components/Dropdown/Dropdown-style';
 import { FULL_WIDTH, HOVER_COLOR } from './style-constants';
 import { buttonStyle } from './components/Button/Button-style';
 import { iconsStyle } from './components/Icons/Icons.style';
