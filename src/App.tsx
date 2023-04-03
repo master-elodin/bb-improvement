@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { loggedInUserUuid } from './constants';
-import { IFilter, IRow, IUser, PRState } from './types';
+import { ICol, IFilter, IRow, IUser, PRState } from './types';
 import Row, { columns } from './Row';
 import { getPullRequests, getStatuses } from './api';
 import UserSelector from './components/UserSelector';
@@ -9,6 +9,7 @@ import { FULL_WIDTH } from './styles';
 import { DownArrow, UpArrow } from './components/Icons/Icons';
 import HeaderOptions from './components/HeaderOptions';
 import { filters, FilterType } from './filters';
+import FilterDropdown from './components/FilterDropdown/FilterDropdown';
 
 const headerStyle: React.CSSProperties = {
   cursor: 'pointer',
@@ -26,6 +27,8 @@ const pageHeaderStyle: React.CSSProperties = {
   padding: '0 20px 10px 20px',
 };
 
+const FILTER_KEY = 'bb-script-filters';
+
 const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
   const getValue = columns.find((col) => col.label === colType)?.getValue ?? (() => 'zzzz');
   rows.sort((a, b) => {
@@ -42,19 +45,40 @@ const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
 
 // TODO: don't reset sort on refresh
 
+type ColFilter = (row: IRow) => boolean;
+
+const savedFilters = JSON.parse(localStorage.getItem(FILTER_KEY) ?? '{}');
+
+const saveFilters = (newVal: string, filterType: FilterType) => {
+  savedFilters[filterType] = newVal;
+  localStorage.setItem(FILTER_KEY, JSON.stringify(savedFilters));
+};
+
+const loadFilters = () => {
+  return {
+    tasks: filters.tasks[savedFilters.tasks ?? 'any'],
+    needsReview: filters.needsReview.any,
+    branch: filters.branch.any,
+  };
+};
+
 function App() {
   const [loading, setLoading] = useState(true);
   const [sortType, setSortType] = useState<string>(`${columns[columns.length - 1].label}:asc`);
   const [sortedRows, setSortedRows] = useState<IRow[]>([]);
-  const [currentFilters, setCurrentFilters] = useState<Record<string, IFilter>>({
-    tasks: filters.tasks.any,
-    needsReview: filters.needsReview.any,
-    branch: filters.branch.any,
-  });
+  const [currentFilters, setCurrentFilters] = useState<Record<string, IFilter>>(loadFilters());
+  const [colFilers, setColFilters] = useState<{ [colLabel: string]: ColFilter }>({});
   const [allBranches, setAllBranches] = useState<string[]>([]);
   const [currentUser, setCurrentUser] = useState<IUser>({ uuid: loggedInUserUuid, display_name: 'Me' } as IUser);
   const [isReviewing, setIsReviewing] = useState(true);
   const [prState, setPRState] = useState<PRState>('OPEN');
+
+  const onFilterType = useCallback((col: ICol, newVal: string) => {
+    setColFilters((prevState) => ({
+      ...prevState,
+      [col.label]: (row: IRow) => col.matchFilter?.(newVal, row) ?? true,
+    }));
+  }, []);
 
   const addBuildStatus = async (commits: string[]) => {
     try {
@@ -118,10 +142,15 @@ function App() {
       prevState[filterType] = filters[filterType][newVal];
       return { ...prevState };
     });
+    saveFilters(newVal, filterType);
   };
 
   const visibleRows = sortedRows.filter(
-    (row) => currentFilters.tasks(row) && currentFilters.needsReview(row) && currentFilters.branch(row),
+    (row) =>
+      currentFilters.tasks(row) &&
+      currentFilters.needsReview(row) &&
+      currentFilters.branch(row) &&
+      Object.values(colFilers).every((colFilter) => colFilter(row)),
   );
   return (
     <div className={'root'}>
@@ -154,10 +183,19 @@ function App() {
           <>
             <div className={'content-header'}>
               {columns.map((col) => (
-                <div key={col.label} className={col.colClass} onClick={() => onHeaderClick(col.label)}>
+                <div key={col.label} className={col.colClass}>
                   <div style={headerStyle}>
                     {col.label}
-                    <SortArrow sort={sortType?.substring(col.label.length + 1) as any} />
+                    <div style={{ display: 'flex' }}>
+                      {col.matchFilter && (
+                        // TODO: extract
+                        <FilterDropdown onFilterChange={(newVal: string) => onFilterType(col, newVal)} />
+                      )}
+                      <SortArrow
+                        onClick={() => onHeaderClick(col.label)}
+                        sort={sortType?.substring(col.label.length + 1) as any}
+                      />
+                    </div>
                   </div>
                 </div>
               ))}
@@ -175,12 +213,13 @@ function App() {
 }
 
 interface ISortArrowProps {
+  onClick: () => void;
   sort?: 'asc' | 'desc';
 }
 
-const SortArrow = ({ sort }: ISortArrowProps) => {
+const SortArrow = ({ onClick, sort }: ISortArrowProps) => {
   return (
-    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+    <div style={{ display: 'flex', justifyContent: 'flex-end' }} onClick={onClick}>
       {<UpArrow selected={sort === 'asc'} />}
       {<DownArrow selected={sort === 'desc'} />}
     </div>

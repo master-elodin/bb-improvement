@@ -11,6 +11,8 @@ export const columns: ICol[] = [
     getValue: (val: IRow) => val.title,
     getRendered: (val: IRow) => <RowTitle val={val} />,
     colClass: 'name-col',
+    matchFilter: (newVal: string, row: IRow) =>
+      row.author.display_name.toLowerCase().includes(newVal) || row.title.toLowerCase().includes(newVal),
   },
   {
     label: 'Tasks',

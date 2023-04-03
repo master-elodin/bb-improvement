@@ -11,7 +11,7 @@ const RowTitle = ({ val }: IProps) => {
   return (
     <div className={'row-title'}>
       <img src={val.author.links.avatar.href} alt={val.author.display_name} />
-      <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+      <div className={'row-title__pr-name'}>
         <a href={val.links.html.href} target={'_blank'} rel='noreferrer'>
           {val.title}
         </a>

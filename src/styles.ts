@@ -5,6 +5,7 @@ import { dropdownStyle } from './components/Dropdown-style';
 import { FULL_WIDTH, HOVER_COLOR } from './style-constants';
 import { buttonStyle } from './components/Button/Button-style';
 import { iconsStyle } from './components/Icons/Icons.style';
+import { filterDropdownStyle } from './components/FilterDropdown/FilterDropdown.style';
 
 InlineStyle({
   body: {
@@ -130,6 +131,7 @@ InlineStyle({
   ...headerOptionsStyle,
   ...buttonStyle,
   ...iconsStyle,
+  ...filterDropdownStyle,
 });
 
 export { FULL_WIDTH };

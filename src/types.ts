@@ -67,6 +67,7 @@ export interface ICol {
   getRendered?: (val: IRow, currentUser: IUser) => React.ReactNode;
   label: string;
   colClass?: string;
+  matchFilter?: (filterVal: string, row: IRow) => boolean;
 }
 
 export type IFilter = (row: IRow) => boolean;
