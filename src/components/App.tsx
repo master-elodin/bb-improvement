@@ -57,6 +57,7 @@ const loadFilters = () => {
     tasks: filters.tasks[savedFilters.tasks ?? 'any'],
     needsReview: filters.needsReview[savedFilters.needsReview ?? 'any'],
     branch: filters.branch.any,
+    repo: filters.repo.any,
   };
 };
 
@@ -67,6 +68,7 @@ function App() {
   const [currentFilters, setCurrentFilters] = useState<Record<string, IFilter>>(loadFilters());
   const [colFilers, setColFilters] = useState<{ [colLabel: string]: ColFilter }>({});
   const [allBranches, setAllBranches] = useState<string[]>([]);
+  const [allRepoNames, setAllRepoNames] = useState<string[]>([]);
   const [currentUser, setCurrentUser] = useState<IUser>({ uuid: loggedInUserUuid, display_name: 'Me' } as IUser);
   const [isReviewing, setIsReviewing] = useState(true);
   const [prState, setPRState] = useState<PRState>('OPEN');
@@ -119,6 +121,13 @@ function App() {
     });
     setAllBranches(branches);
 
+    filters.repo = {
+      any: () => true,
+    };
+    const repoNames = [...new Set(pullRequests.map((p) => p.destination.repository.slug))].sort();
+    repoNames.forEach((repo) => (filters.repo[repo] = (row: IRow) => row.destination.repository.slug === repo));
+    setAllRepoNames(repoNames);
+
     let nextSortType = sortType;
     let sortColumn = nextSortType.split(':')[0];
     if (resetSort) {
@@ -156,6 +165,7 @@ function App() {
       currentFilters.tasks(row) &&
       currentFilters.needsReview(row) &&
       currentFilters.branch(row) &&
+      currentFilters.repo(row) &&
       Object.values(colFilers).every((colFilter) => colFilter(row)),
   );
   return (
@@ -173,6 +183,7 @@ function App() {
         </div>
         <HeaderOptions
           allBranches={allBranches}
+          allRepoNames={allRepoNames}
           onFilterSelect={onFilterSelect}
           onRefreshClick={() => refresh(currentUser.uuid)}
           onPRTypeChange={(newVal) => setIsReviewing(newVal === 'reviewer')}

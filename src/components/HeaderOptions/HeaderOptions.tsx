@@ -7,6 +7,7 @@ import { FILTER_KEY } from '../../api';
 
 interface IProps {
   allBranches: string[];
+  allRepoNames: string[];
   onFilterSelect: (newVal: string, filterType: FilterType) => void;
   onPRTypeChange: (newVal: string) => void;
   onPRStateChange: (newVal: PRState) => void;
@@ -38,9 +39,11 @@ const reviewOptions = [
 
 const savedFilters = JSON.parse(localStorage.getItem(FILTER_KEY) ?? '{}');
 
-const HeaderOptions = ({ allBranches, onFilterSelect, onPRTypeChange, onPRStateChange, onRefreshClick }: IProps) => {
+const HeaderOptions = ({ allBranches, allRepoNames, onFilterSelect, onPRTypeChange, onPRStateChange, onRefreshClick }: IProps) => {
   const targets = allBranches.map((b) => ({ label: b, value: b }));
   targets.unshift({ label: 'All', value: 'any' });
+  const repos = allRepoNames.map((b) => ({ label: b, value: b }));
+  repos.unshift({ label: 'All', value: 'any' });
   return (
     <div className={'header-options__root'}>
       <FilterDropdown
@@ -55,6 +58,12 @@ const HeaderOptions = ({ allBranches, onFilterSelect, onPRTypeChange, onPRStateC
         defaultValue={savedFilters.prState}
         onSelect={(newVal) => onPRStateChange(newVal as PRState)}
         width={'110px'}
+      />
+      <FilterDropdown
+        label={'Repository'}
+        options={repos}
+        onSelect={(newVal: string) => onFilterSelect(newVal, 'repo')}
+        width={'140px'}
       />
       <FilterDropdown
         label={'Target'}

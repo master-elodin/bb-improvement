@@ -1,7 +1,7 @@
 import { IFilter, IRow } from './types';
 import { loggedInUserUuid } from './constants';
 
-export type FilterType = 'needsReview' | 'tasks' | 'branch' | 'prState' | 'isReviewing';
+export type FilterType = 'needsReview' | 'tasks' | 'branch' | 'repo' | 'prState' | 'isReviewing';
 const rowHasApproval = (row: IRow) => row.participants.some((user) => user.user.uuid === loggedInUserUuid && user.approved);
 export const filters: Record<string, Record<string, IFilter>> = {
   tasks: {
@@ -17,4 +17,7 @@ export const filters: Record<string, Record<string, IFilter>> = {
   branch: {
     any: () => true,
   },
+  repo: {
+    any: () => true,
+  }
 };

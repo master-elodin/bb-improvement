@@ -28,6 +28,9 @@ export interface IPullRequest {
     branch: {
       name: string;
     };
+    repository: {
+      slug: string;
+    }
   };
   author: IUser;
   participants: {
