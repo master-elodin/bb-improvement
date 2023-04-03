@@ -2,6 +2,7 @@ import { IS_PROD, loggedInUserUuid } from './constants';
 import { allUsers as mockUsers, rawData, statuses } from './data';
 import { IRow, IStatusResponse, IUser, PRState } from './types';
 
+export const FILTER_KEY = 'bb-script-filters';
 const workspace = process.env.REACT_APP_BB_WORKSPACE ?? 'my-workspace';
 
 const reviewingPRs: Record<string, string> = {

@@ -9,12 +9,13 @@ export interface IOption {
 
 export interface IProps {
   options: IOption[];
+  defaultValue?: string;
   onSelect: (newVal: string) => void;
   allowFilter?: boolean;
   width?: string;
 }
 
-const Dropdown = ({ options, onSelect, allowFilter = false, width = '200px' }: IProps) => {
+const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width = '200px' }: IProps) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [selected, setSelected] = useState<IOption>();
   const [filterVal, setFilterVal] = useState<string>(selected?.label ?? '');
@@ -26,7 +27,7 @@ const Dropdown = ({ options, onSelect, allowFilter = false, width = '200px' }: I
   const setNextFilter = (newVal: string) => {
     setFilterVal(newVal);
     setPrevFilterVal(newVal);
-  }
+  };
 
   useEffect(() => {
     // needs to exist to populate after the first render
@@ -35,9 +36,9 @@ const Dropdown = ({ options, onSelect, allowFilter = false, width = '200px' }: I
 
   useEffect(() => {
     if (!selected) {
-      setSelected(options[0]);
+      setSelected(options.find((o) => o.value === defaultValue) ?? options[0]);
     }
-  }, [options]);
+  }, [selected, options, defaultValue]);
 
   const onFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilterVal(e.currentTarget.value);
@@ -77,7 +78,7 @@ const Dropdown = ({ options, onSelect, allowFilter = false, width = '200px' }: I
     const onInputFocus = () => {
       setFilterVal('');
       show();
-    }
+    };
     filterInput = <input ref={inputRef} value={filterVal} onChange={onFilterChange} onFocus={onInputFocus} />;
   } else {
     filterInput = <input defaultValue={selected?.label} readOnly={true} onClick={show} />;

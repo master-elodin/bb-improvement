@@ -3,6 +3,7 @@ import { FilterType } from '../filters';
 import FilterDropdown from './FilterDropdown';
 import Button from './Button/Button';
 import { PRState } from '../types';
+import { FILTER_KEY } from '../api';
 
 interface IProps {
   allBranches: string[];
@@ -35,15 +36,23 @@ const reviewOptions = [
   { label: 'I have not approved', value: 'yes' },
 ];
 
+const savedFilters = JSON.parse(localStorage.getItem(FILTER_KEY) ?? '{}');
+
 const HeaderOptions = ({ allBranches, onFilterSelect, onPRTypeChange, onPRStateChange, onRefreshClick }: IProps) => {
   const targets = allBranches.map((b) => ({ label: b, value: b }));
   targets.unshift({ label: 'All', value: 'any' });
   return (
     <div className={'header-options__root'}>
-      <FilterDropdown label={'I am...'} options={prTypeOptions} onSelect={onPRTypeChange} />
+      <FilterDropdown
+        label={'I am...'}
+        options={prTypeOptions}
+        defaultValue={prTypeOptions[savedFilters.isReviewing === 'false' ? 1 : 0].value}
+        onSelect={onPRTypeChange}
+      />
       <FilterDropdown
         label={'PR state'}
         options={prStateOptions}
+        defaultValue={savedFilters.prState}
         onSelect={(newVal) => onPRStateChange(newVal as PRState)}
         width={'110px'}
       />
@@ -56,12 +65,14 @@ const HeaderOptions = ({ allBranches, onFilterSelect, onPRTypeChange, onPRStateC
       <FilterDropdown
         label={'Open tasks'}
         options={taskOptions}
+        defaultValue={savedFilters.tasks}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'tasks')}
         width={'150px'}
       />
       <FilterDropdown
         label={'My approval'}
         options={reviewOptions}
+        defaultValue={savedFilters.needsReview}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'needsReview')}
         width={'170px'}
       />

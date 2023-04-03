@@ -18,5 +18,6 @@ export const filterDropdownStyle = {
   },
   '.filter-dropdown__popover input': {
     padding: '2px 8px',
+    'min-width': '240px',
   },
 };

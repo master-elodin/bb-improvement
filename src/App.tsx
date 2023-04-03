@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { loggedInUserUuid } from './constants';
 import { ICol, IFilter, IRow, IUser, PRState } from './types';
 import Row, { columns } from './Row';
-import { getPullRequests, getStatuses } from './api';
+import { FILTER_KEY, getPullRequests, getStatuses } from './api';
 import UserSelector from './components/UserSelector';
 import { FULL_WIDTH } from './styles';
 import { DownArrow, UpArrow } from './components/Icons/Icons';
@@ -26,8 +26,6 @@ const pageHeaderStyle: React.CSSProperties = {
   marginBottom: '20px',
   padding: '0 20px 10px 20px',
 };
-
-const FILTER_KEY = 'bb-script-filters';
 
 const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
   const getValue = columns.find((col) => col.label === colType)?.getValue ?? (() => 'zzzz');
@@ -57,7 +55,7 @@ const saveFilters = (newVal: string, filterType: FilterType) => {
 const loadFilters = () => {
   return {
     tasks: filters.tasks[savedFilters.tasks ?? 'any'],
-    needsReview: filters.needsReview.any,
+    needsReview: filters.needsReview[savedFilters.needsReview ?? 'any'],
     branch: filters.branch.any,
   };
 };
@@ -73,6 +71,14 @@ function App() {
   const [isReviewing, setIsReviewing] = useState(true);
   const [prState, setPRState] = useState<PRState>('OPEN');
 
+  useEffect(() => {
+    saveFilters(prState, 'prState');
+  }, [prState]);
+
+  useEffect(() => {
+    saveFilters(JSON.stringify(isReviewing), 'isReviewing');
+  }, [isReviewing]);
+
   const onFilterType = useCallback((col: ICol, newVal: string) => {
     setColFilters((prevState) => ({
       ...prevState,
@@ -80,26 +86,26 @@ function App() {
     }));
   }, []);
 
-  const addBuildStatus = async (commits: string[]) => {
-    try {
-      const statuses = await getStatuses(commits);
-      setSortedRows((prevState) => {
-        prevState.forEach((pr) => {
-          const status = statuses[pr.source.commit.hash];
-          if (status?.state === 'SUCCESSFUL') {
-            pr.buildStatus = 'success';
-          } else if (status?.state === 'INPROGRESS') {
-            pr.buildStatus = 'in_progress';
-          } else if (status?.state === 'FAILED') {
-            pr.buildStatus = 'fail';
-          }
-        });
-        return [...prevState];
-      });
-    } catch (e) {
-      console.error('Could not add status', e);
-    }
-  };
+  // const addBuildStatus = async (commits: string[]) => {
+  //   try {
+  //     const statuses = await getStatuses(commits);
+  //     setSortedRows((prevState) => {
+  //       prevState.forEach((pr) => {
+  //         const status = statuses[pr.source.commit.hash];
+  //         if (status?.state === 'SUCCESSFUL') {
+  //           pr.buildStatus = 'success';
+  //         } else if (status?.state === 'INPROGRESS') {
+  //           pr.buildStatus = 'in_progress';
+  //         } else if (status?.state === 'FAILED') {
+  //           pr.buildStatus = 'fail';
+  //         }
+  //       });
+  //       return [...prevState];
+  //     });
+  //   } catch (e) {
+  //     console.error('Could not add status', e);
+  //   }
+  // };
 
   const refresh = async (userUuid: string, resetSort = false) => {
     setLoading(true);
@@ -123,7 +129,7 @@ function App() {
     setSortedRows(getSortedRows(pullRequests, sortColumn, nextSortType.split(':')[1] === 'asc'));
     setLoading(false);
 
-    await addBuildStatus(pullRequests.map((pr) => pr.source.commit.hash));
+    // await addBuildStatus(pullRequests.map((pr) => pr.source.commit.hash));
   };
 
   useEffect(() => {
@@ -188,7 +194,6 @@ function App() {
                     {col.label}
                     <div style={{ display: 'flex' }}>
                       {col.matchFilter && (
-                        // TODO: extract
                         <FilterDropdown onFilterChange={(newVal: string) => onFilterType(col, newVal)} />
                       )}
                       <SortArrow
