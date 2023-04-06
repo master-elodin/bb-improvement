@@ -6,6 +6,8 @@ import { FULL_WIDTH, HOVER_COLOR } from './style-constants';
 import { buttonStyle } from './components/Button/Button-style';
 import { iconsStyle } from './components/Icons/Icons.style';
 import { filterDropdownStyle } from './components/FilterDropdown/FilterDropdown.style';
+import { userStatsStyle } from './components/UserStats/UserStats.style';
+import { spinnerStyle } from './components/Spinner/Spinner.style';
 
 InlineStyle({
   body: {
@@ -29,14 +31,6 @@ InlineStyle({
     height: 'calc(100% - 60px)',
     padding: '0 20px 20px 20px',
     width: FULL_WIDTH,
-  },
-  '.spinner': {
-    border: '6px solid rgba(0, 0, 0, 0.15)',
-    'border-radius': '50%',
-    width: '64px',
-    height: '64px',
-    'border-top-color': 'rgba(0, 0, 0, 0.5)',
-    animation: 'rotate 1s linear infinite',
   },
   '.content-header': {
     display: 'flex',
@@ -132,6 +126,8 @@ InlineStyle({
   ...buttonStyle,
   ...iconsStyle,
   ...filterDropdownStyle,
+  ...spinnerStyle,
+  ...userStatsStyle,
 });
 
 export { FULL_WIDTH };

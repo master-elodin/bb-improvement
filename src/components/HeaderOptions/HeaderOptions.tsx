@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { FilterType } from '../../filters';
 import FilterDropdown from '../FilterDropdown';
-import Button from '../Button/Button';
 import { PRState } from '../../types';
 import { FILTER_KEY } from '../../api';
 
@@ -11,7 +10,6 @@ interface IProps {
   onFilterSelect: (newVal: string, filterType: FilterType) => void;
   onPRTypeChange: (newVal: string) => void;
   onPRStateChange: (newVal: PRState) => void;
-  onRefreshClick: () => void;
 }
 
 const prTypeOptions = [
@@ -31,15 +29,16 @@ const taskOptions = [
   { label: 'No open tasks', value: 'no' },
 ];
 
-const reviewOptions = [
+const needsApprovalOptions = [
   { label: 'All', value: 'any' },
-  { label: 'I have approved', value: 'no' },
-  { label: 'I have not approved', value: 'yes' },
+  { label: 'Not approved', value: 'yes' },
+  { label: 'Approved', value: 'no' },
+  { label: 'Requested changes', value: 'changesRequested' },
 ];
 
 const savedFilters = JSON.parse(localStorage.getItem(FILTER_KEY) ?? '{}');
 
-const HeaderOptions = ({ allBranches, allRepoNames, onFilterSelect, onPRTypeChange, onPRStateChange, onRefreshClick }: IProps) => {
+const HeaderOptions = ({ allBranches, allRepoNames, onFilterSelect, onPRTypeChange, onPRStateChange }: IProps) => {
   const targets = allBranches.map((b) => ({ label: b, value: b }));
   targets.unshift({ label: 'All', value: 'any' });
   const repos = allRepoNames.map((b) => ({ label: b, value: b }));
@@ -79,15 +78,12 @@ const HeaderOptions = ({ allBranches, allRepoNames, onFilterSelect, onPRTypeChan
         width={'150px'}
       />
       <FilterDropdown
-        label={'My approval'}
-        options={reviewOptions}
+        label={'I have...'}
+        options={needsApprovalOptions}
         defaultValue={savedFilters.needsReview}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'needsReview')}
         width={'170px'}
       />
-      <Button onClick={onRefreshClick} className={'header-options__refresh-button'}>
-        <span title={'Refresh'}>&#8635;</span>
-      </Button>
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { ICol, IRow, IUser } from '../types';
 import RowTitle from './RowTitle/RowTitle';
 import LastActivity from './LastActivity';
 import Reviewers from './Reviewers';
+import BuildStatus from './BuildStatus';
 // import BuildStatus from './components/BuildStatus';
 
 export const columns: ICol[] = [
@@ -27,12 +28,12 @@ export const columns: ICol[] = [
     colClass: 'comments-col',
   },
   // TODO: maybe replace at some point
-  // {
-  //   label: 'Build',
-  //   getValue: (val: IRow) => (val.buildStatus === 'success' ? 1 : 0),
-  //   getRendered: (val: IRow) => <BuildStatus val={val} />,
-  //   colClass: 'build-col',
-  // },
+  {
+    label: 'Build',
+    getValue: (val: IRow) => (val.buildStatus === 'success' ? 1 : 0),
+    getRendered: (val: IRow) => <BuildStatus val={val} />,
+    colClass: 'build-col',
+  },
   {
     label: 'Reviewers',
     getValue: (val: IRow) => val.participants.filter((p) => p.role === 'REVIEWER' && p.approved).length,

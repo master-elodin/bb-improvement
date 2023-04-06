@@ -4,16 +4,15 @@ import { IOption } from './Dropdown/Dropdown';
 import { getAllUsers } from '../api';
 import { IUser } from '../types';
 import FilterDropdown from './FilterDropdown';
-import { loggedInUserUuid } from '../constants';
 
 interface IProps {
-  currentUser: IUser;
+  loggedInUserUuid: string;
   onUserChange: (newUser: IUser) => void;
 }
 
 type UserRecord = { [uuid: string]: IUser };
 
-const UserSelector = ({ currentUser, onUserChange }: IProps) => {
+const UserSelector = ({ onUserChange, loggedInUserUuid }: IProps) => {
   const [allUsers, setAllUsers] = useState<UserRecord>({});
   const [userOptions, setUserOptions] = useState<IOption[]>([]);
   useEffect(() => {
@@ -22,22 +21,23 @@ const UserSelector = ({ currentUser, onUserChange }: IProps) => {
         acc[val.uuid] = val;
         return acc;
       }, {} as UserRecord);
-      const realCurrentUser = usersById[currentUser.uuid];
-      if (realCurrentUser) onUserChange(realCurrentUser);
+      const realCurrentUser = usersById[loggedInUserUuid];
+
+      const options = Object.values(allUsers)
+        .filter((u) => u.uuid !== loggedInUserUuid) // only add logged-in user at the start of the list
+        .map((u) => ({ label: u.display_name, value: u.uuid }));
+      // handle hardcoded data
+      const meLabel = !realCurrentUser ? 'Me' : `Me (${realCurrentUser.display_name})`;
+      options.unshift({ label: meLabel, value: loggedInUserUuid });
+      setUserOptions(options);
+
+      if (realCurrentUser) {
+        onUserChange(realCurrentUser);
+      }
+
       setAllUsers(usersById);
     });
   }, []);
-
-  useEffect(() => {
-    const options = Object.values(allUsers)
-      .filter((u) => u.uuid !== currentUser.uuid) // only add logged-in user at the start of the list
-      .map((u) => ({ label: u.display_name, value: u.uuid }));
-    const realCurrentUser = allUsers[currentUser.uuid];
-    // handle hardcoded data
-    const meLabel = !realCurrentUser ? 'Me' : `Me (${realCurrentUser.display_name})`;
-    options.unshift({ label: meLabel, value: currentUser.uuid });
-    setUserOptions(options);
-  }, [allUsers]);
 
   return (
     <FilterDropdown

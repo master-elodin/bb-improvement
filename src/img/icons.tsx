@@ -13,6 +13,20 @@ export const ApprovedIcon = () => (
   </svg>
 );
 
+export const RequestChangesIcon = () => (
+  <svg role='presentation' width='16' height='16' viewBox='0 0 24 24' style={{ opacity: '.9' }}>
+    <g fillRule='evenodd'>
+      <circle fill='white' cx='12' cy='12' r='12' />
+      <circle fill='#FFAB00' cx='12' cy='12' r='10' />
+      <path
+        fillRule='evenodd'
+        clipRule='evenodd'
+        d='M17.144 10.76068C17.134700000000002 10.76068 17.1254 10.76078 17.1161 10.76099L7.14397 10.76099C6.45361 10.76099 5.8939699999999995 11.32063 5.8939699999999995 12.011C5.8939699999999995 12.7013 6.45361 13.261 7.14397 13.261L17.144 13.261V13.2607L17.144 13.2607C17.8343 13.2607 18.394 12.701 18.394 12.0107C18.394 11.32033 17.8343 10.76068 17.144 10.76068z'
+        fill='#F4F5F7' />
+    </g>
+  </svg>
+);
+
 export const FailedIcon = () => (
   <svg width='16' height='16' viewBox='4 4 18 18' role='presentation' style={{ color: '#DE350B', opacity: '.9' }}>
     <g fillRule='evenodd'>

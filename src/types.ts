@@ -13,7 +13,15 @@ export interface IUser {
   };
 }
 
-export type PRState = 'OPEN';
+export type IParticipantState = 'approved' | 'changes_requested' | null;
+export interface IParticipant {
+  approved: boolean;
+  role: 'REVIEWER' | 'PARTICIPANT';
+  state: IParticipantState;
+  user: IUser;
+}
+
+export type PRState = 'OPEN' | 'MERGED' | 'DECLINED';
 
 export interface IPullRequest {
   id: number;
@@ -33,15 +41,12 @@ export interface IPullRequest {
     }
   };
   author: IUser;
-  participants: {
-    role: 'REVIEWER' | 'PARTICIPANT';
-    approved: boolean;
-    user: IUser;
-  }[];
+  participants: IParticipant[];
   task_count: number;
   comment_count: number;
   created_on: string;
   updated_on: string;
+  closed_on?: string;
   links: {
     self: ILink;
     html: ILink;
@@ -73,4 +78,4 @@ export interface ICol {
   matchFilter?: (filterVal: string, row: IRow) => boolean;
 }
 
-export type IFilter = (row: IRow) => boolean;
+export type IFilter = (row: IRow, user: IUser) => boolean;

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { loggedInUserUuid } from '../constants';
 import { ICol, IFilter, IRow, IUser, PRState } from '../types';
 import Row, { columns } from './Row';
 import { FILTER_KEY, getPullRequests, getStatuses } from '../api';
@@ -10,6 +9,7 @@ import { DownArrow, UpArrow } from './Icons/Icons';
 import HeaderOptions from './HeaderOptions/HeaderOptions';
 import { filters, FilterType } from '../filters';
 import FilterDropdown from './FilterDropdown/FilterDropdown';
+import Spinner from './Spinner/Spinner';
 
 const headerStyle: React.CSSProperties = {
   cursor: 'pointer',
@@ -61,7 +61,12 @@ const loadFilters = () => {
   };
 };
 
-function App() {
+interface IProps {
+  isProd: boolean;
+  loggedInUserUuid: string;
+}
+
+function App({ isProd, loggedInUserUuid }: IProps) {
   const [loading, setLoading] = useState(true);
   const [sortType, setSortType] = useState<string>(`${columns[columns.length - 1].label}:asc`);
   const [sortedRows, setSortedRows] = useState<IRow[]>([]);
@@ -70,8 +75,8 @@ function App() {
   const [allBranches, setAllBranches] = useState<string[]>([]);
   const [allRepoNames, setAllRepoNames] = useState<string[]>([]);
   const [currentUser, setCurrentUser] = useState<IUser>({ uuid: loggedInUserUuid, display_name: 'Me' } as IUser);
-  const [isReviewing, setIsReviewing] = useState(true);
-  const [prState, setPRState] = useState<PRState>('OPEN');
+  const [isReviewing, setIsReviewing] = useState(savedFilters.isReviewing !== 'false');
+  const [prState, setPRState] = useState<PRState>(savedFilters.prState ?? 'OPEN');
 
   useEffect(() => {
     saveFilters(prState, 'prState');
@@ -88,26 +93,27 @@ function App() {
     }));
   }, []);
 
-  // const addBuildStatus = async (commits: string[]) => {
-  //   try {
-  //     const statuses = await getStatuses(commits);
-  //     setSortedRows((prevState) => {
-  //       prevState.forEach((pr) => {
-  //         const status = statuses[pr.source.commit.hash];
-  //         if (status?.state === 'SUCCESSFUL') {
-  //           pr.buildStatus = 'success';
-  //         } else if (status?.state === 'INPROGRESS') {
-  //           pr.buildStatus = 'in_progress';
-  //         } else if (status?.state === 'FAILED') {
-  //           pr.buildStatus = 'fail';
-  //         }
-  //       });
-  //       return [...prevState];
-  //     });
-  //   } catch (e) {
-  //     console.error('Could not add status', e);
-  //   }
-  // };
+  const addBuildStatus = async (commits: string[]) => {
+    try {
+      // TODO: make statuses work for every repo
+      const statuses = await getStatuses(commits);
+      setSortedRows((prevState) => {
+        prevState.forEach((pr) => {
+          const status = statuses[pr.source.commit.hash];
+          if (status?.state === 'SUCCESSFUL') {
+            pr.buildStatus = 'success';
+          } else if (status?.state === 'INPROGRESS') {
+            pr.buildStatus = 'in_progress';
+          } else if (status?.state === 'FAILED') {
+            pr.buildStatus = 'fail';
+          }
+        });
+        return [...prevState];
+      });
+    } catch (e) {
+      console.error('Could not add status', e);
+    }
+  };
 
   const refresh = async (userUuid: string, resetSort = false) => {
     setLoading(true);
@@ -138,11 +144,14 @@ function App() {
     setSortedRows(getSortedRows(pullRequests, sortColumn, nextSortType.split(':')[1] === 'asc'));
     setLoading(false);
 
-    // await addBuildStatus(pullRequests.map((pr) => pr.source.commit.hash));
+    await addBuildStatus(pullRequests.map((pr) => pr.source.commit.hash));
   };
 
   useEffect(() => {
-    refresh(currentUser.uuid, true);
+    // only refresh if user actually changed from the original user *or* if not in prod
+    if (!isProd || currentUser.links) {
+      refresh(currentUser.uuid, true);
+    }
   }, [currentUser, isReviewing, prState]);
 
   const onHeaderClick = (colType: string) => {
@@ -162,10 +171,10 @@ function App() {
 
   const visibleRows = sortedRows.filter(
     (row) =>
-      currentFilters.tasks(row) &&
-      currentFilters.needsReview(row) &&
-      currentFilters.branch(row) &&
-      currentFilters.repo(row) &&
+      currentFilters.tasks(row, currentUser) &&
+      currentFilters.needsReview(row, currentUser) &&
+      currentFilters.branch(row, currentUser) &&
+      currentFilters.repo(row, currentUser) &&
       Object.values(colFilers).every((colFilter) => colFilter(row)),
   );
   return (
@@ -173,19 +182,21 @@ function App() {
       <div style={pageHeaderStyle}>
         <div style={{ display: 'flex' }}>
           <div style={{ margin: '0 10px', display: 'flex' }}>
-            <UserSelector currentUser={currentUser} onUserChange={setCurrentUser} />
+            <UserSelector loggedInUserUuid={loggedInUserUuid} onUserChange={setCurrentUser} />
             {!loading && (
               <span style={{ paddingLeft: '20px', lineHeight: '60px', height: '40px' }}>
                 {visibleRows.length} of {sortedRows.length} visible
               </span>
             )}
+            {/*{!loading && (*/}
+            {/*  <UserStats userUuid={currentUser.uuid} />*/}
+            {/*)}*/}
           </div>
         </div>
         <HeaderOptions
           allBranches={allBranches}
           allRepoNames={allRepoNames}
           onFilterSelect={onFilterSelect}
-          onRefreshClick={() => refresh(currentUser.uuid)}
           onPRTypeChange={(newVal) => setIsReviewing(newVal === 'reviewer')}
           onPRStateChange={(newVal) => setPRState(newVal)}
         />
@@ -193,7 +204,7 @@ function App() {
       <div className={'content'}>
         {loading && (
           <div style={{ width: FULL_WIDTH, display: 'flex', justifyContent: 'center' }}>
-            <div className={'spinner'} />
+            <Spinner size={'64px'} />
           </div>
         )}
         {!loading && (

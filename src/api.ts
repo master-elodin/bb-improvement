@@ -1,18 +1,28 @@
-import { IS_PROD, loggedInUserUuid } from './constants';
 import { allUsers as mockUsers, rawData, statuses } from './data';
 import { IRow, IStatusResponse, IUser, PRState } from './types';
 
 export const FILTER_KEY = 'bb-script-filters';
 const workspace = process.env.REACT_APP_BB_WORKSPACE ?? 'my-workspace';
 
+const fields = [
+  '-values.closed_by',
+  '-values.description',
+  '-values.reviewers',
+  '-values.summary',
+  '+values.destination.branch.name',
+  '+values.destination.repository.slug',
+  '+values.source.branch.name',
+  '+values.source.commit.hash',
+  '+values.participants.*',
+  '+values.task_count',
+];
+
+const statusFields = ['+*.commit_status.updated_on', '+*.commit_status.description', '+*.commit_status.name'];
+
 const reviewingPRs: Record<string, string> = {
-  fields:
-    '-values.closed_by,-values.description,+values.destination.branch.name,+values.destination.repository.*,' +
-    '-values.reviewers,+values.source.branch.name,+values.source.repository.*,+values.source.commit.hash,' +
-    '-values.summary',
+  fields: fields.join(','),
   page: '1',
   pagelen: '50',
-  q: `state="OPEN" AND reviewers.uuid="${loggedInUserUuid}"`,
 };
 
 const getUrl = (currentUserUuid: string, isReviewing: boolean, prState: PRState) => {
@@ -28,9 +38,12 @@ const getUrl = (currentUserUuid: string, isReviewing: boolean, prState: PRState)
   );
 };
 
+let isProd = false;
+export const setIsProd = (newVal: boolean) => (isProd = newVal);
+
 export const getPullRequests = async (currentUserUuid: string, isReviewing: boolean, prState: PRState) => {
-  if (!IS_PROD) {
-    return rawData.values as IRow[];
+  if (!isProd) {
+    return rawData.values as unknown as IRow[];
   }
   const res = await fetch(getUrl(currentUserUuid, isReviewing, prState));
   const json = await res.json();
@@ -38,18 +51,22 @@ export const getPullRequests = async (currentUserUuid: string, isReviewing: bool
 };
 
 export const getStatuses = async (commits: string[]): Promise<IStatusResponse> => {
-  if (!IS_PROD) {
+  if (!isProd) {
     return statuses as IStatusResponse;
   }
-  const res = await fetch(`https://bitbucket.org/!api/internal/workspaces/${workspace}/commits/statuses`, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json; charset=UTF-8',
-      'X-Bitbucket-Frontend': 'frontbucket',
-      'X-CSRFToken': '??', // TODO
+  const res = await fetch(
+    // TODO: probably should be workspace/repository
+    `https://bitbucket.org/!api/internal/repositories/${workspace}/${workspace}/commits/statuses/` +
+      `?fields=${encodeURIComponent(statusFields.join(','))}`,
+    {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'X-Bitbucket-Frontend': 'frontbucket',
+      },
+      body: commits.map((commit) => `commits=${commit}`).join('&'),
     },
-    body: JSON.stringify({ commits }),
-  });
+  );
   return (await res.json()) as IStatusResponse;
 };
 
@@ -59,18 +76,26 @@ interface IMemberResponse {
 }
 
 export const getAllUsers = async (): Promise<IUser[]> => {
-  if (!IS_PROD) {
+  if (!isProd) {
     return mockUsers.values as IUser[];
   }
-  const getUsers = async (allUsers: IUser[], next?: string) => {
-    const res = await fetch(next ?? `https://bitbucket.org/!api/internal/workspaces/${workspace}/members/?pagelen=100`);
-    const data = (await res.json()) as IMemberResponse;
-    allUsers.push(...data.values);
-    if (data.next) {
-      await getUsers(allUsers, data.next);
-    }
-  };
   const allUsers: IUser[] = [];
-  await getUsers(allUsers);
+  try {
+    const getUsers = async (allUsers: IUser[], next?: string) => {
+      const res = await fetch(
+        next ?? `https://bitbucket.org/!api/internal/workspaces/${workspace}/members/?pagelen=100`,
+      );
+      const data = (await res.json()) as IMemberResponse;
+      allUsers.push(...data.values);
+      if (data.next) {
+        await getUsers(allUsers, data.next);
+      }
+    };
+    await getUsers(allUsers);
+  } catch (e) {
+    console.error('Failed to get users', e);
+    // @ts-ignore: controlled outside the app
+    allUsers.push(...JSON.parse(fallbackMembers ?? '[]'));
+  }
   return allUsers;
 };
