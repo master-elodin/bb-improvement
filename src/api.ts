@@ -55,7 +55,6 @@ export const getStatuses = async (commits: string[]): Promise<IStatusResponse> =
     return statuses as IStatusResponse;
   }
   const res = await fetch(
-    // TODO: probably should be workspace/repository
     `https://bitbucket.org/!api/internal/repositories/${workspace}/${workspace}/commits/statuses/` +
       `?fields=${encodeURIComponent(statusFields.join(','))}`,
     {

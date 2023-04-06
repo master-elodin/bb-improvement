@@ -12,8 +12,21 @@ export const columns: ICol[] = [
     getValue: (val: IRow) => val.title,
     getRendered: (val: IRow) => <RowTitle val={val} />,
     colClass: 'name-col',
-    matchFilter: (newVal: string, row: IRow) =>
-      row.author.display_name.toLowerCase().includes(newVal) || row.title.toLowerCase().includes(newVal),
+    matchFilter: (newVal: string, row: IRow) => {
+      const isNot = newVal.startsWith('!');
+      const matchVal = (isNot ? newVal.substring(1) : newVal).toLowerCase();
+      if (matchVal.length === 0) {
+        return true;
+      }
+      const matchTitle = row.title.toLowerCase().includes(matchVal);
+      const matchAuthor = row.author.display_name.toLowerCase().includes(matchVal);
+      const matchBranch = row.destination.branch.name.toLowerCase().includes(matchVal);
+      if (isNot) {
+        return !matchTitle && !matchAuthor && !matchBranch;
+      } else {
+        return matchTitle || matchAuthor || matchBranch;
+      }
+    },
   },
   {
     label: 'Tasks',
@@ -27,7 +40,6 @@ export const columns: ICol[] = [
     getRendered: (val: IRow) => <span>{val.comment_count || ''}</span>,
     colClass: 'comments-col',
   },
-  // TODO: maybe replace at some point
   {
     label: 'Build',
     getValue: (val: IRow) => (val.buildStatus === 'success' ? 1 : 0),

@@ -23,7 +23,7 @@ const UserSelector = ({ onUserChange, loggedInUserUuid }: IProps) => {
       }, {} as UserRecord);
       const realCurrentUser = usersById[loggedInUserUuid];
 
-      const options = Object.values(allUsers)
+      const options = Object.values(data)
         .filter((u) => u.uuid !== loggedInUserUuid) // only add logged-in user at the start of the list
         .map((u) => ({ label: u.display_name, value: u.uuid }));
       // handle hardcoded data
