@@ -1,6 +1,7 @@
 import { FocusEvent, useCallback, useEffect, useRef, useState } from 'react';
 import * as React from 'react';
 import { DownArrow, UpArrow } from '../Icons/Icons';
+import { handleBlur } from '../../utils';
 
 export interface IOption {
   value: string;
@@ -59,17 +60,11 @@ const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width 
     onSelect(option.value);
   };
 
-  const handleBlur = (e: FocusEvent<HTMLDivElement>) => {
-    const currentTarget = e.currentTarget;
-
-    // gratefully copied from https://muffinman.io/blog/catching-the-blur-event-on-an-element-and-its-children/
-    requestAnimationFrame(() => {
-      // Check if the new focused element is a child of the original container
-      if (!currentTarget.contains(document.activeElement)) {
-        // nothing was selected, so clear any filter typed in
-        setFilterVal(prevFilterVal);
-        hide();
-      }
+  const onBlur = (e: FocusEvent<HTMLDivElement>) => {
+    handleBlur(e, () => {
+      // nothing was selected, so clear any filter typed in
+      setFilterVal(prevFilterVal);
+      hide();
     });
   };
 
@@ -88,7 +83,7 @@ const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width 
     (option) => !allowFilter || option.label.toLowerCase().indexOf(filterVal.toLowerCase()) > -1,
   );
   return (
-    <div className={'dropdown-root'} style={{ width }} onBlur={handleBlur} tabIndex={-1}>
+    <div className={'dropdown-root'} style={{ width }} onBlur={onBlur} tabIndex={-1}>
       <div className={'dropdown-input'}>
         {filterInput}
         {allowFilter && (

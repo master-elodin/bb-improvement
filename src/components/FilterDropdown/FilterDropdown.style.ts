@@ -20,4 +20,15 @@ export const filterDropdownStyle = {
     padding: '2px 8px',
     'min-width': '240px',
   },
+  '.filter-dropdown__clear-btn': {
+    'line-height': '22px',
+    opacity: '.5',
+    padding: '0 5px',
+    position: 'absolute',
+    right: '15px',
+    top: '10px',
+  },
+  '.filter-dropdown__clear-btn:hover': {
+    opacity: 1,
+  }
 };

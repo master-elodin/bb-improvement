@@ -1,3 +1,5 @@
+import { FocusEvent } from 'react';
+
 export const formatDate = (val: string) => new Date(val).toISOString().substring(0, 16).replace('T', ' ');
 
 const pluralize = (str: string, count: number) => `${str}${count > 1 ? 's' : ''}`;
@@ -19,4 +21,16 @@ export const msToTime = (ms: number) => {
   ]
     .filter(Boolean)
     .join(' ');
+};
+
+export const handleBlur = (e: FocusEvent<HTMLDivElement>, cb: () => void) => {
+  const currentTarget = e.currentTarget;
+
+  // gratefully copied from https://muffinman.io/blog/catching-the-blur-event-on-an-element-and-its-children/
+  requestAnimationFrame(() => {
+    // Check if the new focused element is a child of the original container
+    if (!currentTarget.contains(document.activeElement)) {
+      cb();
+    }
+  });
 };
