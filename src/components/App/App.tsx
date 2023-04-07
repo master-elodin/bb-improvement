@@ -9,6 +9,8 @@ import HeaderOptions from '../HeaderOptions/HeaderOptions';
 import { filters, FilterType } from '../../filters';
 import ColumnFilter from '../ColumnFilter/ColumnFilter';
 import Spinner from '../Spinner/Spinner';
+import Drawer from '../Drawer/Drawer';
+import Button from '../Button/Button';
 
 const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
   const getValue = columns.find((col) => col.label === colType)?.getValue ?? (() => 'zzzz');
@@ -58,6 +60,7 @@ function App({ isProd, loggedInUserUuid }: IProps) {
   const [currentUser, setCurrentUser] = useState<IUser>({ uuid: loggedInUserUuid, display_name: 'Me' } as IUser);
   const [isReviewing, setIsReviewing] = useState(savedFilters.isReviewing !== 'false');
   const [prState, setPRState] = useState<PRState>(savedFilters.prState ?? 'OPEN');
+  const [drawerOpen, setDrawerOpen] = useState(true);
 
   useEffect(() => {
     saveFilters(prState, 'prState');
@@ -80,7 +83,7 @@ function App({ isProd, loggedInUserUuid }: IProps) {
       const statuses = await getStatuses(commits);
       setSortedRows((prevState) => {
         prevState.forEach((pr) => {
-          pr.buildStatus = statuses[pr.source.commit.hash]
+          pr.buildStatus = statuses[pr.source.commit.hash];
         });
         return [...prevState];
       });
@@ -165,13 +168,18 @@ function App({ isProd, loggedInUserUuid }: IProps) {
           {/*  <UserStats userUuid={currentUser.uuid} />*/}
           {/*)}*/}
         </div>
-        <HeaderOptions
-          allBranches={allBranches}
-          allRepoNames={allRepoNames}
-          onFilterSelect={onFilterSelect}
-          onPRTypeChange={(newVal) => setIsReviewing(newVal === 'reviewer')}
-          onPRStateChange={(newVal) => setPRState(newVal)}
-        />
+        <div style={{ display: 'flex', alignItems: 'end' }}>
+          <HeaderOptions
+            allBranches={allBranches}
+            allRepoNames={allRepoNames}
+            onFilterSelect={onFilterSelect}
+            onPRTypeChange={(newVal) => setIsReviewing(newVal === 'reviewer')}
+            onPRStateChange={(newVal) => setPRState(newVal)}
+          />
+          <Button onClick={() => refresh(currentUser.uuid)} className={'app__refresh-btn'}>
+            &#8635;
+          </Button>
+        </div>
       </div>
       <div className={'app__content'}>
         {loading && (
@@ -181,26 +189,29 @@ function App({ isProd, loggedInUserUuid }: IProps) {
         )}
         {!loading && (
           <>
-            <div className={'app__content-header'}>
-              {columns.map((col) => (
-                <div key={col.label} className={`app__content-header-col ${col.colClass}`}>
-                  <span className={'app__content-header-label'}>{col.label}</span>
-                  <div className={'app__content-header-col-actions'}>
-                    {col.matchFilter && (
-                      <ColumnFilter onFilterChange={(newVal: string) => onFilterType(col, newVal)} />
-                    )}
-                    <SortArrow
-                      onClick={() => onHeaderClick(col.label)}
-                      sort={sortType?.substring(col.label.length + 1) as any}
-                    />
+            <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} />
+            <div className={'app__content-body'}>
+              <div className={'app__content-header'}>
+                {columns.map((col) => (
+                  <div key={col.label} className={`app__content-header-col ${col.colClass}`}>
+                    <span className={'app__content-header-label'}>{col.label}</span>
+                    <div className={'app__content-header-col-actions'}>
+                      {col.matchFilter && (
+                        <ColumnFilter onFilterChange={(newVal: string) => onFilterType(col, newVal)} />
+                      )}
+                      <SortArrow
+                        onClick={() => onHeaderClick(col.label)}
+                        sort={sortType?.substring(col.label.length + 1) as any}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-            <div className={'app__content-rows'}>
-              {visibleRows.map((val, index) => (
-                <Row key={index} val={val} currentUser={currentUser} />
-              ))}
+                ))}
+              </div>
+              <div className={'app__content-rows'}>
+                {visibleRows.map((val, index) => (
+                  <Row key={index} val={val} currentUser={currentUser} />
+                ))}
+              </div>
             </div>
           </>
         )}

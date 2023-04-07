@@ -1,16 +1,14 @@
 export const appStyle = {
   '.app__root': {
-    height: 'calc(100vh - 40px)',
+    height: '100vh',
     overflow: 'hidden',
-    padding: '10px 0',
     width: '100vw',
   },
   '.app__header': {
     'border-bottom': '1px solid black',
     display: 'flex',
     'justify-content': 'space-between',
-    'margin-bottom': '20px',
-    padding: '0 20px 10px 20px',
+    padding: '10px 20px',
   },
   '.app__user-section': {
     display: 'flex',
@@ -23,9 +21,11 @@ export const appStyle = {
     'padding-left': '20px',
   },
   '.app__content': {
+    display: 'flex',
     height: 'calc(100% - 60px)',
-    padding: '0 20px 20px 20px',
-    width: 'calc(100% - 40px)',
+    padding: '10px 20px 0 0',
+    width: 'calc(100% - 20px)',
+    '--header-height': '30px',
   },
   '.app__content-loading-container': {
     display: 'flex',
@@ -34,10 +34,9 @@ export const appStyle = {
   },
   '.app__content-header': {
     display: 'flex',
-    height: '25px',
+    height: 'var(--header-height)',
     'justify-content': 'space-around',
-    'line-height': '25px',
-    'padding-bottom': '5px',
+    'line-height': 'var(--header-height)',
     width: '100%',
   },
   '.app__content-header .icon': {
@@ -56,8 +55,21 @@ export const appStyle = {
     display: 'flex',
     'padding-right': '8px',
   },
+  '.app__refresh-btn': {
+    height: '18px',
+    'margin-left': '8px',
+    'margin-top': '-2px',
+    width: '18px',
+  },
+  '.app__content-body': {
+    display: 'flex',
+    'flex-direction': 'column',
+    'flex-grow': 1,
+    'flex-shrink': 1,
+    height: '100%',
+    'min-width': 0,
+  },
   '.app__content-rows': {
-    height: 'calc(100% - 48px)',
     'overflow-x': 'hidden',
     'overflow-y': 'scroll',
     width: '100%',

@@ -9,11 +9,13 @@ import { userStatsStyle } from './components/UserStats/UserStats.style';
 import { spinnerStyle } from './components/Spinner/Spinner.style';
 import { reviewersStyle } from './components/Reviewers/Reviewers.style';
 import { appStyle } from './components/App/App.style';
+import { drawerStyle } from './components/Drawer/Drawer.style';
 
 export const initStyles = () => {
   InlineStyle({
     body: {
       '--color-background': '#FCFDFF',
+      '--color-background-alt': '#F5F6FF',
       'background-color': 'var(--color-background)',
       'font-family':
         '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Fira Sans,Droid Sans,Helvetica Neue,sans-serif',
@@ -35,7 +37,7 @@ export const initStyles = () => {
       width: '100%',
     },
     '.row:nth-child(odd)': {
-      '--color-background': '#F5F6FF',
+      '--color-background': 'var(--color-background-alt)',
     },
     '.row-col': {
       overflow: 'hidden',
@@ -82,7 +84,6 @@ export const initStyles = () => {
       position: 'relative',
     },
     '.activity-col': {
-      'min-width': '190px',
       width: '190px',
     },
     '.row-col.activity-col': {
@@ -94,6 +95,7 @@ export const initStyles = () => {
       'padding-left': '8px',
     },
     ...appStyle,
+    ...drawerStyle,
     ...dropdownStyle,
     ...rowTitleStyles,
     ...headerOptionsStyle,

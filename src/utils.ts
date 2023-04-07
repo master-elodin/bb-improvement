@@ -34,3 +34,9 @@ export const handleBlur = (e: FocusEvent<HTMLDivElement>, cb: () => void) => {
     }
   });
 };
+
+type CxTypes = string | boolean | undefined | null;
+
+export const cx = (...classNames: CxTypes[]) => {
+  return classNames.filter(Boolean).join(' ');
+};
