@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './components/App';
+import App from './components/App/App';
 import { setIsProd } from './api';
+import { initStyles } from './styles';
+
+initStyles();
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 const isProd = process.env.NODE_ENV === 'production';

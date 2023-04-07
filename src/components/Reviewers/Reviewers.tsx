@@ -1,5 +1,5 @@
-import { ApprovedIcon, RequestChangesIcon } from '../img/icons';
-import { IRow, IUser } from '../types';
+import { ApprovedIcon, RequestChangesIcon } from '../../img/icons';
+import { IRow, IUser } from '../../types';
 import * as React from 'react';
 
 interface IProps {
@@ -31,10 +31,10 @@ const Reviewers = ({ val, currentUser }: IProps) => {
       return a.user.display_name.localeCompare(b.user.display_name);
     });
   return (
-    <>
+    <div className={'reviewers__root'}>
       {reviewers.map((reviewer, index) => (
         <div
-          className={'reviewerAvatar'}
+          className={'reviewers__avatar'}
           key={reviewer.user.uuid}
           style={{ left: `${(index ?? 0) * 15 + 5}px` }}
           title={reviewer.user.display_name}>
@@ -47,7 +47,8 @@ const Reviewers = ({ val, currentUser }: IProps) => {
           )}
         </div>
       ))}
-    </>
+      <div className={'reviewers__fade'} />
+    </div>
   );
 };
 

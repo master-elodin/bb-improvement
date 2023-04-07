@@ -86,7 +86,7 @@ const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width 
     <div className={'dropdown-root'} style={{ width }} onBlur={onBlur} tabIndex={-1}>
       <div className={'dropdown-input'}>
         {filterInput}
-        {allowFilter && (
+        {allowFilter && filterVal.length > 0 && (
           <div className={'dropdown__clear-btn'} onClick={onClearClick}>
             &times;
           </div>

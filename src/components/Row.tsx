@@ -2,9 +2,24 @@ import * as React from 'react';
 import { ICol, IRow, IUser } from '../types';
 import RowTitle from './RowTitle/RowTitle';
 import LastActivity from './LastActivity';
-import Reviewers from './Reviewers';
+import Reviewers from './Reviewers/Reviewers';
 import BuildStatus from './BuildStatus';
-// import BuildStatus from './components/BuildStatus';
+
+const matchNameCol = (newVal: string, row: IRow) => {
+  const isNot = newVal.startsWith('!');
+  const matchVal = (isNot ? newVal.substring(1) : newVal).trim().toLowerCase();
+  if (matchVal.length === 0) {
+    return true;
+  }
+  const matchTitle = row.title.toLowerCase().includes(matchVal);
+  const matchAuthor = row.author.display_name.toLowerCase().includes(matchVal);
+  const matchBranch = row.destination.branch.name.toLowerCase().includes(matchVal);
+  if (isNot) {
+    return !matchTitle && !matchAuthor && !matchBranch;
+  } else {
+    return matchTitle || matchAuthor || matchBranch;
+  }
+};
 
 export const columns: ICol[] = [
   {
@@ -13,19 +28,7 @@ export const columns: ICol[] = [
     getRendered: (val: IRow) => <RowTitle val={val} />,
     colClass: 'name-col',
     matchFilter: (newVal: string, row: IRow) => {
-      const isNot = newVal.startsWith('!');
-      const matchVal = (isNot ? newVal.substring(1) : newVal).toLowerCase();
-      if (matchVal.length === 0) {
-        return true;
-      }
-      const matchTitle = row.title.toLowerCase().includes(matchVal);
-      const matchAuthor = row.author.display_name.toLowerCase().includes(matchVal);
-      const matchBranch = row.destination.branch.name.toLowerCase().includes(matchVal);
-      if (isNot) {
-        return !matchTitle && !matchAuthor && !matchBranch;
-      } else {
-        return matchTitle || matchAuthor || matchBranch;
-      }
+      return newVal.split(',').some((val) => matchNameCol(val, row));
     },
   },
   {

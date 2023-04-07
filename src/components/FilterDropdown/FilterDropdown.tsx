@@ -45,12 +45,14 @@ const FilterDropdown = ({ onFilterChange }: IProps) => {
             ref={inputRef}
             value={filterVal}
             onChange={(e) => onChange(e.target.value)}
-            placeholder={'Filter by PR name or author'}
+            placeholder={'Separate by comma. ! to negate'}
             autoFocus={true}
           />
-          <div className={'filter-dropdown__clear-btn'} onClick={onClearClick}>
-            &times;
-          </div>
+          {filterVal.length > 0 && (
+            <div className={'filter-dropdown__clear-btn'} onClick={onClearClick}>
+              &times;
+            </div>
+          )}
         </div>
       )}
     </div>

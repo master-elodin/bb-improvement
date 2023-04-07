@@ -1,31 +1,14 @@
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { ICol, IFilter, IRow, IUser, PRState } from '../types';
-import Row, { columns } from './Row';
-import { FILTER_KEY, getPullRequests, getStatuses } from '../api';
-import UserSelector from './UserSelector';
-import { FULL_WIDTH } from '../styles';
-import { DownArrow, UpArrow } from './Icons/Icons';
-import HeaderOptions from './HeaderOptions/HeaderOptions';
-import { filters, FilterType } from '../filters';
-import FilterDropdown from './FilterDropdown/FilterDropdown';
-import Spinner from './Spinner/Spinner';
-
-const headerStyle: React.CSSProperties = {
-  cursor: 'pointer',
-  display: 'flex',
-  justifyContent: 'space-between',
-  padding: '4px 8px',
-  textAlign: 'left',
-};
-
-const pageHeaderStyle: React.CSSProperties = {
-  borderBottom: '1px solid black',
-  display: 'flex',
-  justifyContent: 'space-between',
-  marginBottom: '20px',
-  padding: '0 20px 10px 20px',
-};
+import { ICol, IFilter, IRow, IUser, PRState } from '../../types';
+import Row, { columns } from '../Row';
+import { FILTER_KEY, getPullRequests, getStatuses } from '../../api';
+import UserSelector from '../UserSelector';
+import { DownArrow, UpArrow } from '../Icons/Icons';
+import HeaderOptions from '../HeaderOptions/HeaderOptions';
+import { filters, FilterType } from '../../filters';
+import FilterDropdown from '../FilterDropdown/FilterDropdown';
+import Spinner from '../Spinner/Spinner';
 
 const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
   const getValue = columns.find((col) => col.label === colType)?.getValue ?? (() => 'zzzz');
@@ -40,8 +23,6 @@ const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
   });
   return [...rows];
 };
-
-// TODO: don't reset sort on refresh
 
 type ColFilter = (row: IRow) => boolean;
 
@@ -178,20 +159,18 @@ function App({ isProd, loggedInUserUuid }: IProps) {
       Object.values(colFilers).every((colFilter) => colFilter(row)),
   );
   return (
-    <div className={'root'}>
-      <div style={pageHeaderStyle}>
-        <div style={{ display: 'flex' }}>
-          <div style={{ margin: '0 10px', display: 'flex' }}>
-            <UserSelector loggedInUserUuid={loggedInUserUuid} onUserChange={setCurrentUser} />
-            {!loading && (
-              <span style={{ paddingLeft: '20px', lineHeight: '60px', height: '40px' }}>
-                {visibleRows.length} of {sortedRows.length} visible
-              </span>
-            )}
-            {/*{!loading && (*/}
-            {/*  <UserStats userUuid={currentUser.uuid} />*/}
-            {/*)}*/}
-          </div>
+    <div className={'app__root'}>
+      <div className={'app__header'}>
+        <div className={'app__user-section'}>
+          <UserSelector loggedInUserUuid={loggedInUserUuid} onUserChange={setCurrentUser} />
+          {!loading && (
+            <span className={'app__num-visible'}>
+              {visibleRows.length} of {sortedRows.length} visible
+            </span>
+          )}
+          {/*{!loading && (*/}
+          {/*  <UserStats userUuid={currentUser.uuid} />*/}
+          {/*)}*/}
         </div>
         <HeaderOptions
           allBranches={allBranches}
@@ -201,33 +180,31 @@ function App({ isProd, loggedInUserUuid }: IProps) {
           onPRStateChange={(newVal) => setPRState(newVal)}
         />
       </div>
-      <div className={'content'}>
+      <div className={'app__content'}>
         {loading && (
-          <div style={{ width: FULL_WIDTH, display: 'flex', justifyContent: 'center' }}>
+          <div className={'app__content-loading-container'}>
             <Spinner size={'64px'} />
           </div>
         )}
         {!loading && (
           <>
-            <div className={'content-header'}>
+            <div className={'app__content-header'}>
               {columns.map((col) => (
-                <div key={col.label} className={col.colClass}>
-                  <div style={headerStyle}>
-                    {col.label}
-                    <div style={{ display: 'flex' }}>
-                      {col.matchFilter && (
-                        <FilterDropdown onFilterChange={(newVal: string) => onFilterType(col, newVal)} />
-                      )}
-                      <SortArrow
-                        onClick={() => onHeaderClick(col.label)}
-                        sort={sortType?.substring(col.label.length + 1) as any}
-                      />
-                    </div>
+                <div key={col.label} className={`app__content-header-col ${col.colClass}`}>
+                  {col.label}
+                  <div className={'app__content-header-col-actions'}>
+                    {col.matchFilter && (
+                      <FilterDropdown onFilterChange={(newVal: string) => onFilterType(col, newVal)} />
+                    )}
+                    <SortArrow
+                      onClick={() => onHeaderClick(col.label)}
+                      sort={sortType?.substring(col.label.length + 1) as any}
+                    />
                   </div>
                 </div>
               ))}
             </div>
-            <div style={{ width: FULL_WIDTH, height: 'calc(100% - 40px)', overflowY: 'scroll', overflowX: 'hidden' }}>
+            <div className={'app__content-rows'}>
               {visibleRows.map((val, index) => (
                 <Row key={index} val={val} currentUser={currentUser} />
               ))}
@@ -246,7 +223,7 @@ interface ISortArrowProps {
 
 const SortArrow = ({ onClick, sort }: ISortArrowProps) => {
   return (
-    <div style={{ display: 'flex', justifyContent: 'flex-end' }} onClick={onClick}>
+    <div className={'app__sort-arrows'} onClick={onClick}>
       {<UpArrow selected={sort === 'asc'} />}
       {<DownArrow selected={sort === 'desc'} />}
     </div>
