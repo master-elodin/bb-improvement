@@ -16,7 +16,7 @@ export interface IProps {
   width?: string;
 }
 
-const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width = '200px' }: IProps) => {
+const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width }: IProps) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [selected, setSelected] = useState<IOption>();
   const [filterVal, setFilterVal] = useState<string>(selected?.label ?? '');

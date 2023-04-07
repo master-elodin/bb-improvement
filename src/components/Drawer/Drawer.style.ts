@@ -5,8 +5,7 @@ export const drawerStyle = {
     display: 'flex',
     'flex-basis': '20px',
     'flex-direction': 'column',
-    height: 'calc(100% - var(--header-height))',
-    'margin-top': 'var(--header-height)',
+    height: '100%',
     overflow: 'hidden',
     position: 'relative',
     transition: 'flex-basis 100ms ease-out',
@@ -42,7 +41,7 @@ export const drawerStyle = {
     left: '30px',
     margin: 0,
     position: 'absolute',
-    top: '8px',
+    top: '5px',
   },
   '.drawer__content': {
     display: 'flex',

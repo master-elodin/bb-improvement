@@ -8,11 +8,10 @@ export const appStyle = {
     'border-bottom': '1px solid black',
     display: 'flex',
     'justify-content': 'space-between',
-    padding: '10px 20px',
+    padding: '10px',
   },
   '.app__user-section': {
     display: 'flex',
-    margin: '0 10px',
   },
   '.app__num-visible': {
     'font-size': '.8em',
