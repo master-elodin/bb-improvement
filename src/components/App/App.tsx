@@ -5,12 +5,13 @@ import Row, { columns } from '../Row';
 import { FILTER_KEY, getPullRequests, getStatuses } from '../../api';
 import UserSelector from '../UserSelector';
 import { DownArrow, UpArrow } from '../Icons/Icons';
-import HeaderOptions from '../HeaderOptions/HeaderOptions';
+import DrawerFilters from '../HeaderOptions/DrawerFilters';
 import { filters, FilterType } from '../../filters';
 import ColumnFilter from '../ColumnFilter/ColumnFilter';
 import Spinner from '../Spinner/Spinner';
 import Drawer from '../Drawer/Drawer';
 import Button from '../Button/Button';
+import FilterDropdown from '../HeaderOptions/FilterDropdown';
 
 const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
   const getValue = columns.find((col) => col.label === colType)?.getValue ?? (() => 'zzzz');
@@ -168,16 +169,9 @@ function App({ isProd, loggedInUserUuid }: IProps) {
           {/*  <UserStats userUuid={currentUser.uuid} />*/}
           {/*)}*/}
         </div>
-        <div style={{ display: 'flex', alignItems: 'end' }}>
-          <HeaderOptions
-            allBranches={allBranches}
-            allRepoNames={allRepoNames}
-            onFilterSelect={onFilterSelect}
-            onPRTypeChange={(newVal) => setIsReviewing(newVal === 'reviewer')}
-            onPRStateChange={(newVal) => setPRState(newVal)}
-          />
+        <div className={'app__header-action-container'}>
           <Button onClick={() => refresh(currentUser.uuid)} className={'app__refresh-btn'}>
-            &#8635;
+            <span>&#8635; Refresh</span>
           </Button>
         </div>
       </div>
@@ -189,7 +183,15 @@ function App({ isProd, loggedInUserUuid }: IProps) {
         )}
         {!loading && (
           <>
-            <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} />
+            <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+              <DrawerFilters
+                allBranches={allBranches}
+                allRepoNames={allRepoNames}
+                onFilterSelect={onFilterSelect}
+                onPRTypeChange={(newVal) => setIsReviewing(newVal === 'reviewer')}
+                onPRStateChange={(newVal) => setPRState(newVal)}
+              />
+            </Drawer>
             <div className={'app__content-body'}>
               <div className={'app__content-header'}>
                 {columns.map((col) => (

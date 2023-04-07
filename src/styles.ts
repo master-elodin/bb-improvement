@@ -1,6 +1,6 @@
 import { InlineStyle } from './inlineStyles';
 import { rowTitleStyles } from './components/RowTitle/RowTitle.style';
-import { headerOptionsStyle } from './components/HeaderOptions/HeaderOptions-style';
+import { drawerFiltersStyle } from './components/HeaderOptions/DrawerFilters.style';
 import { dropdownStyle } from './components/Dropdown/Dropdown-style';
 import { buttonStyle } from './components/Button/Button-style';
 import { iconsStyle } from './components/Icons/Icons.style';
@@ -98,7 +98,7 @@ export const initStyles = () => {
     ...drawerStyle,
     ...dropdownStyle,
     ...rowTitleStyles,
-    ...headerOptionsStyle,
+    ...drawerFiltersStyle,
     ...buttonStyle,
     ...iconsStyle,
     ...columnFilterStyle,

@@ -21,10 +21,11 @@ export const appStyle = {
     'padding-left': '20px',
   },
   '.app__content': {
+    'background-color': 'var(--color-background-alt)',
     display: 'flex',
     height: 'calc(100% - 60px)',
-    padding: '10px 20px 0 0',
-    width: 'calc(100% - 20px)',
+    padding: '10px 10px 0 0',
+    width: 'calc(100% - 10px)',
     '--header-height': '30px',
   },
   '.app__content-loading-container': {
@@ -55,11 +56,14 @@ export const appStyle = {
     display: 'flex',
     'padding-right': '8px',
   },
-  '.app__refresh-btn': {
-    height: '18px',
-    'margin-left': '8px',
-    'margin-top': '-2px',
-    width: '18px',
+  '.app__header-action-container': {
+    display: 'flex',
+    'align-items': 'center',
+  },
+  '.app__refresh-btn.button': {
+    height: '20px',
+    'line-height': '20px',
+    padding: '2px 8px',
   },
   '.app__content-body': {
     display: 'flex',

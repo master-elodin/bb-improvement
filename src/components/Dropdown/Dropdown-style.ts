@@ -4,12 +4,11 @@ export const dropdownStyle = {
   '.dropdown-root': {
     cursor: 'pointer',
     position: 'relative',
-    'z-index': 2,
   },
   '.dropdown-root .icon': {
     position: 'absolute',
     right: '7px',
-    top: '3px',
+    top: '4px',
     'z-index': 2,
   },
   '.dropdown-dropdown': {
@@ -24,6 +23,7 @@ export const dropdownStyle = {
     right: 0,
     top: '30px',
     width: '100%',
+    'z-index': 5,
   },
   '.dropdown-input': {
     display: 'flex',
@@ -40,7 +40,7 @@ export const dropdownStyle = {
     cursor: 'pointer',
   },
   '.dropdown__clear-btn': {
-    'line-height': '22px',
+    'line-height': '23px',
     opacity: '.5',
     padding: '0 5px',
     position: 'absolute',

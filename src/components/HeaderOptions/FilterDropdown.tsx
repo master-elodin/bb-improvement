@@ -6,8 +6,8 @@ interface IProps extends IDropdownProps {
 }
 
 const FilterDropdown = ({ label, options, defaultValue, onSelect, allowFilter, width }: IProps) => (
-  <div className={'header-options__filter'}>
-    <span className={'header-options__label'}>{label}</span>
+  <div className={'drawer-filters__filter'}>
+    <span className={'drawer-filters__label'}>{label}</span>
     <Dropdown
       options={options}
       defaultValue={defaultValue}
