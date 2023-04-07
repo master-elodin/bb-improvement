@@ -5,22 +5,6 @@ import LastActivity from './LastActivity';
 import Reviewers from './Reviewers/Reviewers';
 import BuildStatus from './BuildStatus';
 
-const matchNameCol = (newVal: string, row: IRow) => {
-  const isNot = newVal.startsWith('!');
-  const matchVal = (isNot ? newVal.substring(1) : newVal).trim().toLowerCase();
-  if (matchVal.length === 0) {
-    return true;
-  }
-  const matchTitle = row.title.toLowerCase().includes(matchVal);
-  const matchAuthor = row.author.display_name.toLowerCase().includes(matchVal);
-  const matchBranch = row.destination.branch.name.toLowerCase().includes(matchVal);
-  if (isNot) {
-    return !matchTitle && !matchAuthor && !matchBranch;
-  } else {
-    return matchTitle || matchAuthor || matchBranch;
-  }
-};
-
 export const columns: ICol[] = [
   {
     label: 'Name',
@@ -28,7 +12,27 @@ export const columns: ICol[] = [
     getRendered: (val: IRow) => <RowTitle val={val} />,
     colClass: 'name-col',
     matchFilter: (newVal: string, row: IRow) => {
-      return newVal.split(',').every((val) => matchNameCol(val, row));
+      const filtersByType = newVal
+        .split(',')
+        .map((v) => v.trim().toLowerCase())
+        .filter((v) => !!v)
+        .reduce(
+          (acc, val) => {
+            const isNot = val.startsWith('!');
+            const matchVal = isNot ? val.substring(1) : val;
+            const matchTitle = row.title.toLowerCase().includes(matchVal);
+            const matchAuthor = row.author.display_name.toLowerCase().includes(matchVal);
+            const matchBranch = row.destination.branch.name.toLowerCase().includes(matchVal);
+            if (isNot) {
+              acc.notHas.push(!matchTitle && !matchAuthor && !matchBranch);
+            } else {
+              acc.has.push(matchTitle || matchAuthor || matchBranch);
+            }
+            return acc;
+          },
+          { has: [] as boolean[], notHas: [] as boolean[] },
+        );
+      return filtersByType.has.some(Boolean) && filtersByType.notHas.every(Boolean);
     },
   },
   {
