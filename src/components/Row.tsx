@@ -49,7 +49,7 @@ export const columns: ICol[] = [
   },
   {
     label: 'Build',
-    getValue: (val: IRow) => (val.buildStatus === 'success' ? 1 : 0),
+    getValue: (val: IRow) => (val.buildStatus?.state === 'SUCCESSFUL' ? 1 : 0),
     getRendered: (val: IRow) => <BuildStatus val={val} />,
     colClass: 'build-col',
   },

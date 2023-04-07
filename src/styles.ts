@@ -1,5 +1,5 @@
 import { InlineStyle } from './inlineStyles';
-import { rowTitleStyles } from './components/RowTitle/RowTitle-style';
+import { rowTitleStyles } from './components/RowTitle/RowTitle.style';
 import { headerOptionsStyle } from './components/HeaderOptions/HeaderOptions-style';
 import { dropdownStyle } from './components/Dropdown/Dropdown-style';
 import { buttonStyle } from './components/Button/Button-style';
@@ -17,6 +17,7 @@ export const initStyles = () => {
       'background-color': 'var(--color-background)',
       'font-family':
         '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Fira Sans,Droid Sans,Helvetica Neue,sans-serif',
+      'font-size': '14px',
     },
     select: {
       height: '24px',

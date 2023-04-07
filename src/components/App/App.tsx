@@ -80,14 +80,7 @@ function App({ isProd, loggedInUserUuid }: IProps) {
       const statuses = await getStatuses(commits);
       setSortedRows((prevState) => {
         prevState.forEach((pr) => {
-          const status = statuses[pr.source.commit.hash];
-          if (status?.state === 'SUCCESSFUL') {
-            pr.buildStatus = 'success';
-          } else if (status?.state === 'INPROGRESS') {
-            pr.buildStatus = 'in_progress';
-          } else if (status?.state === 'FAILED') {
-            pr.buildStatus = 'fail';
-          }
+          pr.buildStatus = statuses[pr.source.commit.hash]
         });
         return [...prevState];
       });

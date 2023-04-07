@@ -20,5 +20,13 @@ export const rowTitleStyles = {
     position: 'absolute',
     left: 0,
     top: '4px',
-  }
+  },
+  '.row-title__extra-info': {
+    'font-size': '0.8em',
+  },
+  '.row-title__extra-info a': {
+    color: 'black !important',
+    'font-style': 'italic',
+    'text-decoration': 'none !important',
+  },
 };

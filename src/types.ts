@@ -14,6 +14,7 @@ export interface IUser {
 }
 
 export type IParticipantState = 'approved' | 'changes_requested' | null;
+
 export interface IParticipant {
   approved: boolean;
   role: 'REVIEWER' | 'PARTICIPANT';
@@ -37,8 +38,11 @@ export interface IPullRequest {
       name: string;
     };
     repository: {
+      links: {
+        html: ILink;
+      };
       slug: string;
-    }
+    };
   };
   author: IUser;
   participants: IParticipant[];
@@ -53,21 +57,29 @@ export interface IPullRequest {
   };
 }
 
-export interface IStatusResponse {
-  [hash: string]: {
-    state: string;
-    status_counts: {
-      FAILED: number;
-      STOPPED: number;
-      INPROGRESS: number;
-      SUCCESSFUL: number;
-    };
+export interface IStatus {
+  state: 'SUCCESSFUL' | 'INPROGRESS' | 'FAILED';
+  commit_status: {
+    name: string;
+    url: string;
+    description: string;
+    updated_on: string;
   };
+  status_counts: {
+    FAILED: number;
+    STOPPED: number;
+    INPROGRESS: number;
+    SUCCESSFUL: number;
+  };
+}
+
+export interface IStatusResponse {
+  [hash: string]: IStatus;
 }
 
 export interface IRow extends IPullRequest {
   hidden?: boolean;
-  buildStatus?: 'success' | 'fail' | 'in_progress';
+  buildStatus?: IStatus;
 }
 
 export interface ICol {
