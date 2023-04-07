@@ -1,4 +1,4 @@
-export const filterDropdownStyle = {
+export const columnFilterStyle = {
   '.filter-dropdown': {
     cursor: 'pointer',
     'font-size': '12px',

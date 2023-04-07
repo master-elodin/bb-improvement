@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Dropdown, { IProps as IDropdownProps } from './Dropdown/Dropdown';
+import Dropdown, { IProps as IDropdownProps } from '../Dropdown/Dropdown';
 
 interface IProps extends IDropdownProps {
   label: string;

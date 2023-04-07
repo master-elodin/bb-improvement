@@ -9,7 +9,7 @@ interface IProps {
 
 // for basic debounce
 let onChangeTimeout: NodeJS.Timeout;
-const FilterDropdown = ({ onFilterChange }: IProps) => {
+const ColumnFilter = ({ onFilterChange }: IProps) => {
   const [showPopover, setShowPopover] = useState(false);
   const [filterVal, setFilterVal] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -59,4 +59,4 @@ const FilterDropdown = ({ onFilterChange }: IProps) => {
   );
 };
 
-export default FilterDropdown;
+export default ColumnFilter;

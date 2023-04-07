@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { IOption } from './Dropdown/Dropdown';
 import { getAllUsers } from '../api';
 import { IUser } from '../types';
-import FilterDropdown from './FilterDropdown';
+import FilterDropdown from './HeaderOptions/FilterDropdown';
 
 interface IProps {
   loggedInUserUuid: string;

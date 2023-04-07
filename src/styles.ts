@@ -4,7 +4,7 @@ import { headerOptionsStyle } from './components/HeaderOptions/HeaderOptions-sty
 import { dropdownStyle } from './components/Dropdown/Dropdown-style';
 import { buttonStyle } from './components/Button/Button-style';
 import { iconsStyle } from './components/Icons/Icons.style';
-import { filterDropdownStyle } from './components/FilterDropdown/FilterDropdown.style';
+import { columnFilterStyle } from './components/ColumnFilter/ColumnFilter.style';
 import { userStatsStyle } from './components/UserStats/UserStats.style';
 import { spinnerStyle } from './components/Spinner/Spinner.style';
 import { reviewersStyle } from './components/Reviewers/Reviewers.style';
@@ -98,7 +98,7 @@ export const initStyles = () => {
     ...headerOptionsStyle,
     ...buttonStyle,
     ...iconsStyle,
-    ...filterDropdownStyle,
+    ...columnFilterStyle,
     ...reviewersStyle,
     ...spinnerStyle,
     ...userStatsStyle,

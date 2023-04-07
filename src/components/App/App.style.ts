@@ -34,8 +34,9 @@ export const appStyle = {
   },
   '.app__content-header': {
     display: 'flex',
-    height: '35px',
+    height: '25px',
     'justify-content': 'space-around',
+    'line-height': '25px',
     'padding-bottom': '5px',
     width: '100%',
   },
@@ -46,11 +47,14 @@ export const appStyle = {
     cursor: 'pointer',
     display: 'flex',
     'justify-content': 'space-between',
-    padding: '4px 8px',
     'text-align': 'left',
+  },
+  '.app__content-header-label': {
+    'padding-left': '8px',
   },
   '.app__content-header-col-actions': {
     display: 'flex',
+    'padding-right': '8px',
   },
   '.app__content-rows': {
     height: 'calc(100% - 48px)',

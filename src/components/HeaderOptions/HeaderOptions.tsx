@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FilterType } from '../../filters';
-import FilterDropdown from '../FilterDropdown';
+import FilterDropdown from './FilterDropdown';
 import { PRState } from '../../types';
 import { FILTER_KEY } from '../../api';
 

@@ -28,7 +28,7 @@ export const columns: ICol[] = [
     getRendered: (val: IRow) => <RowTitle val={val} />,
     colClass: 'name-col',
     matchFilter: (newVal: string, row: IRow) => {
-      return newVal.split(',').some((val) => matchNameCol(val, row));
+      return newVal.split(',').every((val) => matchNameCol(val, row));
     },
   },
   {

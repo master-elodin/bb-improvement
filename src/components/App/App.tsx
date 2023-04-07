@@ -7,7 +7,7 @@ import UserSelector from '../UserSelector';
 import { DownArrow, UpArrow } from '../Icons/Icons';
 import HeaderOptions from '../HeaderOptions/HeaderOptions';
 import { filters, FilterType } from '../../filters';
-import FilterDropdown from '../FilterDropdown/FilterDropdown';
+import ColumnFilter from '../ColumnFilter/ColumnFilter';
 import Spinner from '../Spinner/Spinner';
 
 const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
@@ -191,10 +191,10 @@ function App({ isProd, loggedInUserUuid }: IProps) {
             <div className={'app__content-header'}>
               {columns.map((col) => (
                 <div key={col.label} className={`app__content-header-col ${col.colClass}`}>
-                  {col.label}
+                  <span className={'app__content-header-label'}>{col.label}</span>
                   <div className={'app__content-header-col-actions'}>
                     {col.matchFilter && (
-                      <FilterDropdown onFilterChange={(newVal: string) => onFilterType(col, newVal)} />
+                      <ColumnFilter onFilterChange={(newVal: string) => onFilterType(col, newVal)} />
                     )}
                     <SortArrow
                       onClick={() => onHeaderClick(col.label)}
