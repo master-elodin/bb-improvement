@@ -75,7 +75,7 @@ export const appStyle = {
   },
   '.app__content-rows': {
     'overflow-x': 'hidden',
-    'overflow-y': 'scroll',
+    'overflow-y': 'auto',
     width: '100%',
   },
   '.app__sort-arrows': {

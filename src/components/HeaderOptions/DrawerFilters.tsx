@@ -70,15 +70,15 @@ const DrawerFilters = ({ allBranches, allRepoNames, onFilterSelect, onPRTypeChan
         onSelect={(newVal) => onPRStateChange(newVal as PRState)}
       />
       <FilterDropdown
-        label={'Repository'}
-        options={repos}
-        onSelect={(newVal: string) => onFilterSelect(newVal, 'repo')}
-      />
-      <FilterDropdown
         label={'Target'}
         options={targets}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'branch')}
         allowFilter={true}
+      />
+      <FilterDropdown
+        label={'Repository'}
+        options={repos}
+        onSelect={(newVal: string) => onFilterSelect(newVal, 'repo')}
       />
     </>
   );

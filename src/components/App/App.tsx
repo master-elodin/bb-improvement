@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { ICol, IFilter, IRow, IUser, PRState } from '../../types';
 import Row, { columns } from '../Row';
-import { FILTER_KEY, getPullRequests, getStatuses } from '../../api';
+import { DRAWER_KEY, FILTER_KEY, getPullRequests, getStatuses } from '../../api';
 import UserSelector from '../UserSelector';
 import { DownArrow, UpArrow } from '../Icons/Icons';
 import DrawerFilters from '../HeaderOptions/DrawerFilters';
@@ -11,7 +11,6 @@ import ColumnFilter from '../ColumnFilter/ColumnFilter';
 import Spinner from '../Spinner/Spinner';
 import Drawer from '../Drawer/Drawer';
 import Button from '../Button/Button';
-import FilterDropdown from '../HeaderOptions/FilterDropdown';
 
 const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
   const getValue = columns.find((col) => col.label === colType)?.getValue ?? (() => 'zzzz');
@@ -61,7 +60,7 @@ function App({ isProd, loggedInUserUuid }: IProps) {
   const [currentUser, setCurrentUser] = useState<IUser>({ uuid: loggedInUserUuid, display_name: 'Me' } as IUser);
   const [isReviewing, setIsReviewing] = useState(savedFilters.isReviewing !== 'false');
   const [prState, setPRState] = useState<PRState>(savedFilters.prState ?? 'OPEN');
-  const [drawerOpen, setDrawerOpen] = useState(true);
+  const [drawerOpen, setDrawerOpen] = useState(localStorage.getItem(DRAWER_KEY) !== 'false');
 
   useEffect(() => {
     saveFilters(prState, 'prState');
@@ -70,6 +69,10 @@ function App({ isProd, loggedInUserUuid }: IProps) {
   useEffect(() => {
     saveFilters(JSON.stringify(isReviewing), 'isReviewing');
   }, [isReviewing]);
+
+  useEffect(() => {
+    localStorage.setItem(DRAWER_KEY, JSON.stringify(drawerOpen));
+  }, [drawerOpen]);
 
   const onFilterType = useCallback((col: ICol, newVal: string) => {
     setColFilters((prevState) => ({

@@ -8,7 +8,7 @@ export const dropdownStyle = {
   '.dropdown-root .icon': {
     position: 'absolute',
     right: '7px',
-    top: '4px',
+    top: '3px',
     'z-index': 2,
   },
   '.dropdown-dropdown': {
@@ -40,7 +40,7 @@ export const dropdownStyle = {
     cursor: 'pointer',
   },
   '.dropdown__clear-btn': {
-    'line-height': '23px',
+    'line-height': '22px',
     opacity: '.5',
     padding: '0 5px',
     position: 'absolute',
