@@ -2,11 +2,7 @@ import { FocusEvent, useCallback, useEffect, useRef, useState } from 'react';
 import * as React from 'react';
 import { DownArrow, UpArrow } from '../Icons/Icons';
 import { handleBlur } from '../../utils';
-
-export interface IOption {
-  value: string;
-  label: string;
-}
+import { IOption } from '../../types';
 
 export interface IProps {
   options: IOption[];

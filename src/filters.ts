@@ -35,12 +35,16 @@ const passesBranch = (row: IRow, filters: IRowFilters) => {
 const passesRepo = (row: IRow, filters: IRowFilters) => {
   return filters.repo === 'any' || filters.repo === row.destination.repository.slug;
 };
+const passesAuthor = (row: IRow, filters: IRowFilters) => {
+  return filters.author === 'any' || filters.author === row.author.uuid;
+};
 
 export const passesFilters = (row: IRow, filters: IRowFilters) => {
   return (
     passesTasks(row, filters) &&
     passesNeedsReview(row, filters) &&
     passesBranch(row, filters) &&
-    passesRepo(row, filters)
+    passesRepo(row, filters) &&
+    passesAuthor(row, filters)
   );
 };

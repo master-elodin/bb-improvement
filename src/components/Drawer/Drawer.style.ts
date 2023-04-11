@@ -19,6 +19,7 @@ export const drawerStyle = {
     cursor: 'pointer',
     'flex-basis': 'var(--drawer-header-height)',
     position: 'relative',
+    width: '90px',
   },
   '.drawer__toggle': {
     'font-size': '8px',

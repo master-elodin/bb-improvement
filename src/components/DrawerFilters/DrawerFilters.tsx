@@ -1,12 +1,12 @@
 import * as React from 'react';
 import FilterDropdown from './FilterDropdown';
-import { IRowFilters } from '../../types';
+import { IPRSummarized, IRowFilters } from '../../types';
+import { useMemo } from 'react';
 
 interface IProps {
   defaultFilters: IRowFilters;
   rowFilters: IRowFilters;
-  allBranches: string[];
-  allRepoNames: string[];
+  summarized: IPRSummarized;
   onFilterSelect: (newVal: string, filterType: keyof IRowFilters) => void;
   clearFilters: () => void;
 }
@@ -36,11 +36,34 @@ const needsApprovalOptions = [
   { label: 'Requested changes', value: 'changesRequested' },
 ];
 
-const DrawerFilters = ({ rowFilters, allBranches, allRepoNames, onFilterSelect, clearFilters }: IProps) => {
-  const targets = allBranches.map((b) => ({ label: b, value: b }));
-  targets.unshift({ label: 'All', value: 'any' });
-  const repos = allRepoNames.map((b) => ({ label: b, value: b }));
-  repos.unshift({ label: 'All', value: 'any' });
+const DrawerFilters = ({ rowFilters, summarized, onFilterSelect, clearFilters }: IProps) => {
+  const targets = useMemo(
+    () => [
+      { label: 'All', value: 'any' },
+      ...summarized.branches.map((value: string) => ({
+        label: value,
+        value,
+      })),
+    ],
+    [summarized.branches],
+  );
+  const repos = useMemo(
+    () => [
+      { label: 'All', value: 'any' },
+      ...summarized.repos.map((value: string) => ({
+        label: value,
+        value,
+      })),
+    ],
+    [summarized.repos],
+  );
+  const authors = useMemo(
+    () => [
+      { label: 'All', value: 'any' },
+      ...summarized.authors,
+    ],
+    [summarized.authors],
+  );
 
   return (
     <>
@@ -70,6 +93,11 @@ const DrawerFilters = ({ rowFilters, allBranches, allRepoNames, onFilterSelect, 
         label={'Repository'}
         options={repos}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'repo')}
+      />
+      <FilterDropdown
+        label={'Author'}
+        options={authors}
+        onSelect={(newVal: string) => onFilterSelect(newVal, 'author')}
       />
       <h5 className={'drawer-filters__type-title'}>Filter with reload</h5>
       <FilterDropdown

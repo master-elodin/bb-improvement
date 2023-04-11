@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { getPullRequests, getStatuses } from '../api';
-import { IRow, IRowFilters } from '../types';
+import { IPRSummarized, IRow, IRowFilters } from '../types';
 
 const useData = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [allBranches, setAllBranches] = useState<string[]>([]);
-  const [allRepoNames, setAllRepoNames] = useState<string[]>([]);
+  const [summarized, setSummarized] = useState<IPRSummarized>({
+    branches: [],
+    repos: [],
+    authors: [],
+  });
   const [pullRequests, setPullRequests] = useState<IRow[]>([]);
 
   const addBuildStatus = async (commits: string[]) => {
@@ -26,11 +29,24 @@ const useData = () => {
   const refresh = async (filters: IRowFilters) => {
     setIsLoading(true);
     const pullRequests = await getPullRequests(filters.userUuid, filters.role === 'reviewer', filters.state);
-    const branches = [...new Set(pullRequests.map((row) => row.destination.branch.name))].sort();
-    setAllBranches(branches);
+    const branches = [...new Set(pullRequests.map((pr) => pr.destination.branch.name))].sort();
+    const repos = [...new Set(pullRequests.map((pr) => pr.destination.repository.slug))].sort();
+    const authorsById = pullRequests.reduce((acc: { [uuid: string]: string }, val) => {
+      acc[val.author.uuid] = val.author.display_name;
+      return acc;
+    }, {});
+    const authors = Object.keys(authorsById)
+      .map((uuid) => ({
+        label: authorsById[uuid],
+        value: uuid,
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label));
 
-    const repoNames = [...new Set(pullRequests.map((p) => p.destination.repository.slug))].sort();
-    setAllRepoNames(repoNames);
+    setSummarized({
+      branches,
+      repos,
+      authors,
+    });
 
     setPullRequests(pullRequests);
     await addBuildStatus(pullRequests.map((pr) => pr.source.commit.hash));
@@ -40,8 +56,7 @@ const useData = () => {
 
   return {
     isLoading,
-    allBranches,
-    allRepoNames,
+    summarized,
     pullRequests,
     refresh,
   };

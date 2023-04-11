@@ -69,8 +69,6 @@ export const columns: ICol[] = [
   },
 ];
 
-// TODO: configurable columns
-
 interface IProps {
   val: IRow;
   currentUser: IUser;

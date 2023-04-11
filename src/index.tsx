@@ -23,6 +23,7 @@ const defaultFilters = {
   needsReview: 'any',
   repo: 'any',
   branch: 'any',
+  author: 'any',
   role: 'reviewer',
   state: 'OPEN',
 } as IRowFilters;

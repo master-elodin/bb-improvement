@@ -48,7 +48,7 @@ function App({ isProd, loggedInUserUuid, defaultFilters, savedFilters }: IProps)
   const [drawerOpen, setDrawerOpen] = useState(localStorage.getItem(DRAWER_KEY) !== 'false');
   const [rowFilters, setRowFilters] = useState<IRowFilters>(savedFilters);
 
-  const { isLoading, allBranches, allRepoNames, pullRequests, refresh } = useData();
+  const { isLoading, summarized, pullRequests, refresh } = useData();
 
   useEffect(() => {
     let nextSortType = sortType;
@@ -122,8 +122,7 @@ function App({ isProd, loggedInUserUuid, defaultFilters, savedFilters }: IProps)
           <DrawerFilters
             defaultFilters={defaultFilters}
             rowFilters={rowFilters}
-            allBranches={allBranches}
-            allRepoNames={allRepoNames}
+            summarized={summarized}
             onFilterSelect={onFilterSelect}
             clearFilters={clearFilters}
           />

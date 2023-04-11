@@ -90,14 +90,24 @@ export interface ICol {
   matchFilter?: (filterVal: string, row: IRow) => boolean;
 }
 
-export type IFilter = (row: IRow, user: IUser) => boolean;
-
 export interface IRowFilters {
   userUuid: string;
   tasks: 'any' | 'yes' | 'no';
   needsReview: 'any' | 'yes' | 'no' | 'changesRequested';
   branch: 'any' | string;
   repo: 'any' | string;
+  author: 'any' | string;
   role: 'reviewer' | 'author' | 'all';
   state: PRState;
+}
+
+export interface IOption {
+  value: string;
+  label: string;
+}
+
+export interface IPRSummarized {
+  branches: string[];
+  repos: string[];
+  authors: IOption[];
 }
