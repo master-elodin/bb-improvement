@@ -86,17 +86,20 @@ const DrawerFilters = ({ rowFilters, summarized, onFilterSelect, clearFilters }:
       <FilterDropdown
         label={'Target'}
         options={targets}
+        defaultValue={rowFilters.branch}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'branch')}
         allowFilter={true}
       />
       <FilterDropdown
         label={'Repository'}
         options={repos}
+        defaultValue={rowFilters.repo}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'repo')}
       />
       <FilterDropdown
         label={'Author'}
         options={authors}
+        defaultValue={rowFilters.author}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'author')}
       />
       <h5 className={'drawer-filters__type-title'}>Filter with reload</h5>

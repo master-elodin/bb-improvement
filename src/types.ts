@@ -57,6 +57,12 @@ export interface IPullRequest {
   };
 }
 
+export interface IPullRequestResponse {
+  pullRequests: IPullRequest[];
+  pageNum: number;
+  totalNumResults: number;
+}
+
 export interface IStatus {
   state: 'SUCCESSFUL' | 'INPROGRESS' | 'FAILED';
   commit_status: {
@@ -99,6 +105,7 @@ export interface IRowFilters {
   author: 'any' | string;
   role: 'reviewers' | 'author' | 'all';
   state: PRState;
+  pageNum?: number;
 }
 
 export interface IOption {
@@ -110,4 +117,6 @@ export interface IPRSummarized {
   branches: string[];
   repos: string[];
   authors: IOption[];
+  pageNum: number;
+  totalNumResults: number;
 }

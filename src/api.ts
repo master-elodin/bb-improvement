@@ -1,8 +1,10 @@
 import { allUsers as mockUsers, rawData, statuses } from './data';
-import { IRow, IRowFilters, IStatusResponse, IUser } from './types';
+import { IPullRequestResponse, IRow, IRowFilters, IStatusResponse, IUser } from './types';
 
 export const FILTER_KEY = 'bb-script-filters';
 export const DRAWER_KEY = 'bb-script-drawer-open';
+
+export const RESULTS_PER_PAGE = 50;
 const workspace = process.env.REACT_APP_BB_WORKSPACE ?? 'my-workspace';
 
 const fields = [
@@ -22,31 +24,39 @@ const statusFields = ['+*.commit_status.updated_on', '+*.commit_status.descripti
 
 const reviewingPRs: Record<string, string> = {
   fields: fields.join(','),
-  page: '1',
-  pagelen: '50',
+  pagelen: `${RESULTS_PER_PAGE}`,
 };
 
 let isProd = false;
 export const setIsProd = (newVal: boolean) => (isProd = newVal);
 
-export const getPullRequests = async (filters: IRowFilters) => {
+export const getPullRequests = async (filters: IRowFilters): Promise<IPullRequestResponse> => {
   if (!isProd) {
-    return rawData.values as unknown as IRow[];
+    return {
+      pullRequests: rawData.values as unknown as IRow[],
+      pageNum: 1,
+      totalNumResults: 55,
+    };
   }
-  const reviewerQ = filters.role === 'all' ? '' : ` AND ${filters.role}.uuid="${filters.userUuid}"`
+  // TODO: use filter for what repo
+  const reviewerQ = filters.role === 'all' ? '' : ` AND ${filters.role}.uuid="${filters.userUuid}"`;
   const params: Record<string, string> = {
     ...reviewingPRs,
     q: `state="${filters.state}"${reviewerQ}`,
+    page: `${filters.pageNum ?? 1}`,
   };
-  const url = (
+  const url =
     `https://bitbucket.org/!api/internal/workspaces/${workspace}/pullrequests/?` +
     Object.keys(params)
       .map((key: string) => `${key}=${encodeURIComponent(params[key])}`)
-      .join('&')
-  );
+      .join('&');
   const res = await fetch(url);
   const json = await res.json();
-  return (json.values ?? []) as IRow[];
+  return {
+    pullRequests: (json.values ?? []) as IRow[],
+    pageNum: json.page,
+    totalNumResults: json.size,
+  };
 };
 
 export const getStatuses = async (commits: string[]): Promise<IStatusResponse> => {

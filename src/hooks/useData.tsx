@@ -8,6 +8,8 @@ const useData = () => {
     branches: [],
     repos: [],
     authors: [],
+    pageNum: 1,
+    totalNumResults: 1,
   });
   const [pullRequests, setPullRequests] = useState<IRow[]>([]);
 
@@ -28,7 +30,8 @@ const useData = () => {
 
   const refresh = async (filters: IRowFilters) => {
     setIsLoading(true);
-    const pullRequests = await getPullRequests(filters);
+    const response = await getPullRequests(filters);
+    const { pullRequests, pageNum, totalNumResults } = response;
     const branches = [...new Set(pullRequests.map((pr) => pr.destination.branch.name))].sort();
     const repos = [...new Set(pullRequests.map((pr) => pr.destination.repository.slug))].sort();
     const authorsById = pullRequests.reduce((acc: { [uuid: string]: string }, val) => {
@@ -46,6 +49,8 @@ const useData = () => {
       branches,
       repos,
       authors,
+      pageNum,
+      totalNumResults,
     });
 
     setPullRequests(pullRequests);

@@ -84,4 +84,17 @@ export const appStyle = {
     display: 'flex',
     'justify-content': 'flex-end',
   },
+  '.app__page-selector': {
+    'margin': '0 24px 0 8px',
+  },
+  '.app__page-selector__page': {
+    padding: '0 2px',
+  },
+  '.app__page-selector__page:not(.app__page-selector__page--current)': {
+    color: 'blue',
+    cursor: 'pointer',
+  },
+  '.app__page-selector__page--current': {
+    'font-weight': 'bold',
+  },
 };

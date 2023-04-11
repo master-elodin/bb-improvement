@@ -31,6 +31,7 @@ const defaultFilters = {
 const savedFilters = {
   ...defaultFilters,
   ...JSON.parse(localStorage.getItem(FILTER_KEY) ?? '{}'),
+  pageNum: 1, // always use page 1 on reload
 };
 
 root.render(

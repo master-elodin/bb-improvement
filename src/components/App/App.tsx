@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { ICol, IRow, IRowFilters, IUser } from '../../types';
 import Row, { columns } from '../Row';
-import { DRAWER_KEY, FILTER_KEY } from '../../api';
+import { DRAWER_KEY, FILTER_KEY, RESULTS_PER_PAGE } from '../../api';
 import UserSelector from '../UserSelector';
 import { DownArrow, UpArrow } from '../Icons/Icons';
 import DrawerFilters from '../DrawerFilters/DrawerFilters';
@@ -12,6 +12,7 @@ import Drawer from '../Drawer/Drawer';
 import Button from '../Button/Button';
 import useData from '../../hooks/useData';
 import { passesFilters } from '../../filters';
+import { cx } from '../../utils';
 
 const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
   const getValue = columns.find((col) => col.label === colType)?.getValue ?? (() => 'zzzz');
@@ -90,7 +91,7 @@ function App({ isProd, loggedInUserUuid, defaultFilters, savedFilters }: IProps)
     if (!isProd || currentUser.links) {
       refresh(rowFilters);
     }
-  }, [currentUser, rowFilters.role, rowFilters.state]);
+  }, [currentUser, rowFilters.role, rowFilters.state, rowFilters.pageNum]);
 
   const onHeaderClick = (colType: string) => {
     const isAsc = sortType === `${colType}:asc`;
@@ -104,11 +105,28 @@ function App({ isProd, loggedInUserUuid, defaultFilters, savedFilters }: IProps)
     }));
   };
 
-  const clearFilters = () => setRowFilters(defaultFilters);
+  const clearFilters = () =>
+    setRowFilters({
+      ...defaultFilters,
+    });
 
   const visibleRows = sortedRows.filter(
     (row) => passesFilters(row, rowFilters) && Object.values(colFilers).every((colFilter) => colFilter(row)),
   );
+  const possiblePages = Array.from({ length: Math.ceil(summarized.totalNumResults / RESULTS_PER_PAGE) }).map(
+    (_, pageNum) => pageNum + 1,
+  );
+  const onPageClick = (pageNum: number) => {
+    if (pageNum === summarized.pageNum) {
+      return;
+    }
+    summarized.pageNum = pageNum;
+    setRowFilters((prevState) => ({
+      ...prevState,
+      pageNum,
+    }));
+  };
+
   return (
     <div className={'app__root'}>
       <div className={'app__header'}>
@@ -124,6 +142,23 @@ function App({ isProd, loggedInUserUuid, defaultFilters, savedFilters }: IProps)
           {/*)}*/}
         </div>
         <div className={'app__header-action-container'}>
+          {sortedRows.length > 0 && (
+            <>
+              <span>Page</span>
+              <div className={'app__page-selector'}>
+                {possiblePages.map((pageNum) => (
+                  <span
+                    className={cx(
+                      'app__page-selector__page',
+                      summarized.pageNum === pageNum && 'app__page-selector__page--current',
+                    )}
+                    onClick={() => onPageClick(pageNum)}>
+                    {pageNum}
+                  </span>
+                ))}
+              </div>
+            </>
+          )}
           <Button onClick={() => refresh(rowFilters)} className={'app__refresh-btn'}>
             <span>&#8635; Refresh</span>
           </Button>
@@ -161,7 +196,8 @@ function App({ isProd, loggedInUserUuid, defaultFilters, savedFilters }: IProps)
           )}
           {!isLoading && (
             <div className={'app__content-rows'}>
-              {!isLoading && visibleRows.map((val: IRow) => <Row key={val.id} val={val} currentUser={currentUser} />)}
+              {!isLoading &&
+                visibleRows.map((val: IRow, index) => <Row key={index} val={val} currentUser={currentUser} />)}
             </div>
           )}
         </div>

@@ -37,6 +37,10 @@ const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width 
     }
   }, [selected, options, defaultValue]);
 
+  useEffect(() => {
+    setSelected(options.find((o) => o.value === defaultValue) ?? options[0]);
+  }, [defaultValue]);
+
   const onFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilterVal(e.currentTarget.value);
   };
