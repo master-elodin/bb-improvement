@@ -65,10 +65,10 @@ function App({ isProd, loggedInUserUuid, defaultFilters, savedFilters }: IProps)
   }, []);
 
   useEffect(() => {
-    let nextSortType = sortType;
-    let sortColumn = nextSortType.split(':')[0];
+    const nextSortType = sortType;
+    const sortColumn = nextSortType.split(':')[0];
     setSortedRows(getSortedRows(pullRequests, sortColumn, nextSortType.split(':')[1] === 'asc'));
-  }, [pullRequests]);
+  }, [pullRequests, sortType]);
 
   useEffect(() => {
     saveFilters(rowFilters);
@@ -94,8 +94,6 @@ function App({ isProd, loggedInUserUuid, defaultFilters, savedFilters }: IProps)
 
   const onHeaderClick = (colType: string) => {
     const isAsc = sortType === `${colType}:asc`;
-    setSortedRows((prevState) => getSortedRows(prevState, colType, isAsc));
-    // hack to change sort type each time
     setSortType(`${colType}:${isAsc ? 'desc' : 'asc'}`);
   };
 
