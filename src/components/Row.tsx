@@ -32,7 +32,9 @@ export const columns: ICol[] = [
           },
           { has: [] as boolean[], notHas: [] as boolean[] },
         );
-      return filtersByType.has.some(Boolean) && filtersByType.notHas.every(Boolean);
+      const matchHas = !filtersByType.has.length || filtersByType.has.some(Boolean);
+      const matchHasNot = !filtersByType.notHas.length || filtersByType.notHas.every(Boolean);
+      return matchHas && matchHasNot;
     },
   },
   {
