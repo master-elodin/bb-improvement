@@ -30,7 +30,6 @@ export const handleBlur = (e: FocusEvent<HTMLDivElement>, cb: () => void) => {
   requestAnimationFrame(() => {
     // Check if the new focused element is a child of the original container
     if (!currentTarget.contains(document.activeElement)) {
-      console.log('blurry blur blur')
       cb();
     }
   });

@@ -51,6 +51,20 @@ function App({ isProd, loggedInUserUuid, defaultFilters, savedFilters }: IProps)
   const { isLoading, summarized, pullRequests, refresh } = useData();
 
   useEffect(() => {
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.key === '[') {
+        setDrawerOpen(false);
+      } else if (e.key === ']') {
+        setDrawerOpen(true);
+      }
+    };
+    document.addEventListener('keyup', onKeyUp);
+    return () => {
+      document.removeEventListener('keyup', onKeyUp);
+    };
+  }, []);
+
+  useEffect(() => {
     let nextSortType = sortType;
     let sortColumn = nextSortType.split(':')[0];
     setSortedRows(getSortedRows(pullRequests, sortColumn, nextSortType.split(':')[1] === 'asc'));
