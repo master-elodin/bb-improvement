@@ -4,7 +4,7 @@ import './index.css';
 import App from './components/App/App';
 import { FILTER_KEY, setIsProd } from './api';
 import { initStyles } from './styles';
-import { IRowFilters } from './types';
+import { IInPlaceFilters, IRefreshableFilters } from './types';
 
 initStyles();
 
@@ -17,19 +17,23 @@ const loggedInUserUuid = isProd
     JSON.parse(jQuery('#bb-bootstrap').attr('data-current-user')).uuid
   : '{2f8139ca-b887-4d13-a41f-ed7f0fe31022}';
 
-const defaultFilters = {
+const defaultRefreshableFilters: IRefreshableFilters = {
+  role: 'reviewers',
+  state: 'OPEN',
+};
+
+const defaultInPlaceFilters: IInPlaceFilters = {
   userUuid: loggedInUserUuid,
   tasks: 'any',
   needsReview: 'any',
   repo: 'any',
   branch: 'any',
   author: 'any',
-  role: 'reviewers',
-  state: 'OPEN',
-} as IRowFilters;
+};
 
 const savedFilters = {
-  ...defaultFilters,
+  ...defaultInPlaceFilters,
+  ...defaultRefreshableFilters,
   ...JSON.parse(localStorage.getItem(FILTER_KEY) ?? '{}'),
   pageNum: 1, // always use page 1 on reload
 };
@@ -39,7 +43,8 @@ root.render(
     <App
       isProd={isProd}
       loggedInUserUuid={loggedInUserUuid}
-      defaultFilters={defaultFilters}
+      defaultRefreshableFilters={defaultRefreshableFilters}
+      defaultInPlaceFilters={defaultInPlaceFilters}
       savedFilters={savedFilters}
     />
   </React.StrictMode>,

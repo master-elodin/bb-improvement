@@ -96,15 +96,21 @@ export interface ICol {
   matchFilter?: (filterVal: string, row: IRow) => boolean;
 }
 
-export interface IRowFilters {
+export interface IRefreshableFilters {
+  role: 'reviewers' | 'author' | 'all';
+  state: PRState;
+}
+
+export interface IInPlaceFilters {
   userUuid: string;
   tasks: 'any' | 'yes' | 'no';
   needsReview: 'any' | 'yes' | 'no' | 'changesRequested';
   branch: 'any' | string;
   repo: 'any' | string;
   author: 'any' | string;
-  role: 'reviewers' | 'author' | 'all';
-  state: PRState;
+}
+
+export interface IRowFilters extends IRefreshableFilters, IInPlaceFilters{
   pageNum?: number;
 }
 

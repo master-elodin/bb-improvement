@@ -1,6 +1,17 @@
 export const drawerFiltersStyle = {
+  '.drawer-filters__root': {
+    display: 'flex',
+    'flex-direction': 'column',
+    gap: '8px',
+    position: 'relative',
+  },
+  '.drawer-filters__title': {
+    display: 'flex',
+    'justify-content': 'space-between',
+    'line-height': '24px',
+  },
   '.drawer-filters__type-title': {
-    margin: '0',
+    'font-weight': 'bold',
   },
   '.drawer-filters__filter': {
     display: 'flex',
@@ -13,8 +24,9 @@ export const drawerFiltersStyle = {
   '.drawer-filters__clear': {
     color: 'blue',
     cursor: 'pointer',
-    left: '100px',
-    position: 'absolute',
-    top: '8px',
   },
-}
+  '.drawer-filters__buttons': {
+    display: 'flex',
+    'justify-content': 'flex-end',
+  },
+};

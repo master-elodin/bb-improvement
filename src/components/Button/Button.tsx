@@ -1,13 +1,15 @@
 import * as React from 'react';
+import { cx } from '../../utils';
 
 interface IProps {
   onClick: () => void;
   className?: string;
+  type?: 'primary';
 }
 
-const Button = ({ children, onClick, className }: React.PropsWithChildren<IProps>) => {
+const Button = ({ children, onClick, className, type }: React.PropsWithChildren<IProps>) => {
   return (
-    <div className={`button ${className ?? ''}`} onClick={onClick}>
+    <div className={cx('button', className, type && `button--${type}`)} onClick={onClick}>
       {children}
     </div>
   );

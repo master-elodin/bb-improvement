@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { ICol, IRow, IRowFilters, IUser } from '../../types';
+import { ICol, IInPlaceFilters, IRefreshableFilters, IRow, IRowFilters, IUser } from '../../types';
 import Row, { columns } from '../Row';
 import { DRAWER_KEY, FILTER_KEY, RESULTS_PER_PAGE } from '../../api';
 import UserSelector from '../UserSelector';
 import { DownArrow, UpArrow } from '../Icons/Icons';
-import DrawerFilters from '../DrawerFilters/DrawerFilters';
+import DrawerFiltersInPlace from '../DrawerFilters/DrawerFiltersInPlace';
 import ColumnFilter from '../ColumnFilter/ColumnFilter';
 import Spinner from '../Spinner/Spinner';
 import Drawer from '../Drawer/Drawer';
@@ -13,6 +13,7 @@ import Button from '../Button/Button';
 import useData from '../../hooks/useData';
 import { passesFilters } from '../../filters';
 import { cx } from '../../utils';
+import DrawerFiltersReload from '../DrawerFilters/DrawerFiltersReload';
 
 const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
   const getValue = columns.find((col) => col.label === colType)?.getValue ?? (() => 'zzzz');
@@ -37,11 +38,12 @@ const saveFilters = (newVal: IRowFilters) => {
 interface IProps {
   isProd: boolean;
   loggedInUserUuid: string;
-  defaultFilters: IRowFilters;
+  defaultRefreshableFilters: IRefreshableFilters;
+  defaultInPlaceFilters: IInPlaceFilters;
   savedFilters: IRowFilters;
 }
 
-function App({ isProd, loggedInUserUuid, defaultFilters, savedFilters }: IProps) {
+function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPlaceFilters, savedFilters }: IProps) {
   const [sortType, setSortType] = useState<string>(`${columns[columns.length - 1].label}:asc`);
   const [sortedRows, setSortedRows] = useState<IRow[]>([]);
   const [colFilers, setColFilters] = useState<{ [colLabel: string]: ColFilter }>({});
@@ -54,16 +56,14 @@ function App({ isProd, loggedInUserUuid, defaultFilters, savedFilters }: IProps)
   useEffect(() => {
     const onKeyUp = (e: KeyboardEvent) => {
       if (e.key === '[') {
-        setDrawerOpen(false);
-      } else if (e.key === ']') {
-        setDrawerOpen(true);
+        setDrawerOpen(!drawerOpen);
       }
     };
     document.addEventListener('keyup', onKeyUp);
     return () => {
       document.removeEventListener('keyup', onKeyUp);
     };
-  }, []);
+  }, [drawerOpen]);
 
   useEffect(() => {
     const nextSortType = sortType;
@@ -87,11 +87,12 @@ function App({ isProd, loggedInUserUuid, defaultFilters, savedFilters }: IProps)
   }, []);
 
   useEffect(() => {
+    console.log('reload?')
     // only refresh if user actually changed from the original user *or* if not in prod
     if (!isProd || currentUser.links) {
       refresh(rowFilters);
     }
-  }, [currentUser, rowFilters.role, rowFilters.state, rowFilters.pageNum]);
+  }, [currentUser, rowFilters.pageNum]);
 
   const onHeaderClick = (colType: string) => {
     const isAsc = sortType === `${colType}:asc`;
@@ -105,10 +106,16 @@ function App({ isProd, loggedInUserUuid, defaultFilters, savedFilters }: IProps)
     }));
   };
 
-  const clearFilters = () =>
-    setRowFilters({
-      ...defaultFilters,
-    });
+  const clearInPlaceFilters = () =>
+    setRowFilters((prevState) => ({
+      ...prevState,
+      ...defaultInPlaceFilters,
+    }));
+  const clearReloadFilters = () =>
+    setRowFilters((prevState) => ({
+      ...prevState,
+      ...defaultRefreshableFilters,
+    }));
 
   const visibleRows = sortedRows.filter(
     (row) => passesFilters(row, rowFilters) && Object.values(colFilers).every((colFilter) => colFilter(row)),
@@ -148,6 +155,7 @@ function App({ isProd, loggedInUserUuid, defaultFilters, savedFilters }: IProps)
               <div className={'app__page-selector'}>
                 {possiblePages.map((pageNum) => (
                   <span
+                    key={pageNum}
                     className={cx(
                       'app__page-selector__page',
                       summarized.pageNum === pageNum && 'app__page-selector__page--current',
@@ -166,12 +174,19 @@ function App({ isProd, loggedInUserUuid, defaultFilters, savedFilters }: IProps)
       </div>
       <div className={'app__content'}>
         <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
-          <DrawerFilters
-            defaultFilters={defaultFilters}
+          <DrawerFiltersInPlace
+            defaultFilters={defaultInPlaceFilters}
             rowFilters={rowFilters}
             summarized={summarized}
             onFilterSelect={onFilterSelect}
-            clearFilters={clearFilters}
+            clearFilters={clearInPlaceFilters}
+          />
+          <DrawerFiltersReload
+            defaultFilters={defaultRefreshableFilters}
+            rowFilters={rowFilters}
+            onFilterSelect={onFilterSelect}
+            clearFilters={clearReloadFilters}
+            onGoClick={() => refresh(rowFilters)}
           />
         </Drawer>
         <div className={'app__content-body'}>
