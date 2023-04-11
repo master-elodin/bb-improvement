@@ -14,23 +14,23 @@ interface IStat {
 }
 
 const getStats = async (userUuid: string): Promise<IStat[]> => {
-  const all = await getPullRequests(userUuid, false, 'MERGED');
-  const stats: IStat[] = [{ label: 'Sample size', value: all.length }];
-  let totalTimeToMerge = 0;
-  let totalNumComments = 0;
-  let totalNumTasks = 0;
-  all.forEach((pr) => {
-    const opened = new Date(pr.created_on).getTime();
-    const closed = pr.closed_on ? new Date(pr.closed_on).getTime() : Date.now();
-    totalTimeToMerge += closed - opened;
-
-    totalNumComments += pr.comment_count;
-    totalNumTasks += pr.task_count;
-  });
-  console.log('totalNumComments', totalNumComments, 'totalNumTasks', totalNumTasks);
-  stats.push({ label: 'Avg time to close', value: msToTime(Math.floor(totalTimeToMerge / all.length)) });
-  stats.push({ label: 'Avg comments', value: Math.ceil(totalNumComments / all.length) });
-  stats.push({ label: 'Avg tasks', value: (totalNumTasks / all.length).toFixed(2) });
+  // const all = await getPullRequests(userUuid, false, 'MERGED');
+  const stats: IStat[] = [{ label: 'Sample size', value: 0 }];
+  // let totalTimeToMerge = 0;
+  // let totalNumComments = 0;
+  // let totalNumTasks = 0;
+  // all.forEach((pr) => {
+  //   const opened = new Date(pr.created_on).getTime();
+  //   const closed = pr.closed_on ? new Date(pr.closed_on).getTime() : Date.now();
+  //   totalTimeToMerge += closed - opened;
+  //
+  //   totalNumComments += pr.comment_count;
+  //   totalNumTasks += pr.task_count;
+  // });
+  // console.log('totalNumComments', totalNumComments, 'totalNumTasks', totalNumTasks);
+  // stats.push({ label: 'Avg time to close', value: msToTime(Math.floor(totalTimeToMerge / all.length)) });
+  // stats.push({ label: 'Avg comments', value: Math.ceil(totalNumComments / all.length) });
+  // stats.push({ label: 'Avg tasks', value: (totalNumTasks / all.length).toFixed(2) });
 
   return stats;
 };

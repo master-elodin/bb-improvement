@@ -97,7 +97,7 @@ export interface IRowFilters {
   branch: 'any' | string;
   repo: 'any' | string;
   author: 'any' | string;
-  role: 'reviewer' | 'author' | 'all';
+  role: 'reviewers' | 'author' | 'all';
   state: PRState;
 }
 

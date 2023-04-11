@@ -40,7 +40,7 @@ const UserSelector = ({ onUserChange, loggedInUserUuid }: IProps) => {
 
   return (
     <FilterDropdown
-      label={'Reviewer'}
+      label={'Selected user'}
       onSelect={(newId: string) => onUserChange(allUsers[newId])}
       options={userOptions}
       allowFilter={true}

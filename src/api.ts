@@ -1,5 +1,5 @@
 import { allUsers as mockUsers, rawData, statuses } from './data';
-import { IRow, IStatusResponse, IUser, PRState } from './types';
+import { IRow, IRowFilters, IStatusResponse, IUser } from './types';
 
 export const FILTER_KEY = 'bb-script-filters';
 export const DRAWER_KEY = 'bb-script-drawer-open';
@@ -26,27 +26,25 @@ const reviewingPRs: Record<string, string> = {
   pagelen: '50',
 };
 
-const getUrl = (currentUserUuid: string, isReviewing: boolean, prState: PRState) => {
+let isProd = false;
+export const setIsProd = (newVal: boolean) => (isProd = newVal);
+
+export const getPullRequests = async (filters: IRowFilters) => {
+  if (!isProd) {
+    return rawData.values as unknown as IRow[];
+  }
+  const reviewerQ = filters.role === 'all' ? '' : ` AND ${filters.role}.uuid="${filters.userUuid}"`
   const params: Record<string, string> = {
     ...reviewingPRs,
-    q: `state="${prState}" AND ${isReviewing ? 'reviewers' : 'author'}.uuid="${currentUserUuid}"`,
+    q: `state="${filters.state}"${reviewerQ}`,
   };
-  return (
+  const url = (
     `https://bitbucket.org/!api/internal/workspaces/${workspace}/pullrequests/?` +
     Object.keys(params)
       .map((key: string) => `${key}=${encodeURIComponent(params[key])}`)
       .join('&')
   );
-};
-
-let isProd = false;
-export const setIsProd = (newVal: boolean) => (isProd = newVal);
-
-export const getPullRequests = async (currentUserUuid: string, isReviewing: boolean, prState: PRState) => {
-  if (!isProd) {
-    return rawData.values as unknown as IRow[];
-  }
-  const res = await fetch(getUrl(currentUserUuid, isReviewing, prState));
+  const res = await fetch(url);
   const json = await res.json();
   return (json.values ?? []) as IRow[];
 };

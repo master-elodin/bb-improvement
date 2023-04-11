@@ -12,9 +12,9 @@ interface IProps {
 }
 
 const prTypeOptions = [
-  { label: 'Reviewing', value: 'reviewer' },
+  { label: 'Reviewing', value: 'reviewers' },
   { label: 'Author', value: 'author' },
-  // { label: 'All', value: 'all' },
+  { label: 'Irrelevant', value: 'all' },
 ];
 
 const prStateOptions = [
@@ -101,7 +101,7 @@ const DrawerFilters = ({ rowFilters, summarized, onFilterSelect, clearFilters }:
       />
       <h5 className={'drawer-filters__type-title'}>Filter with reload</h5>
       <FilterDropdown
-        label={'I am...'}
+        label={'Selected user is...'}
         options={prTypeOptions}
         defaultValue={rowFilters.role}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'role')}

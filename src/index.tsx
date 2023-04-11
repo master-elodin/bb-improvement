@@ -24,7 +24,7 @@ const defaultFilters = {
   repo: 'any',
   branch: 'any',
   author: 'any',
-  role: 'reviewer',
+  role: 'reviewers',
   state: 'OPEN',
 } as IRowFilters;
 

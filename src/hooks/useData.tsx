@@ -28,7 +28,7 @@ const useData = () => {
 
   const refresh = async (filters: IRowFilters) => {
     setIsLoading(true);
-    const pullRequests = await getPullRequests(filters.userUuid, filters.role === 'reviewer', filters.state);
+    const pullRequests = await getPullRequests(filters);
     const branches = [...new Set(pullRequests.map((pr) => pr.destination.branch.name))].sort();
     const repos = [...new Set(pullRequests.map((pr) => pr.destination.repository.slug))].sort();
     const authorsById = pullRequests.reduce((acc: { [uuid: string]: string }, val) => {
