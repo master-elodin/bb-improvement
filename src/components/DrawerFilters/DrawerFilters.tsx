@@ -1,20 +1,20 @@
 import * as React from 'react';
-import { FilterType } from '../../filters';
 import FilterDropdown from './FilterDropdown';
-import { PRState } from '../../types';
-import { FILTER_KEY } from '../../api';
+import { IRowFilters } from '../../types';
 
 interface IProps {
+  defaultFilters: IRowFilters;
+  rowFilters: IRowFilters;
   allBranches: string[];
   allRepoNames: string[];
-  onFilterSelect: (newVal: string, filterType: FilterType) => void;
-  onPRTypeChange: (newVal: string) => void;
-  onPRStateChange: (newVal: PRState) => void;
+  onFilterSelect: (newVal: string, filterType: keyof IRowFilters) => void;
+  clearFilters: () => void;
 }
 
 const prTypeOptions = [
   { label: 'Reviewing', value: 'reviewer' },
   { label: 'Author', value: 'author' },
+  // { label: 'All', value: 'all' },
 ];
 
 const prStateOptions = [
@@ -36,38 +36,29 @@ const needsApprovalOptions = [
   { label: 'Requested changes', value: 'changesRequested' },
 ];
 
-const savedFilters = JSON.parse(localStorage.getItem(FILTER_KEY) ?? '{}');
-
-const DrawerFilters = ({ allBranches, allRepoNames, onFilterSelect, onPRTypeChange, onPRStateChange }: IProps) => {
+const DrawerFilters = ({ rowFilters, allBranches, allRepoNames, onFilterSelect, clearFilters }: IProps) => {
   const targets = allBranches.map((b) => ({ label: b, value: b }));
   targets.unshift({ label: 'All', value: 'any' });
   const repos = allRepoNames.map((b) => ({ label: b, value: b }));
   repos.unshift({ label: 'All', value: 'any' });
+
   return (
     <>
+      <h5 className={'drawer-filters__type-title'}>Filter in place</h5>
+      <div className={'drawer-filters__clear'} onClick={clearFilters}>
+        clear
+      </div>
       <FilterDropdown
         label={'I have...'}
         options={needsApprovalOptions}
-        defaultValue={savedFilters.needsReview}
+        defaultValue={rowFilters.needsReview}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'needsReview')}
       />
       <FilterDropdown
         label={'Open tasks'}
         options={taskOptions}
-        defaultValue={savedFilters.tasks}
+        defaultValue={rowFilters.tasks}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'tasks')}
-      />
-      <FilterDropdown
-        label={'I am...'}
-        options={prTypeOptions}
-        defaultValue={prTypeOptions[savedFilters.isReviewing === 'false' ? 1 : 0].value}
-        onSelect={onPRTypeChange}
-      />
-      <FilterDropdown
-        label={'PR state'}
-        options={prStateOptions}
-        defaultValue={savedFilters.prState}
-        onSelect={(newVal) => onPRStateChange(newVal as PRState)}
       />
       <FilterDropdown
         label={'Target'}
@@ -79,6 +70,19 @@ const DrawerFilters = ({ allBranches, allRepoNames, onFilterSelect, onPRTypeChan
         label={'Repository'}
         options={repos}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'repo')}
+      />
+      <h5 className={'drawer-filters__type-title'}>Filter with reload</h5>
+      <FilterDropdown
+        label={'I am...'}
+        options={prTypeOptions}
+        defaultValue={rowFilters.role}
+        onSelect={(newVal: string) => onFilterSelect(newVal, 'role')}
+      />
+      <FilterDropdown
+        label={'PR state'}
+        options={prStateOptions}
+        defaultValue={rowFilters.state}
+        onSelect={(newVal: string) => onFilterSelect(newVal, 'state')}
       />
     </>
   );

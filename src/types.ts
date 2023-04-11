@@ -91,3 +91,13 @@ export interface ICol {
 }
 
 export type IFilter = (row: IRow, user: IUser) => boolean;
+
+export interface IRowFilters {
+  userUuid: string;
+  tasks: 'any' | 'yes' | 'no';
+  needsReview: 'any' | 'yes' | 'no' | 'changesRequested';
+  branch: 'any' | string;
+  repo: 'any' | string;
+  role: 'reviewer' | 'author' | 'all';
+  state: PRState;
+}

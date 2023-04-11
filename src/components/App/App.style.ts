@@ -28,8 +28,10 @@ export const appStyle = {
     '--header-height': '30px',
   },
   '.app__content-loading-container': {
+    'align-items': 'center',
     display: 'flex',
     'justify-content': 'center',
+    height: '100%',
     width: '100%',
   },
   '.app__content-header': {
@@ -69,8 +71,9 @@ export const appStyle = {
     'flex-direction': 'column',
     'flex-grow': 1,
     'flex-shrink': 1,
-    height: '100%',
+    height: 'calc(100% - 20px)',
     'min-width': 0,
+    width: '100%',
   },
   '.app__content-rows': {
     'overflow-x': 'hidden',

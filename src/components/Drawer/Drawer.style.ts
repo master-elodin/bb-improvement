@@ -45,7 +45,7 @@ export const drawerStyle = {
   },
   '.drawer__content': {
     display: 'flex',
-    gap: '20px',
+    gap: '15px',
     'flex-basis': 'calc(100% - var(--drawer-header-height) - 35px)',
     'flex-direction': 'column',
     'overflow-y': 'auto',

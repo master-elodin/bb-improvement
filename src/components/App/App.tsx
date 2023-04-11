@@ -1,16 +1,17 @@
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { ICol, IFilter, IRow, IUser, PRState } from '../../types';
+import { ICol, IRow, IRowFilters, IUser } from '../../types';
 import Row, { columns } from '../Row';
-import { DRAWER_KEY, FILTER_KEY, getPullRequests, getStatuses } from '../../api';
+import { DRAWER_KEY, FILTER_KEY } from '../../api';
 import UserSelector from '../UserSelector';
 import { DownArrow, UpArrow } from '../Icons/Icons';
-import DrawerFilters from '../HeaderOptions/DrawerFilters';
-import { filters, FilterType } from '../../filters';
+import DrawerFilters from '../DrawerFilters/DrawerFilters';
 import ColumnFilter from '../ColumnFilter/ColumnFilter';
 import Spinner from '../Spinner/Spinner';
 import Drawer from '../Drawer/Drawer';
 import Button from '../Button/Button';
+import useData from '../../hooks/useData';
+import { passesFilters } from '../../filters';
 
 const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
   const getValue = columns.find((col) => col.label === colType)?.getValue ?? (() => 'zzzz');
@@ -28,47 +29,36 @@ const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
 
 type ColFilter = (row: IRow) => boolean;
 
-const savedFilters = JSON.parse(localStorage.getItem(FILTER_KEY) ?? '{}');
-
-const saveFilters = (newVal: string, filterType: FilterType) => {
-  savedFilters[filterType] = newVal;
-  localStorage.setItem(FILTER_KEY, JSON.stringify(savedFilters));
-};
-
-const loadFilters = () => {
-  return {
-    tasks: filters.tasks[savedFilters.tasks ?? 'any'],
-    needsReview: filters.needsReview[savedFilters.needsReview ?? 'any'],
-    branch: filters.branch.any,
-    repo: filters.repo.any,
-  };
+const saveFilters = (newVal: IRowFilters) => {
+  localStorage.setItem(FILTER_KEY, JSON.stringify(newVal));
 };
 
 interface IProps {
   isProd: boolean;
   loggedInUserUuid: string;
+  defaultFilters: IRowFilters;
+  savedFilters: IRowFilters;
 }
 
-function App({ isProd, loggedInUserUuid }: IProps) {
-  const [loading, setLoading] = useState(true);
+function App({ isProd, loggedInUserUuid, defaultFilters, savedFilters }: IProps) {
   const [sortType, setSortType] = useState<string>(`${columns[columns.length - 1].label}:asc`);
   const [sortedRows, setSortedRows] = useState<IRow[]>([]);
-  const [currentFilters, setCurrentFilters] = useState<Record<string, IFilter>>(loadFilters());
   const [colFilers, setColFilters] = useState<{ [colLabel: string]: ColFilter }>({});
-  const [allBranches, setAllBranches] = useState<string[]>([]);
-  const [allRepoNames, setAllRepoNames] = useState<string[]>([]);
   const [currentUser, setCurrentUser] = useState<IUser>({ uuid: loggedInUserUuid, display_name: 'Me' } as IUser);
-  const [isReviewing, setIsReviewing] = useState(savedFilters.isReviewing !== 'false');
-  const [prState, setPRState] = useState<PRState>(savedFilters.prState ?? 'OPEN');
   const [drawerOpen, setDrawerOpen] = useState(localStorage.getItem(DRAWER_KEY) !== 'false');
+  const [rowFilters, setRowFilters] = useState<IRowFilters>(savedFilters);
+
+  const { isLoading, allBranches, allRepoNames, pullRequests, refresh } = useData();
 
   useEffect(() => {
-    saveFilters(prState, 'prState');
-  }, [prState]);
+    let nextSortType = sortType;
+    let sortColumn = nextSortType.split(':')[0];
+    setSortedRows(getSortedRows(pullRequests, sortColumn, nextSortType.split(':')[1] === 'asc'));
+  }, [pullRequests]);
 
   useEffect(() => {
-    saveFilters(JSON.stringify(isReviewing), 'isReviewing');
-  }, [isReviewing]);
+    saveFilters(rowFilters);
+  }, [rowFilters]);
 
   useEffect(() => {
     localStorage.setItem(DRAWER_KEY, JSON.stringify(drawerOpen));
@@ -81,59 +71,12 @@ function App({ isProd, loggedInUserUuid }: IProps) {
     }));
   }, []);
 
-  const addBuildStatus = async (commits: string[]) => {
-    try {
-      // TODO: make statuses work for every repo
-      const statuses = await getStatuses(commits);
-      setSortedRows((prevState) => {
-        prevState.forEach((pr) => {
-          pr.buildStatus = statuses[pr.source.commit.hash];
-        });
-        return [...prevState];
-      });
-    } catch (e) {
-      console.error('Could not add status', e);
-    }
-  };
-
-  const refresh = async (userUuid: string, resetSort = false) => {
-    setLoading(true);
-    const pullRequests = await getPullRequests(userUuid, isReviewing, prState);
-    const branches = [...new Set(pullRequests.map((row) => row.destination.branch.name))].sort();
-    filters.branch = {
-      any: () => true,
-    };
-    branches.forEach((branch) => {
-      filters.branch[branch] = (row: IRow) => row.destination.branch.name === branch;
-    });
-    setAllBranches(branches);
-
-    filters.repo = {
-      any: () => true,
-    };
-    const repoNames = [...new Set(pullRequests.map((p) => p.destination.repository.slug))].sort();
-    repoNames.forEach((repo) => (filters.repo[repo] = (row: IRow) => row.destination.repository.slug === repo));
-    setAllRepoNames(repoNames);
-
-    let nextSortType = sortType;
-    let sortColumn = nextSortType.split(':')[0];
-    if (resetSort) {
-      sortColumn = columns[columns.length - 1].label;
-      nextSortType = `${sortColumn}:asc`;
-      setSortType(nextSortType);
-    }
-    setSortedRows(getSortedRows(pullRequests, sortColumn, nextSortType.split(':')[1] === 'asc'));
-    setLoading(false);
-
-    await addBuildStatus(pullRequests.map((pr) => pr.source.commit.hash));
-  };
-
   useEffect(() => {
     // only refresh if user actually changed from the original user *or* if not in prod
     if (!isProd || currentUser.links) {
-      refresh(currentUser.uuid, true);
+      refresh(rowFilters);
     }
-  }, [currentUser, isReviewing, prState]);
+  }, [currentUser, rowFilters.role, rowFilters.state]);
 
   const onHeaderClick = (colType: string) => {
     const isAsc = sortType === `${colType}:asc`;
@@ -142,28 +85,24 @@ function App({ isProd, loggedInUserUuid }: IProps) {
     setSortType(`${colType}:${isAsc ? 'desc' : 'asc'}`);
   };
 
-  const onFilterSelect = (newVal: string, filterType: FilterType) => {
-    setCurrentFilters((prevState) => {
-      prevState[filterType] = filters[filterType][newVal];
-      return { ...prevState };
-    });
-    saveFilters(newVal, filterType);
+  const onFilterSelect = (newVal: string, filterType: keyof IRowFilters) => {
+    setRowFilters((prevState: IRowFilters) => ({
+      ...prevState,
+      [filterType]: newVal,
+    }));
   };
 
+  const clearFilters = () => setRowFilters(defaultFilters);
+
   const visibleRows = sortedRows.filter(
-    (row) =>
-      currentFilters.tasks(row, currentUser) &&
-      currentFilters.needsReview(row, currentUser) &&
-      currentFilters.branch(row, currentUser) &&
-      currentFilters.repo(row, currentUser) &&
-      Object.values(colFilers).every((colFilter) => colFilter(row)),
+    (row) => passesFilters(row, rowFilters) && Object.values(colFilers).every((colFilter) => colFilter(row)),
   );
   return (
     <div className={'app__root'}>
       <div className={'app__header'}>
         <div className={'app__user-section'}>
           <UserSelector loggedInUserUuid={loggedInUserUuid} onUserChange={setCurrentUser} />
-          {!loading && (
+          {!isLoading && (
             <span className={'app__num-visible'}>
               {visibleRows.length} of {sortedRows.length} visible
             </span>
@@ -173,53 +112,48 @@ function App({ isProd, loggedInUserUuid }: IProps) {
           {/*)}*/}
         </div>
         <div className={'app__header-action-container'}>
-          <Button onClick={() => refresh(currentUser.uuid)} className={'app__refresh-btn'}>
+          <Button onClick={() => refresh(rowFilters)} className={'app__refresh-btn'}>
             <span>&#8635; Refresh</span>
           </Button>
         </div>
       </div>
       <div className={'app__content'}>
-        {loading && (
-          <div className={'app__content-loading-container'}>
-            <Spinner size={'64px'} />
+        <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+          <DrawerFilters
+            defaultFilters={defaultFilters}
+            rowFilters={rowFilters}
+            allBranches={allBranches}
+            allRepoNames={allRepoNames}
+            onFilterSelect={onFilterSelect}
+            clearFilters={clearFilters}
+          />
+        </Drawer>
+        <div className={'app__content-body'}>
+          <div className={'app__content-header'}>
+            {columns.map((col) => (
+              <div key={col.label} className={`app__content-header-col ${col.colClass}`}>
+                <span className={'app__content-header-label'}>{col.label}</span>
+                <div className={'app__content-header-col-actions'}>
+                  {col.matchFilter && <ColumnFilter onFilterChange={(newVal: string) => onFilterType(col, newVal)} />}
+                  <SortArrow
+                    onClick={() => onHeaderClick(col.label)}
+                    sort={sortType?.substring(col.label.length + 1) as any}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
-        )}
-        {!loading && (
-          <>
-            <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
-              <DrawerFilters
-                allBranches={allBranches}
-                allRepoNames={allRepoNames}
-                onFilterSelect={onFilterSelect}
-                onPRTypeChange={(newVal) => setIsReviewing(newVal === 'reviewer')}
-                onPRStateChange={(newVal) => setPRState(newVal)}
-              />
-            </Drawer>
-            <div className={'app__content-body'}>
-              <div className={'app__content-header'}>
-                {columns.map((col) => (
-                  <div key={col.label} className={`app__content-header-col ${col.colClass}`}>
-                    <span className={'app__content-header-label'}>{col.label}</span>
-                    <div className={'app__content-header-col-actions'}>
-                      {col.matchFilter && (
-                        <ColumnFilter onFilterChange={(newVal: string) => onFilterType(col, newVal)} />
-                      )}
-                      <SortArrow
-                        onClick={() => onHeaderClick(col.label)}
-                        sort={sortType?.substring(col.label.length + 1) as any}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className={'app__content-rows'}>
-                {visibleRows.map((val, index) => (
-                  <Row key={index} val={val} currentUser={currentUser} />
-                ))}
-              </div>
+          {isLoading && (
+            <div className={'app__content-loading-container'}>
+              <Spinner size={'64px'} />
             </div>
-          </>
-        )}
+          )}
+          {!isLoading && (
+            <div className={'app__content-rows'}>
+              {!isLoading && visibleRows.map((val: IRow) => <Row key={val.id} val={val} currentUser={currentUser} />)}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

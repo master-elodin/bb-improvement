@@ -2,8 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './components/App/App';
-import { setIsProd } from './api';
+import { FILTER_KEY, setIsProd } from './api';
 import { initStyles } from './styles';
+import { IRowFilters } from './types';
 
 initStyles();
 
@@ -16,8 +17,28 @@ const loggedInUserUuid = isProd
     JSON.parse(jQuery('#bb-bootstrap').attr('data-current-user')).uuid
   : '{2f8139ca-b887-4d13-a41f-ed7f0fe31022}';
 
+const defaultFilters = {
+  userUuid: loggedInUserUuid,
+  tasks: 'any',
+  needsReview: 'any',
+  repo: 'any',
+  branch: 'any',
+  role: 'reviewer',
+  state: 'OPEN',
+} as IRowFilters;
+
+const savedFilters = {
+  ...defaultFilters,
+  ...JSON.parse(localStorage.getItem(FILTER_KEY) ?? '{}'),
+};
+
 root.render(
   <React.StrictMode>
-    <App isProd={isProd} loggedInUserUuid={loggedInUserUuid} />
+    <App
+      isProd={isProd}
+      loggedInUserUuid={loggedInUserUuid}
+      defaultFilters={defaultFilters}
+      savedFilters={savedFilters}
+    />
   </React.StrictMode>,
 );

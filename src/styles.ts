@@ -1,6 +1,6 @@
 import { InlineStyle } from './inlineStyles';
 import { rowTitleStyles } from './components/RowTitle/RowTitle.style';
-import { drawerFiltersStyle } from './components/HeaderOptions/DrawerFilters.style';
+import { drawerFiltersStyle } from './components/DrawerFilters/DrawerFilters.style';
 import { dropdownStyle } from './components/Dropdown/Dropdown-style';
 import { buttonStyle } from './components/Button/Button-style';
 import { iconsStyle } from './components/Icons/Icons.style';
