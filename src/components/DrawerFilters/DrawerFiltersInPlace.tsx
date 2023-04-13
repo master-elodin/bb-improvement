@@ -68,7 +68,7 @@ const DrawerFiltersInPlace = ({ rowFilters, summarized, onFilterSelect, clearFil
         options={needsApprovalOptions}
         defaultValue={rowFilters.needsReview}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'needsReview')}
-        disabled={rowFilters.role === 'author' || isLoading}
+        disabled={isLoading}
       />
       <FilterDropdown
         label={'Open tasks'}
@@ -98,7 +98,7 @@ const DrawerFiltersInPlace = ({ rowFilters, summarized, onFilterSelect, clearFil
         defaultValue={rowFilters.author}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'author')}
         allowFilter={true}
-        disabled={rowFilters.role === 'author' || isLoading}
+        disabled={isLoading}
       />
     </div>
   );

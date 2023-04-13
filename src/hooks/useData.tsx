@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { getPullRequests, getStatuses } from '../api';
-import { IPRSummarized, IRow, IRowFilters } from '../types';
+import { useCallback, useEffect, useState } from 'react';
+import { getAllUsers, getPullRequests, getStatuses } from '../api';
+import { IPRSummarized, IRow, IRowFilters, UserRecord } from '../types';
 
 const useData = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -12,6 +12,7 @@ const useData = () => {
     totalNumResults: 1,
   });
   const [pullRequests, setPullRequests] = useState<IRow[]>([]);
+  const [allUsersById, setAllUsersById] = useState<UserRecord>({});
 
   const addBuildStatus = async (commits: string[]) => {
     try {
@@ -28,7 +29,20 @@ const useData = () => {
     }
   };
 
-  const refresh = async (filters: IRowFilters) => {
+  useEffect(() => {
+    getAllUsers()
+      .then((data) =>
+        setAllUsersById(
+          data.reduce((acc, val) => {
+            acc[val.uuid] = val;
+            return acc;
+          }, {} as UserRecord),
+        ),
+      )
+      .catch((err) => console.error('Failed fetching users', err));
+  }, []);
+
+  const refresh = useCallback(async (filters: IRowFilters) => {
     setIsLoading(true);
     const response = await getPullRequests(filters);
     const { pullRequests, pageNum, totalNumResults } = response;
@@ -57,12 +71,13 @@ const useData = () => {
     await addBuildStatus(pullRequests.map((pr) => pr.source.commit.hash));
 
     setIsLoading(false);
-  };
+  }, []);
 
   return {
     isLoading,
     summarized,
     pullRequests,
+    allUsersById,
     refresh,
   };
 };

@@ -4,6 +4,7 @@ interface ILink {
   href: string;
 }
 
+export type UserRecord = { [uuid: string]: IUser };
 export interface IUser {
   display_name: string;
   nickname: string;

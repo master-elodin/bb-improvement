@@ -53,7 +53,7 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
   const [rowFilters, setRowFilters] = useState<IRowFilters>(savedFilters);
   const [isDarkMode, setIsDarkMode] = useState(JSON.parse(localStorage.getItem(DARK_MODE_KEY) ?? 'false'));
 
-  const { isLoading, summarized, pullRequests, refresh } = useData();
+  const { isLoading, summarized, pullRequests, allUsersById, refresh } = useData();
 
   useEffect(() => {
     const onKeyUp = (e: KeyboardEvent) => {
@@ -78,6 +78,18 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
   }, [pullRequests, sortType]);
 
   useEffect(() => {
+    setRowFilters((prevState) => {
+      const newFilters = {
+        ...prevState,
+        userUuid: currentUser.uuid,
+      };
+      // if user changes, refresh data as well
+      refresh(newFilters);
+      return newFilters;
+    });
+  }, [currentUser]);
+
+  useEffect(() => {
     saveFilters(rowFilters);
   }, [rowFilters]);
 
@@ -97,7 +109,7 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
     if (!isProd || currentUser.links) {
       refresh(rowFilters);
     }
-  }, [currentUser, rowFilters.pageNum]);
+  }, [rowFilters.pageNum]);
 
   const onHeaderClick = (colType: string) => {
     const isAsc = sortType === `${colType}:asc`;
@@ -105,21 +117,22 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
   };
 
   const onFilterSelect = (newVal: string, filterType: keyof IRowFilters) => {
+    setRowFilters((prevState: IRowFilters) => ({
+      ...prevState,
+      [filterType]: newVal,
+    }));
+  };
+
+  const onGoClick = async () => {
+    await refresh(rowFilters);
     setRowFilters((prevState: IRowFilters) => {
-      const newFilters = {
-        ...prevState,
-        [filterType]: newVal,
-      };
-      // TODO: this isn't showing the latest updates... don't disable until reload happens
-      if (filterType === 'role') {
-        if (newVal === 'author') {
-          newFilters.author = currentUser.uuid;
-          newFilters.needsReview = 'any';
-        } else if (newVal === 'reviewers') {
-          newFilters.author = 'any';
-        }
+      if (prevState.role === 'author') {
+        prevState.author = currentUser.uuid;
+        prevState.needsReview = 'any';
+      } else if (prevState.role === 'reviewers') {
+        prevState.author = 'any';
       }
-      return newFilters;
+      return { ...prevState };
     });
   };
 
@@ -128,6 +141,7 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
       ...prevState,
       ...defaultInPlaceFilters,
     }));
+
   const clearReloadFilters = () =>
     setRowFilters((prevState) => ({
       ...prevState,
@@ -155,7 +169,7 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
     <div className={cx('app__root', isDarkMode && 'app__root--dark')}>
       <div className={'app__header'}>
         <div className={'app__user-section'}>
-          <UserSelector loggedInUserUuid={loggedInUserUuid} onUserChange={setCurrentUser} />
+          <UserSelector loggedInUserUuid={loggedInUserUuid} onUserChange={setCurrentUser} allUsersById={allUsersById} />
           <DarkModeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
           {!isLoading && (
             <span className={'app__num-visible'}>
@@ -206,7 +220,7 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
             rowFilters={rowFilters}
             onFilterSelect={onFilterSelect}
             clearFilters={clearReloadFilters}
-            onGoClick={() => refresh(rowFilters)}
+            onGoClick={onGoClick}
             isLoading={isLoading}
           />
         </Drawer>
