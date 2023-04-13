@@ -44,6 +44,7 @@ export const appStyle = {
   '.app__header': {
     'border-bottom': '1px solid var(--color-border)',
     display: 'flex',
+    height: '42px',
     'justify-content': 'space-between',
     padding: '10px',
   },
