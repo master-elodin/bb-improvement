@@ -17,8 +17,8 @@ export const reviewersStyle = {
     'border-radius': '12px',
   },
   '.reviewers__fade': {
-    background: 'linear-gradient(to right, transparent 5%, var(--color-background)), ' +
-      'linear-gradient(to right, transparent 5%, var(--color-background))',
+    background: 'linear-gradient(to right, transparent 5%, var(--color-background-alt)), ' +
+      'linear-gradient(to right, transparent 5%, var(--color-background-alt))',
     height: '100%',
     position: 'absolute',
     right: 0,

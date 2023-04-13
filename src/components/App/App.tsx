@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { ICol, IInPlaceFilters, IRefreshableFilters, IRow, IRowFilters, IUser } from '../../types';
 import Row, { columns } from '../Row';
-import { DRAWER_KEY, FILTER_KEY, RESULTS_PER_PAGE } from '../../api';
+import { DARK_MODE_KEY, DRAWER_KEY, FILTER_KEY, RESULTS_PER_PAGE } from '../../api';
 import UserSelector from '../UserSelector';
 import { DownArrow, UpArrow } from '../Icons/Icons';
 import DrawerFiltersInPlace from '../DrawerFilters/DrawerFiltersInPlace';
@@ -14,6 +14,7 @@ import useData from '../../hooks/useData';
 import { passesFilters } from '../../filters';
 import { cx } from '../../utils';
 import DrawerFiltersReload from '../DrawerFilters/DrawerFiltersReload';
+import DarkModeToggle from './DarkModeToggle';
 
 const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
   const getValue = columns.find((col) => col.label === colType)?.getValue ?? (() => 'zzzz');
@@ -50,6 +51,7 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
   const [currentUser, setCurrentUser] = useState<IUser>({ uuid: loggedInUserUuid, display_name: 'Me' } as IUser);
   const [drawerOpen, setDrawerOpen] = useState(localStorage.getItem(DRAWER_KEY) !== 'false');
   const [rowFilters, setRowFilters] = useState<IRowFilters>(savedFilters);
+  const [isDarkMode, setIsDarkMode] = useState(JSON.parse(localStorage.getItem(DARK_MODE_KEY) ?? 'false'));
 
   const { isLoading, summarized, pullRequests, refresh } = useData();
 
@@ -64,6 +66,10 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
       document.removeEventListener('keyup', onKeyUp);
     };
   }, [drawerOpen]);
+
+  useEffect(() => {
+    localStorage.setItem(DARK_MODE_KEY, JSON.stringify(isDarkMode));
+  }, [isDarkMode]);
 
   useEffect(() => {
     const nextSortType = sortType;
@@ -87,7 +93,6 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
   }, []);
 
   useEffect(() => {
-    console.log('reload?')
     // only refresh if user actually changed from the original user *or* if not in prod
     if (!isProd || currentUser.links) {
       refresh(rowFilters);
@@ -100,10 +105,22 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
   };
 
   const onFilterSelect = (newVal: string, filterType: keyof IRowFilters) => {
-    setRowFilters((prevState: IRowFilters) => ({
-      ...prevState,
-      [filterType]: newVal,
-    }));
+    setRowFilters((prevState: IRowFilters) => {
+      const newFilters = {
+        ...prevState,
+        [filterType]: newVal,
+      };
+      // TODO: this isn't showing the latest updates... don't disable until reload happens
+      if (filterType === 'role') {
+        if (newVal === 'author') {
+          newFilters.author = currentUser.uuid;
+          newFilters.needsReview = 'any';
+        } else if (newVal === 'reviewers') {
+          newFilters.author = 'any';
+        }
+      }
+      return newFilters;
+    });
   };
 
   const clearInPlaceFilters = () =>
@@ -135,10 +152,11 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
   };
 
   return (
-    <div className={'app__root'}>
+    <div className={cx('app__root', isDarkMode && 'app__root--dark')}>
       <div className={'app__header'}>
         <div className={'app__user-section'}>
           <UserSelector loggedInUserUuid={loggedInUserUuid} onUserChange={setCurrentUser} />
+          <DarkModeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
           {!isLoading && (
             <span className={'app__num-visible'}>
               {visibleRows.length} of {sortedRows.length} visible
@@ -158,6 +176,7 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
                     key={pageNum}
                     className={cx(
                       'app__page-selector__page',
+                      'link',
                       summarized.pageNum === pageNum && 'app__page-selector__page--current',
                     )}
                     onClick={() => onPageClick(pageNum)}>
@@ -180,6 +199,7 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
             summarized={summarized}
             onFilterSelect={onFilterSelect}
             clearFilters={clearInPlaceFilters}
+            isLoading={isLoading}
           />
           <DrawerFiltersReload
             defaultFilters={defaultRefreshableFilters}
@@ -187,6 +207,7 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
             onFilterSelect={onFilterSelect}
             clearFilters={clearReloadFilters}
             onGoClick={() => refresh(rowFilters)}
+            isLoading={isLoading}
           />
         </Drawer>
         <div className={'app__content-body'}>

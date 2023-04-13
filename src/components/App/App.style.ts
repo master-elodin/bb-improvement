@@ -1,11 +1,48 @@
+// TODO:
+// @media (prefers-color-scheme: dark) {
+//   /* Dark theme styles go here */
+// }
+//
+// @media (prefers-color-scheme: light) {
+//   /* Light theme styles go here */
+// }
+
+// TODO: box shadow
+const lightModeVars = {
+  '--color-background': '#F5F6FF',
+  '--color-background-alt': '#FCFDFF',
+  '--color-disabled': '#EBECF5',
+  '--color-text': '#0A1E47',
+  '--color-link': '#3764eb',
+  '--color-border': '#0A1E47',
+  '--color-input-background': '#FCFDFF',
+  '--color-input-icon': '#0A1E47',
+}
+const darkModeVars = {
+  '--color-background': '#000a1f',
+  '--color-background-alt': '#0A1429',
+  '--color-disabled': '#8597A9',
+  '--color-text': '#ecf0f1',
+  '--color-link': '#5271D1',
+  '--color-border': '#ecf0f1',
+  '--color-input-background': '#ecf0f1',
+  '--color-input-icon': '#0A1E47',
+}
+
 export const appStyle = {
   '.app__root': {
+    ...lightModeVars,
+    'background-color': 'var(--color-background)',
+    color: 'var(--color-text)',
     height: '100vh',
     overflow: 'hidden',
     width: '100vw',
   },
+  '.app__root.app__root--dark': {
+    ...darkModeVars,
+  },
   '.app__header': {
-    'border-bottom': '1px solid black',
+    'border-bottom': '1px solid var(--color-border)',
     display: 'flex',
     'justify-content': 'space-between',
     padding: '10px',
@@ -20,7 +57,7 @@ export const appStyle = {
     'padding-left': '20px',
   },
   '.app__content': {
-    'background-color': 'var(--color-background-alt)',
+    'background-color': 'var(--color-background)',
     display: 'flex',
     height: 'calc(100% - 60px)',
     padding: '10px 10px 0 0',
@@ -95,6 +132,7 @@ export const appStyle = {
     cursor: 'pointer',
   },
   '.app__page-selector__page--current': {
+    color: 'var(--color-text) !important',
     'font-weight': 'bold',
   },
 };

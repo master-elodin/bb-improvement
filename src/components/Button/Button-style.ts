@@ -2,7 +2,7 @@ import { HOVER_COLOR } from '../../style-constants';
 
 export const buttonStyle = {
   '.button': {
-    '--button-border': '1px solid rgba(0, 0, 0, .6)',
+    '--button-border': '1px solid var(--color-border)',
     border: 'var(--button-border)',
     'border-radius': '3px',
     cursor: 'pointer',
@@ -10,7 +10,7 @@ export const buttonStyle = {
     'text-align': 'center',
   },
   '.button:hover': {
-    'background-color': HOVER_COLOR,
+    'background-color': HOVER_COLOR, // TODO
     'box-shadow': '0 0 3px 1px rgba(150, 150, 150, .2)',
   },
   '.button--primary': {

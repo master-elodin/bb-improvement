@@ -1,6 +1,6 @@
 export const drawerStyle = {
   '.drawer__root': {
-    'background-color': 'var(--color-background-alt)',
+    'background-color': 'var(--color-background)',
     cursor: 'pointer',
     display: 'flex',
     'flex-basis': '20px',
@@ -27,7 +27,7 @@ export const drawerStyle = {
   '.drawer__toggle-arrow': {
     'border-top': '1em solid transparent',
     'border-bottom': '1em solid transparent',
-    'border-right': '1em solid black',
+    'border-right': '1em solid var(--color-text)',
     height: 0,
     left: '10px',
     position: 'absolute',

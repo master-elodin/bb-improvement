@@ -1,7 +1,7 @@
 import { FocusEvent, useCallback, useEffect, useRef, useState } from 'react';
 import * as React from 'react';
 import { DownArrow, UpArrow } from '../Icons/Icons';
-import { handleBlur } from '../../utils';
+import { cx, handleBlur } from '../../utils';
 import { IOption } from '../../types';
 
 export interface IProps {
@@ -10,9 +10,10 @@ export interface IProps {
   onSelect: (newVal: string) => void;
   allowFilter?: boolean;
   width?: string;
+  disabled?: boolean;
 }
 
-const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width }: IProps) => {
+const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width, disabled }: IProps) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [selected, setSelected] = useState<IOption>();
   const [filterVal, setFilterVal] = useState<string>(selected?.label ?? '');
@@ -83,7 +84,7 @@ const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width 
     (option) => !allowFilter || option.label.toLowerCase().indexOf(filterVal.toLowerCase()) > -1,
   );
   return (
-    <div className={'dropdown-root'} style={{ width }} onBlur={onBlur} tabIndex={-1}>
+    <div className={cx('dropdown-root', disabled && 'dropdown-root--disabled')} style={{ width }} onBlur={onBlur} tabIndex={-1}>
       <div className={'dropdown-input'}>
         {filterInput}
         {allowFilter && filterVal.length > 0 && (

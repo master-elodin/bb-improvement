@@ -10,16 +10,18 @@ import { spinnerStyle } from './components/Spinner/Spinner.style';
 import { reviewersStyle } from './components/Reviewers/Reviewers.style';
 import { appStyle } from './components/App/App.style';
 import { drawerStyle } from './components/Drawer/Drawer.style';
+import { darkModeToggleStyle } from './components/App/DarkModeToggle.style';
 
 export const initStyles = () => {
   InlineStyle({
     body: {
-      '--color-background': '#FCFDFF',
-      '--color-background-alt': '#F5F6FF',
-      'background-color': 'var(--color-background)',
+      'background-color': 'var(--color-background-alt)',
       'font-family':
         '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Fira Sans,Droid Sans,Helvetica Neue,sans-serif',
       'font-size': '14px',
+    },
+    'a, .link': {
+      color: 'var(--color-link) !important',
     },
     select: {
       height: '24px',
@@ -29,7 +31,7 @@ export const initStyles = () => {
       cursor: 'pointer',
     },
     '.row': {
-      'background-color': 'var(--color-background)',
+      'background-color': 'var(--color-background-alt)',
       padding: '4px 8px',
       display: 'flex',
       height: '40px',
@@ -37,7 +39,7 @@ export const initStyles = () => {
       width: '100%',
     },
     '.row:nth-child(odd)': {
-      '--color-background': 'var(--color-background-alt)',
+      '--color-background-alt': 'var(--color-background)',
     },
     '.row-col': {
       overflow: 'hidden',
@@ -95,6 +97,7 @@ export const initStyles = () => {
       'padding-left': '8px',
     },
     ...appStyle,
+    ...darkModeToggleStyle,
     ...drawerStyle,
     ...dropdownStyle,
     ...rowTitleStyles,

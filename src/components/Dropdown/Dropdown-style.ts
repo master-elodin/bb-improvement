@@ -1,11 +1,21 @@
-import { HOVER_COLOR } from '../../style-constants';
-
 export const dropdownStyle = {
   '.dropdown-root': {
     cursor: 'pointer',
     position: 'relative',
   },
+  '.dropdown-root--disabled': {
+    cursor: 'default',
+    'pointer-events': 'none',
+  },
+  '.dropdown-root--disabled .dropdown-input input': {
+    background: 'var(--color-disabled)',
+    'border': '1px solid var(--color-disabled)',
+  },
+  '.dropdown-root--disabled .dropdown-input': {
+    background: 'var(--color-disabled)',
+  },
   '.dropdown-root .icon': {
+    color: 'var(--color-input-icon)',
     position: 'absolute',
     right: '7px',
     top: '3px',
@@ -13,7 +23,7 @@ export const dropdownStyle = {
   },
   '.dropdown-dropdown': {
     'box-shadow': '0 0 10px 1px grey',
-    background: 'white',
+    background: 'var(--color-background-alt)',
     display: 'flex',
     position: 'absolute',
     'flex-direction': 'column',
@@ -31,6 +41,9 @@ export const dropdownStyle = {
     position: 'relative',
   },
   '.dropdown-input input': {
+    'background-color': 'var(--color-input-background)',
+    'border': '1px solid var(--color-border)',
+    'border-radius': '3px',
     overflow: 'hidden',
     padding: '3px 20px 3px 8px',
     'text-overflow': 'ellipsis',
@@ -40,6 +53,7 @@ export const dropdownStyle = {
     cursor: 'pointer',
   },
   '.dropdown__clear-btn': {
+    color: 'var(--color-background)',
     'line-height': '22px',
     opacity: '.5',
     padding: '0 5px',
@@ -57,7 +71,7 @@ export const dropdownStyle = {
     'white-space': 'nowrap',
   },
   '.dropdown-option:not(.dropdown-option--no-results):hover': {
-    'background-color': HOVER_COLOR,
+    'background-color': 'var(--color-background)',
   },
   '.dropdown-option--no-results': {
     cursor: 'default',

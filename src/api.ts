@@ -3,6 +3,7 @@ import { IPullRequestResponse, IRow, IRowFilters, IStatusResponse, IUser } from 
 
 export const FILTER_KEY = 'bb-script-filters';
 export const DRAWER_KEY = 'bb-script-drawer-open';
+export const DARK_MODE_KEY = 'bb-script-dark-mode';
 
 export const RESULTS_PER_PAGE = 50;
 const workspace = process.env.REACT_APP_BB_WORKSPACE ?? 'my-workspace';
