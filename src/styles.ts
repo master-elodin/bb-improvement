@@ -4,7 +4,6 @@ import { drawerFiltersStyle } from './components/DrawerFilters/DrawerFilters.sty
 import { dropdownStyle } from './components/Dropdown/Dropdown-style';
 import { buttonStyle } from './components/Button/Button-style';
 import { iconsStyle } from './components/Icons/Icons.style';
-import { columnFilterStyle } from './components/ColumnFilter/ColumnFilter.style';
 import { userStatsStyle } from './components/UserStats/UserStats.style';
 import { spinnerStyle } from './components/Spinner/Spinner.style';
 import { reviewersStyle } from './components/Reviewers/Reviewers.style';
@@ -105,7 +104,6 @@ export const initStyles = () => {
     ...drawerFiltersStyle,
     ...buttonStyle,
     ...iconsStyle,
-    ...columnFilterStyle,
     ...regexFilterStyle,
     ...reviewersStyle,
     ...spinnerStyle,

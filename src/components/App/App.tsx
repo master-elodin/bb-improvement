@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { useCallback, useEffect, useState } from 'react';
-import { ICol, IInPlaceFilters, IRefreshableFilters, IRow, IRowFilters, IUser } from '../../types';
+import { useEffect, useState } from 'react';
+import { IInPlaceFilters, IRefreshableFilters, IRow, IRowFilters, IUser } from '../../types';
 import Row, { columns } from '../Row';
 import { DARK_MODE_KEY, DRAWER_KEY, FILTER_KEY, RESULTS_PER_PAGE } from '../../api';
 import UserSelector from '../UserSelector';
 import { DownArrow, UpArrow } from '../Icons/Icons';
 import DrawerFiltersInPlace from '../DrawerFilters/DrawerFiltersInPlace';
-import ColumnFilter from '../ColumnFilter/ColumnFilter';
 import Spinner from '../Spinner/Spinner';
 import Drawer from '../Drawer/Drawer';
 import Button from '../Button/Button';
@@ -30,8 +29,6 @@ const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
   return [...rows];
 };
 
-type ColFilter = (row: IRow) => boolean;
-
 const saveFilters = (newVal: IRowFilters) => {
   localStorage.setItem(
     FILTER_KEY,
@@ -53,7 +50,6 @@ interface IProps {
 function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPlaceFilters, savedFilters }: IProps) {
   const [sortType, setSortType] = useState<string>(`${columns[columns.length - 1].label}:asc`);
   const [sortedRows, setSortedRows] = useState<IRow[]>([]);
-  const [colFilers, setColFilters] = useState<{ [colLabel: string]: ColFilter }>({});
   const [currentUser, setCurrentUser] = useState<IUser>({ uuid: loggedInUserUuid, display_name: 'Me' } as IUser);
   const [drawerOpen, setDrawerOpen] = useState(localStorage.getItem(DRAWER_KEY) !== 'false');
   const [rowFilters, setRowFilters] = useState<IRowFilters>(savedFilters);
@@ -112,13 +108,6 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
     localStorage.setItem(DRAWER_KEY, JSON.stringify(drawerOpen));
   }, [drawerOpen]);
 
-  const onFilterType = useCallback((col: ICol, newVal: string) => {
-    setColFilters((prevState) => ({
-      ...prevState,
-      [col.label]: (row: IRow) => col.matchFilter?.(newVal, row) ?? true,
-    }));
-  }, []);
-
   useEffect(() => {
     // only refresh if user actually changed from the original user *or* if not in prod
     if (!isProd || currentUser.links) {
@@ -155,9 +144,7 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
       ...defaultRefreshableFilters,
     }));
 
-  const visibleRows = sortedRows.filter(
-    (row) => passesFilters(row, rowFilters) && Object.values(colFilers).every((colFilter) => colFilter(row)),
-  );
+  const visibleRows = sortedRows.filter((row) => passesFilters(row, rowFilters));
   const possiblePages = Array.from({ length: Math.ceil(summarized.totalNumResults / RESULTS_PER_PAGE) }).map(
     (_, pageNum) => pageNum + 1,
   );
@@ -178,11 +165,6 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
         <div className={'app__user-section'}>
           <UserSelector loggedInUserUuid={loggedInUserUuid} onUserChange={setCurrentUser} allUsersById={allUsersById} />
           <DarkModeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
-          {!isLoading && (
-            <span className={'app__num-visible'}>
-              {visibleRows.length} of {sortedRows.length} visible
-            </span>
-          )}
           {/*{!loading && (*/}
           {/*  <UserStats userUuid={currentUser.uuid} />*/}
           {/*)}*/}
@@ -213,7 +195,7 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
         </div>
       </div>
       <div className={'app__content'}>
-        <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+        <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} numVisible={visibleRows.length} numTotal={sortedRows.length}>
           <DrawerFiltersInPlace
             defaultFilters={defaultInPlaceFilters}
             rowFilters={rowFilters}
@@ -237,7 +219,6 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
               <div key={col.label} className={`app__content-header-col ${col.colClass}`}>
                 <span className={'app__content-header-label'}>{col.label}</span>
                 <div className={'app__content-header-col-actions'}>
-                  {col.matchFilter && <ColumnFilter onFilterChange={(newVal: string) => onFilterType(col, newVal)} />}
                   <SortArrow
                     onClick={() => onHeaderClick(col.label)}
                     sort={sortType?.substring(col.label.length + 1) as any}

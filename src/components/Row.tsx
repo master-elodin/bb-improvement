@@ -11,31 +11,6 @@ export const columns: ICol[] = [
     getValue: (val: IRow) => val.title,
     getRendered: (val: IRow) => <RowTitle val={val} />,
     colClass: 'name-col',
-    matchFilter: (newVal: string, row: IRow) => {
-      const filtersByType = newVal
-        .split(',')
-        .map((v) => v.trim().toLowerCase())
-        .filter((v) => !!v)
-        .reduce(
-          (acc, val) => {
-            const isNot = val.startsWith('!');
-            const matchVal = isNot ? val.substring(1) : val;
-            const matchTitle = row.title.toLowerCase().includes(matchVal);
-            const matchAuthor = row.author.display_name.toLowerCase().includes(matchVal);
-            const matchBranch = row.destination.branch.name.toLowerCase().includes(matchVal);
-            if (isNot) {
-              acc.notHas.push(!matchTitle && !matchAuthor && !matchBranch);
-            } else {
-              acc.has.push(matchTitle || matchAuthor || matchBranch);
-            }
-            return acc;
-          },
-          { has: [] as boolean[], notHas: [] as boolean[] },
-        );
-      const matchHas = !filtersByType.has.length || filtersByType.has.some(Boolean);
-      const matchHasNot = !filtersByType.notHas.length || filtersByType.notHas.every(Boolean);
-      return matchHas && matchHasNot;
-    },
   },
   {
     label: 'Tasks',

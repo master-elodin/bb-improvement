@@ -53,12 +53,6 @@ export const appStyle = {
   '.app__user-section': {
     display: 'flex',
   },
-  '.app__num-visible': {
-    'font-size': '.8em',
-    height: '45px',
-    'line-height': '62px',
-    'padding-left': '20px',
-  },
   '.app__content': {
     'background-color': 'var(--color-background)',
     display: 'flex',

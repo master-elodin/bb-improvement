@@ -16,22 +16,33 @@ export const drawerStyle = {
     'flex-basis': '250px',
   },
   '.drawer__header': {
+    'align-items': 'center',
     cursor: 'pointer',
+    display: 'flex',
     'flex-basis': 'var(--drawer-header-height)',
+    'justify-content': 'space-between',
+    'padding': '0 20px 0 10px',
     position: 'relative',
-    width: '90px',
+    width: 'calc(100% - 30px)',
+  },
+  '.drawer__header-title-container': {
+    display: 'flex',
+    gap: '10px'
+  },
+  '.drawer__num-visible': {
+    'font-size': '.8em',
   },
   '.drawer__toggle': {
+    'align-items': 'center',
     'font-size': '8px',
+    display: 'flex',
   },
   '.drawer__toggle-arrow': {
     'border-top': '1em solid transparent',
     'border-bottom': '1em solid transparent',
     'border-right': '1em solid var(--color-text)',
+    'flex-basis': '30px',
     height: 0,
-    left: '10px',
-    position: 'absolute',
-    top: '10px',
     transition: 'transform 250ms',
     width: 0,
   },
@@ -40,10 +51,7 @@ export const drawerStyle = {
   },
   '.drawer__title': {
     color: 'var(--color-text)',
-    left: '30px',
     margin: 0,
-    position: 'absolute',
-    top: '5px',
   },
   '.drawer__content': {
     display: 'flex',
