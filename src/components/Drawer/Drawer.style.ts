@@ -39,6 +39,7 @@ export const drawerStyle = {
     transform: 'rotate(180deg)'
   },
   '.drawer__title': {
+    color: 'var(--color-text)',
     left: '30px',
     margin: 0,
     position: 'absolute',
