@@ -7,7 +7,6 @@
 //   /* Light theme styles go here */
 // }
 
-// TODO: box shadow
 const lightModeVars = {
   '--color-background': '#F5F6FF',
   '--color-background-alt': '#FCFDFF',
@@ -17,6 +16,8 @@ const lightModeVars = {
   '--color-border': '#0A1E47',
   '--color-input-background': '#FCFDFF',
   '--color-input-icon': '#0A1E47',
+  '--color-highlight': '#ff1ff8',
+  '--shadow-filter-highlight': '0 0 7px var(--color-highlight)',
 }
 const darkModeVars = {
   '--color-background': '#000a1f',
@@ -27,6 +28,7 @@ const darkModeVars = {
   '--color-border': '#ecf0f1',
   '--color-input-background': '#ecf0f1',
   '--color-input-icon': '#0A1E47',
+  '--shadow-filter-highlight': '0 0 7px var(--color-highlight), 0 1px 6px var(--color-highlight), 0 1px 6px var(--color-highlight)',
 }
 
 export const appStyle = {

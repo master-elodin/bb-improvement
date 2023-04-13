@@ -8,7 +8,7 @@ interface IProps extends IDropdownProps {
 const FilterDropdown = ({ label, ...props }: IProps) => (
   <div className={'drawer-filters__filter'}>
     <span className={'drawer-filters__label'}>{label}</span>
-    <Dropdown {...props} />
+    <Dropdown {...props} shadowChanged={props.shadowChanged ?? true} />
   </div>
 );
 

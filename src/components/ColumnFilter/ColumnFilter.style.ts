@@ -1,12 +1,12 @@
 export const columnFilterStyle = {
-  '.filter-dropdown': {
+  '.column-filter': {
     cursor: 'pointer',
     'font-size': '12px',
     'margin-top': '3px',
     'margin-right': '10px',
     position: 'relative',
   },
-  '.filter-dropdown__popover': {
+  '.column-filter__popover': {
     'background-color': 'white',
     'border-radius': '5px',
     'box-shadow': '0 0 10px 1px grey',
@@ -16,11 +16,12 @@ export const columnFilterStyle = {
     top: '20px',
     'z-index': 2,
   },
-  '.filter-dropdown__popover input': {
+  '.column-filter__popover input': {
     padding: '2px 8px',
     'min-width': '240px',
   },
-  '.filter-dropdown__clear-btn': {
+  '.column-filter__clear-btn': {
+    color: 'var(--color-input-icon)',
     'line-height': '22px',
     opacity: '.5',
     padding: '0 5px',
@@ -28,7 +29,19 @@ export const columnFilterStyle = {
     right: '15px',
     top: '10px',
   },
-  '.filter-dropdown__clear-btn:hover': {
+  '.column-filter__clear-btn:hover': {
     opacity: 1,
-  }
+  },
+  '.column-filter__icon': {
+    'border-radius': '10px',
+    height: '21px',
+    'margin-top': '3px',
+    width: '20px',
+    display: 'flex',
+    'justify-content': 'center',
+    'align-items': 'center',
+  },
+  '.column-filter__icon--changed': {
+    'box-shadow': '-2px -2px 7px var(--color-highlight), 2px 2px 7px var(--color-highlight)',
+  },
 };

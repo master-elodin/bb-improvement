@@ -125,15 +125,6 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
 
   const onGoClick = async () => {
     await refresh(rowFilters);
-    setRowFilters((prevState: IRowFilters) => {
-      if (prevState.role === 'author') {
-        prevState.author = currentUser.uuid;
-        prevState.needsReview = 'any';
-      } else if (prevState.role === 'reviewers') {
-        prevState.author = 'any';
-      }
-      return { ...prevState };
-    });
   };
 
   const clearInPlaceFilters = () =>

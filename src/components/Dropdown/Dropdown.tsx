@@ -11,9 +11,10 @@ export interface IProps {
   allowFilter?: boolean;
   width?: string;
   disabled?: boolean;
+  shadowChanged?: boolean;
 }
 
-const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width, disabled }: IProps) => {
+const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width, disabled, shadowChanged }: IProps) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [selected, setSelected] = useState<IOption>();
   const [filterVal, setFilterVal] = useState<string>(selected?.label ?? '');
@@ -84,7 +85,15 @@ const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width,
     (option) => !allowFilter || option.label.toLowerCase().indexOf(filterVal.toLowerCase()) > -1,
   );
   return (
-    <div className={cx('dropdown-root', disabled && 'dropdown-root--disabled')} style={{ width }} onBlur={onBlur} tabIndex={-1}>
+    <div
+      className={cx(
+        'dropdown-root',
+        disabled && 'dropdown-root--disabled',
+        shadowChanged && options[0]?.value !== defaultValue && 'dropdown-root--show-changed',
+      )}
+      style={{ width }}
+      onBlur={onBlur}
+      tabIndex={-1}>
       <div className={'dropdown-input'}>
         {filterInput}
         {allowFilter && filterVal.length > 0 && (

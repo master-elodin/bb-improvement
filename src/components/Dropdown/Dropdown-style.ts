@@ -1,7 +1,12 @@
 export const dropdownStyle = {
   '.dropdown-root': {
+    '--dropdown-border-radius': '3px',
+    'border-radius': 'var(--dropdown-border-radius)',
     cursor: 'pointer',
     position: 'relative',
+  },
+  '.dropdown-root--show-changed': {
+    'box-shadow': 'var(--shadow-filter-highlight)',
   },
   '.dropdown-root--disabled': {
     cursor: 'default',
@@ -9,7 +14,7 @@ export const dropdownStyle = {
   },
   '.dropdown-root--disabled .dropdown-input input': {
     background: 'var(--color-disabled)',
-    'border': '1px solid var(--color-disabled)',
+    border: '1px solid var(--color-disabled)',
   },
   '.dropdown-root--disabled .dropdown-input': {
     background: 'var(--color-disabled)',
@@ -37,13 +42,14 @@ export const dropdownStyle = {
   },
   '.dropdown-input': {
     display: 'flex',
+    'border-radius': 'var(--dropdown-border-radius)',
     'justify-content': 'space-between',
     position: 'relative',
   },
   '.dropdown-input input': {
     'background-color': 'var(--color-input-background)',
-    'border': '1px solid var(--color-border)',
-    'border-radius': '3px',
+    border: '1px solid var(--color-border)',
+    'border-radius': 'var(--dropdown-border-radius)',
     overflow: 'hidden',
     padding: '3px 20px 3px 8px',
     'text-overflow': 'ellipsis',
@@ -53,7 +59,7 @@ export const dropdownStyle = {
     cursor: 'pointer',
   },
   '.dropdown__clear-btn': {
-    color: 'var(--color-background)',
+    color: 'var(--color-input-icon)',
     'line-height': '22px',
     opacity: '.5',
     padding: '0 5px',

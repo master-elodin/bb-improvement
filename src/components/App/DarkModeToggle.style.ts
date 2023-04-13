@@ -28,7 +28,7 @@ export const darkModeToggleStyle = {
   '.dark-mode-toggle__icon': {
     'font-size': '12px',
     position: 'absolute',
-    top: '3px',
+    top: '2px',
   },
   '.dark-mode-toggle__sun': {
     color: '#0A1E47',

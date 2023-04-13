@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FocusEvent, useCallback, useRef, useState } from 'react';
 import { FilterIcon } from '../icons';
-import { handleBlur } from '../../utils';
+import { cx, handleBlur } from '../../utils';
 
 interface IProps {
   onFilterChange: (filterVal: string) => void;
@@ -35,12 +35,15 @@ const ColumnFilter = ({ onFilterChange }: IProps) => {
   };
 
   return (
-    <div className={'filter-dropdown'} onBlur={onBlur} tabIndex={0}>
-      <span onClick={() => setShowPopover(!showPopover)}>
+    <div className={'column-filter'} onBlur={onBlur} tabIndex={0}>
+      <div
+        // className={cx('column-filter__icon', 'column-filter__icon--changed')}
+        className={cx('column-filter__icon', filterVal.length > 0 && 'column-filter__icon--changed')}
+        onClick={() => setShowPopover(!showPopover)}>
         <FilterIcon />
-      </span>
+      </div>
       {showPopover && (
-        <div className={'filter-dropdown__popover'}>
+        <div className={'column-filter__popover'}>
           <input
             ref={inputRef}
             value={filterVal}
@@ -49,7 +52,7 @@ const ColumnFilter = ({ onFilterChange }: IProps) => {
             autoFocus={true}
           />
           {filterVal.length > 0 && (
-            <div className={'filter-dropdown__clear-btn'} onClick={onClearClick}>
+            <div className={'column-filter__clear-btn'} onClick={onClearClick}>
               &times;
             </div>
           )}
