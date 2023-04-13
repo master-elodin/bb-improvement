@@ -12,7 +12,7 @@ import Drawer from '../Drawer/Drawer';
 import Button from '../Button/Button';
 import useData from '../../hooks/useData';
 import { passesFilters } from '../../filters';
-import { cx } from '../../utils';
+import { cx, sanitizeRegex } from '../../utils';
 import DrawerFiltersReload from '../DrawerFilters/DrawerFiltersReload';
 import DarkModeToggle from './DarkModeToggle';
 
@@ -33,7 +33,13 @@ const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
 type ColFilter = (row: IRow) => boolean;
 
 const saveFilters = (newVal: IRowFilters) => {
-  localStorage.setItem(FILTER_KEY, JSON.stringify(newVal));
+  localStorage.setItem(
+    FILTER_KEY,
+    JSON.stringify({
+      ...newVal,
+      compiledRegex: undefined,
+    }),
+  );
 };
 
 interface IProps {
@@ -94,6 +100,15 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
   }, [rowFilters]);
 
   useEffect(() => {
+    setRowFilters((prevState: IRowFilters) => {
+      return {
+        ...prevState,
+        compiledRegex: sanitizeRegex(prevState.regex),
+      };
+    });
+  }, [rowFilters.regex]);
+
+  useEffect(() => {
     localStorage.setItem(DRAWER_KEY, JSON.stringify(drawerOpen));
   }, [drawerOpen]);
 
@@ -131,6 +146,7 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
     setRowFilters((prevState) => ({
       ...prevState,
       ...defaultInPlaceFilters,
+      compiledRegex: undefined,
     }));
 
   const clearReloadFilters = () =>

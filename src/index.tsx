@@ -4,7 +4,8 @@ import './index.css';
 import App from './components/App/App';
 import { FILTER_KEY, setIsProd } from './api';
 import { initStyles } from './styles';
-import { IInPlaceFilters, IRefreshableFilters } from './types';
+import { IInPlaceFilters, IRefreshableFilters, IRowFilters } from './types';
+import { sanitizeRegex } from './utils';
 
 initStyles();
 
@@ -24,6 +25,7 @@ const defaultRefreshableFilters: IRefreshableFilters = {
 
 const defaultInPlaceFilters: IInPlaceFilters = {
   userUuid: loggedInUserUuid,
+  regex: '',
   tasks: 'any',
   needsReview: 'any',
   repo: 'any',
@@ -31,11 +33,13 @@ const defaultInPlaceFilters: IInPlaceFilters = {
   author: 'any',
 };
 
-const savedFilters = {
+let savedFilters = JSON.parse(localStorage.getItem(FILTER_KEY) ?? '{}');
+const initialFilters: IRowFilters = {
   ...defaultInPlaceFilters,
   ...defaultRefreshableFilters,
-  ...JSON.parse(localStorage.getItem(FILTER_KEY) ?? '{}'),
-  pageNum: 1, // always use page 1 on reload
+  ...savedFilters,
+  pageNum: 1, // always use page 1 on reload,
+  compiledRegex: sanitizeRegex(savedFilters.regex ?? ''),
 };
 
 root.render(
@@ -45,7 +49,7 @@ root.render(
       loggedInUserUuid={loggedInUserUuid}
       defaultRefreshableFilters={defaultRefreshableFilters}
       defaultInPlaceFilters={defaultInPlaceFilters}
-      savedFilters={savedFilters}
+      savedFilters={initialFilters}
     />
   </React.StrictMode>,
 );

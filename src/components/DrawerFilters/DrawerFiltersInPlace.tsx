@@ -3,6 +3,7 @@ import FilterDropdown from './FilterDropdown';
 import { IInPlaceFilters, IPRSummarized, IRowFilters } from '../../types';
 import { useMemo } from 'react';
 import { cx } from '../../utils';
+import RegexFilter from './RegexFilter/RegexFilter';
 
 interface IProps {
   defaultFilters: IInPlaceFilters;
@@ -47,13 +48,7 @@ const DrawerFiltersInPlace = ({ rowFilters, summarized, onFilterSelect, clearFil
     ],
     [summarized.repos],
   );
-  const authors = useMemo(
-    () => [
-      { label: 'All', value: 'any' },
-      ...summarized.authors,
-    ],
-    [summarized.authors],
-  );
+  const authors = useMemo(() => [{ label: 'All', value: 'any' }, ...summarized.authors], [summarized.authors]);
 
   return (
     <div className={'drawer-filters__root'}>
@@ -63,6 +58,10 @@ const DrawerFiltersInPlace = ({ rowFilters, summarized, onFilterSelect, clearFil
           clear
         </span>
       </div>
+      <RegexFilter
+        defaultValue={rowFilters.regex}
+        onValueChange={(newVal: string) => onFilterSelect(newVal, 'regex')}
+      />
       <FilterDropdown
         label={'I have...'}
         options={needsApprovalOptions}

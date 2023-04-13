@@ -5,6 +5,7 @@ interface ILink {
 }
 
 export type UserRecord = { [uuid: string]: IUser };
+
 export interface IUser {
   display_name: string;
   nickname: string;
@@ -104,6 +105,8 @@ export interface IRefreshableFilters {
 
 export interface IInPlaceFilters {
   userUuid: string;
+  regex: string;
+  compiledRegex?: RegExp;
   tasks: 'any' | 'yes' | 'no';
   needsReview: 'any' | 'yes' | 'no' | 'changesRequested';
   branch: 'any' | string;
@@ -111,7 +114,7 @@ export interface IInPlaceFilters {
   author: 'any' | string;
 }
 
-export interface IRowFilters extends IRefreshableFilters, IInPlaceFilters{
+export interface IRowFilters extends IRefreshableFilters, IInPlaceFilters {
   pageNum?: number;
 }
 

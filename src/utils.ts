@@ -40,3 +40,13 @@ type CxTypes = string | boolean | undefined | null;
 export const cx = (...classNames: CxTypes[]) => {
   return classNames.filter(Boolean).join(' ');
 };
+
+export const sanitizeRegex = (newVal: string) => {
+  const sanitizedRegex = `.*(${newVal.replace(/^\/|\/$/g, '')}).*`;
+  let compiledRegex = undefined;
+  try {
+    // make sure a bad regex doesn't break everything
+    compiledRegex = newVal.length > 0 ? new RegExp(sanitizedRegex, 'gi') : undefined;
+  } catch (ignore) {}
+  return compiledRegex;
+};

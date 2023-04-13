@@ -32,11 +32,19 @@ const passesNeedsReview = (row: IRow, filters: IRowFilters) => {
 const passesBranch = (row: IRow, filters: IRowFilters) => {
   return filters.branch === 'any' || filters.branch === row.destination.branch.name;
 };
+
 const passesRepo = (row: IRow, filters: IRowFilters) => {
   return filters.repo === 'any' || filters.repo === row.destination.repository.slug;
 };
+
 const passesAuthor = (row: IRow, filters: IRowFilters) => {
   return filters.author === 'any' || filters.author === row.author.uuid;
+};
+
+const getRegexFieldString = (row: IRow) =>
+  [row.author.display_name, row.title, row.destination.branch.name, row.destination.repository.slug].join('');
+const passesRegex = (row: IRow, filters: IRowFilters) => {
+  return filters.compiledRegex?.test(getRegexFieldString(row)) ?? true;
 };
 
 export const passesFilters = (row: IRow, filters: IRowFilters) => {
@@ -45,6 +53,7 @@ export const passesFilters = (row: IRow, filters: IRowFilters) => {
     passesNeedsReview(row, filters) &&
     passesBranch(row, filters) &&
     passesRepo(row, filters) &&
-    passesAuthor(row, filters)
+    passesAuthor(row, filters) &&
+    passesRegex(row, filters)
   );
 };

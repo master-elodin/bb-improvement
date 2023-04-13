@@ -11,6 +11,7 @@ import { reviewersStyle } from './components/Reviewers/Reviewers.style';
 import { appStyle } from './components/App/App.style';
 import { drawerStyle } from './components/Drawer/Drawer.style';
 import { darkModeToggleStyle } from './components/App/DarkModeToggle.style';
+import { regexFilterStyle } from './components/DrawerFilters/RegexFilter/RegexFilter.style';
 
 export const initStyles = () => {
   InlineStyle({
@@ -105,6 +106,7 @@ export const initStyles = () => {
     ...buttonStyle,
     ...iconsStyle,
     ...columnFilterStyle,
+    ...regexFilterStyle,
     ...reviewersStyle,
     ...spinnerStyle,
     ...userStatsStyle,
