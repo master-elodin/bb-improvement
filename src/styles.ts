@@ -47,8 +47,8 @@ export const initStyles = () => {
       'white-space': 'nowrap',
     },
     '.name-col': {
-      'flex-grow': 1,
       'min-width': '750px',
+      width: '65%',
     },
     '.tasks-col': {
       width: '100px',

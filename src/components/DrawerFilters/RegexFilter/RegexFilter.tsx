@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cx } from '../../../utils';
 
 interface IProps {
@@ -12,6 +12,10 @@ let onChangeTimeout: NodeJS.Timeout;
 const RegexFilter = ({ defaultValue, onValueChange }: IProps) => {
   const [regexFilter, setRegexFilter] = useState(defaultValue);
   const [isInvalid, setIsInvalid] = useState(false);
+
+  useEffect(() => {
+    setRegexFilter(defaultValue);
+  }, [defaultValue])
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVal = e.currentTarget.value;
@@ -47,6 +51,7 @@ const RegexFilter = ({ defaultValue, onValueChange }: IProps) => {
             value={regexFilter}
             onChange={onInputChange}
             placeholder={'(4.2.0)|(lukasz)'}
+            autoFocus={true}
           />
         </div>
       </div>

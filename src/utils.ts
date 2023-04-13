@@ -46,7 +46,7 @@ export const sanitizeRegex = (newVal: string) => {
   let compiledRegex = undefined;
   try {
     // make sure a bad regex doesn't break everything
-    compiledRegex = newVal.length > 0 ? new RegExp(sanitizedRegex, 'gi') : undefined;
+    compiledRegex = newVal.length > 0 ? new RegExp(sanitizedRegex, 'i') : undefined;
   } catch (ignore) {}
   return compiledRegex;
 };
