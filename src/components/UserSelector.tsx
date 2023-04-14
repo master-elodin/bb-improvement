@@ -33,7 +33,7 @@ const UserSelector = ({ onUserChange, loggedInUserUuid, allUsersById }: IProps) 
       onSelect={(newId: string) => onUserChange(allUsersById[newId])}
       options={userOptions}
       allowFilter={true}
-      defaultValue={userOptions.find(o => o.value === loggedInUserUuid)?.value}
+      defaultValue={loggedInUserUuid}
     />
   );
 };

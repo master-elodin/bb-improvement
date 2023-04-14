@@ -80,6 +80,7 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
   }, [pullRequests, sortType]);
 
   useEffect(() => {
+    console.log('real user changed')
     setRowFilters((prevState) => {
       const newFilters = {
         ...prevState,

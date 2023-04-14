@@ -16,7 +16,7 @@ export interface IProps {
 
 const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width, disabled, shadowChanged }: IProps) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [selected, setSelected] = useState<IOption>();
+  const [selected, setSelected] = useState<IOption | undefined>();
   const [filterVal, setFilterVal] = useState<string>(selected?.label ?? '');
   const [prevFilterVal, setPrevFilterVal] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -34,14 +34,8 @@ const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width,
   }, [selected?.label]);
 
   useEffect(() => {
-    if (!selected) {
-      setSelected(options.find((o) => o.value === defaultValue) ?? options[0]);
-    }
-  }, [selected, options, defaultValue]);
-
-  useEffect(() => {
-    setSelected(options.find((o) => o.value === defaultValue) ?? options[0]);
-  }, [defaultValue]);
+    setSelected(options.find((o) => o.value === defaultValue));
+  }, [defaultValue, options]);
 
   const onFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilterVal(e.currentTarget.value);
