@@ -1,7 +1,5 @@
 import * as React from 'react';
-import UserSelector from '../../UserSelector';
 import Button from '../../Button/Button';
-import { cx } from '../../../utils';
 import DarkModeToggle from '../DarkModeToggle';
 import PageArrow from './PageArrow';
 import PageNumber from './PageNumber';
