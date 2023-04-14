@@ -1,5 +1,7 @@
 import { IParticipantState, IRow, IRowFilters } from './types';
 
+type RowFilter = (row: IRow, filters: IRowFilters) => boolean;
+
 const passesTasks = (row: IRow, filters: IRowFilters) => {
   switch (filters.tasks) {
     case 'yes':
@@ -47,13 +49,20 @@ const passesRegex = (row: IRow, filters: IRowFilters) => {
   return filters.compiledRegex?.test(getRegexFieldString(row)) ?? true;
 };
 
+const passesBuild = (row: IRow, filters: IRowFilters) => {
+  return filters.build === 'any' || filters.build === row.buildStatus?.state;
+};
+
+const allFilters: RowFilter[] = [
+  passesTasks,
+  passesNeedsReview,
+  passesBranch,
+  passesRepo,
+  passesAuthor,
+  passesRegex,
+  passesBuild,
+];
+
 export const passesFilters = (row: IRow, filters: IRowFilters) => {
-  return (
-    passesTasks(row, filters) &&
-    passesNeedsReview(row, filters) &&
-    passesBranch(row, filters) &&
-    passesRepo(row, filters) &&
-    passesAuthor(row, filters) &&
-    passesRegex(row, filters)
-  );
+  return allFilters.every((f) => f(row, filters));
 };

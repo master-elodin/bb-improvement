@@ -31,6 +31,7 @@ const defaultInPlaceFilters: IInPlaceFilters = {
   repo: 'any',
   branch: 'any',
   author: 'any',
+  build: 'any',
 };
 
 let savedFilters = JSON.parse(localStorage.getItem(FILTER_KEY) ?? '{}');
@@ -38,7 +39,7 @@ const initialFilters: IRowFilters = {
   ...defaultInPlaceFilters,
   ...defaultRefreshableFilters,
   ...savedFilters,
-  pageNum: 1, // always use page 1 on reload,
+  pageNum: 1, // always use page 1 on page reload,
   compiledRegex: sanitizeRegex(savedFilters.regex ?? ''),
 };
 

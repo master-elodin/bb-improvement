@@ -65,8 +65,9 @@ export interface IPullRequestResponse {
   totalNumResults: number;
 }
 
+type BuildState = 'SUCCESSFUL' | 'INPROGRESS' | 'FAILED';
 export interface IStatus {
-  state: 'SUCCESSFUL' | 'INPROGRESS' | 'FAILED';
+  state: BuildState;
   commit_status: {
     name: string;
     url: string;
@@ -111,6 +112,7 @@ export interface IInPlaceFilters {
   branch: 'any' | string;
   repo: 'any' | string;
   author: 'any' | string;
+  build: 'any' | BuildState;
 }
 
 export interface IRowFilters extends IRefreshableFilters, IInPlaceFilters {

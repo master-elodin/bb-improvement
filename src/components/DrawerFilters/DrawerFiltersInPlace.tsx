@@ -14,17 +14,24 @@ interface IProps {
   isLoading: boolean;
 }
 
-const taskOptions = [
+const taskOptions: { label: string; value: IInPlaceFilters['tasks'] }[] = [
   { label: 'Any tasks', value: 'any' },
   { label: 'Has open tasks', value: 'yes' },
   { label: 'No open tasks', value: 'no' },
 ];
 
-const needsApprovalOptions = [
+const needsApprovalOptions: { label: string; value: IInPlaceFilters['needsReview'] }[] = [
   { label: 'All', value: 'any' },
   { label: 'Not approved', value: 'yes' },
   { label: 'Approved', value: 'no' },
   { label: 'Requested changes', value: 'changesRequested' },
+];
+
+const buildOptions: { label: string; value: IInPlaceFilters['build'] }[] = [
+  { label: 'All', value: 'any' },
+  { label: 'Successful', value: 'SUCCESSFUL' },
+  { label: 'In progress', value: 'INPROGRESS' },
+  { label: 'Failed', value: 'FAILED' },
 ];
 
 const DrawerFiltersInPlace = ({ rowFilters, summarized, onFilterSelect, clearFilters, isLoading }: IProps) => {
@@ -97,6 +104,13 @@ const DrawerFiltersInPlace = ({ rowFilters, summarized, onFilterSelect, clearFil
         defaultValue={rowFilters.author}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'author')}
         allowFilter={true}
+        disabled={isLoading}
+      />
+      <FilterDropdown
+        label={'Build status'}
+        options={buildOptions}
+        defaultValue={rowFilters.build}
+        onSelect={(newVal: string) => onFilterSelect(newVal, 'build')}
         disabled={isLoading}
       />
     </div>
