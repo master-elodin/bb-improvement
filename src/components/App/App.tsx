@@ -168,7 +168,7 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
         onRefreshClick={() => refresh(rowFilters)}
         isDarkMode={isDarkMode}
         setIsDarkMode={setIsDarkMode}
-        pageNum={summarized.pageNum}
+        currentPage={summarized.pageNum}
         possiblePages={possiblePages}
         onPageClick={onPageClick}
         userSelector={userSelector}
