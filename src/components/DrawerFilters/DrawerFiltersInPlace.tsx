@@ -4,6 +4,7 @@ import { IInPlaceFilters, IPRSummarized, IRowFilters } from '../../types';
 import { useMemo } from 'react';
 import { cx } from '../../utils';
 import RegexFilter from './RegexFilter/RegexFilter';
+import SavedRegexDropdown from './RegexFilter/SavedRegexDropdown';
 
 interface IProps {
   defaultFilters: IInPlaceFilters;
@@ -65,6 +66,10 @@ const DrawerFiltersInPlace = ({ rowFilters, summarized, onFilterSelect, clearFil
         </span>
       </div>
       <RegexFilter
+        defaultValue={rowFilters.regex}
+        onValueChange={(newVal: string) => onFilterSelect(newVal, 'regex')}
+      />
+      <SavedRegexDropdown
         defaultValue={rowFilters.regex}
         onValueChange={(newVal: string) => onFilterSelect(newVal, 'regex')}
       />

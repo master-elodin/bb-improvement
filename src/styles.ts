@@ -12,6 +12,7 @@ import { drawerStyle } from './components/Drawer/Drawer.style';
 import { darkModeToggleStyle } from './components/App/DarkModeToggle.style';
 import { regexFilterStyle } from './components/DrawerFilters/RegexFilter/RegexFilter.style';
 import { appHeaderStyle } from './components/App/AppHeader/AppHeader.style';
+import { modalStyle } from './components/Modal/Modal.style';
 
 export const initStyles = () => {
   InlineStyle({
@@ -99,15 +100,16 @@ export const initStyles = () => {
     },
     ...appStyle,
     ...appHeaderStyle,
+    ...buttonStyle,
     ...darkModeToggleStyle,
+    ...drawerFiltersStyle,
     ...drawerStyle,
     ...dropdownStyle,
-    ...rowTitleStyles,
-    ...drawerFiltersStyle,
-    ...buttonStyle,
     ...iconsStyle,
+    ...modalStyle,
     ...regexFilterStyle,
     ...reviewersStyle,
+    ...rowTitleStyles,
     ...spinnerStyle,
     ...userStatsStyle,
   });

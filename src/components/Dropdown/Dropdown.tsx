@@ -110,7 +110,7 @@ const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width,
               onClick={(e) => onOptionSelect(e, option)}
               tabIndex={index}
               title={option.label}>
-              {option.label}
+              {option.rendered ?? option.label}
             </div>
           ))}
         </div>
