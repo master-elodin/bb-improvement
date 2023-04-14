@@ -113,6 +113,10 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
   };
 
   const onFilterSelect = (newVal: string, filterType: keyof IRowFilters) => {
+    if (rowFilters[filterType] === newVal) {
+      // nothing to do
+      return;
+    }
     setRowFilters((prevState: IRowFilters) => {
       const nextState = {
         ...prevState,

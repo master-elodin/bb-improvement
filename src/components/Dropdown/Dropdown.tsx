@@ -7,14 +7,26 @@ import { IOption } from '../../types';
 export interface IProps {
   options: IOption[];
   defaultValue?: string;
+  value?: string; // to manually change selected
   onSelect: (newVal: string) => void;
   allowFilter?: boolean;
   width?: string;
   disabled?: boolean;
   shadowChanged?: boolean;
+  selectOnOptionsChange?: boolean;
 }
 
-const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width, disabled, shadowChanged }: IProps) => {
+const Dropdown = ({
+  options,
+  defaultValue,
+  value,
+  onSelect,
+  allowFilter = false,
+  width,
+  disabled,
+  shadowChanged,
+  selectOnOptionsChange = true,
+}: IProps) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [selected, setSelected] = useState<IOption | undefined>();
   const [filterVal, setFilterVal] = useState<string>(selected?.label ?? '');
@@ -29,12 +41,18 @@ const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width,
   };
 
   useEffect(() => {
+    setSelected(options.find((o) => o.value === value));
+  }, [options, value]);
+
+  useEffect(() => {
     // needs to exist to populate after the first render
     setNextFilter(selected?.label ?? '');
   }, [selected?.label]);
 
   useEffect(() => {
-    setSelected(options.find((o) => o.value === defaultValue));
+    if (selectOnOptionsChange || !selected) {
+      setSelected(options.find((o) => o.value === defaultValue));
+    }
   }, [defaultValue, options]);
 
   const onFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,7 +101,7 @@ const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width,
       className={cx(
         'dropdown-root',
         disabled && 'dropdown-root--disabled',
-        shadowChanged && options[0]?.value !== defaultValue && 'dropdown-root--show-changed',
+        shadowChanged && selected?.value !== defaultValue && 'dropdown-root--show-changed',
       )}
       style={{ width }}
       onBlur={onBlur}
@@ -110,7 +128,7 @@ const Dropdown = ({ options, defaultValue, onSelect, allowFilter = false, width,
               onClick={(e) => onOptionSelect(e, option)}
               tabIndex={index}
               title={option.label}>
-              {option.rendered ?? option.label}
+              {option.label}
             </div>
           ))}
         </div>

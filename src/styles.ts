@@ -13,6 +13,7 @@ import { darkModeToggleStyle } from './components/App/DarkModeToggle.style';
 import { regexFilterStyle } from './components/DrawerFilters/RegexFilter/RegexFilter.style';
 import { appHeaderStyle } from './components/App/AppHeader/AppHeader.style';
 import { modalStyle } from './components/Modal/Modal.style';
+import { savedRegexDropdownStyle } from './components/DrawerFilters/RegexFilter/SavedRegexDropdown.style';
 
 export const initStyles = () => {
   InlineStyle({
@@ -110,6 +111,7 @@ export const initStyles = () => {
     ...regexFilterStyle,
     ...reviewersStyle,
     ...rowTitleStyles,
+    ...savedRegexDropdownStyle,
     ...spinnerStyle,
     ...userStatsStyle,
   });

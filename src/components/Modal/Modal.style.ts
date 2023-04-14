@@ -18,15 +18,25 @@ export const modalStyle = {
     top: 0,
     width: '100%',
   },
-  '.modal__content': {
+  '.modal__body': {
     'background-color': 'var(--color-background)',
     'border-radius': '5px',
     'box-shadow': 'var(--shadow-elevation-medium)',
+    display: 'flex',
+    'flex-direction': 'column',
     height: '400px',
     padding: '10px',
     position: 'relative',
     width: '600px',
     'z-index': 2,
+  },
+  '.modal__content': {
+    height: 'calc(100% - 30px)',
+  },
+  '.modal__title': {
+    'font-size': '1.3em',
+    'font-weight': 'bold',
+    'margin-bottom': '10px',
   },
   '.modal__close-btn': {
     cursor: 'pointer',
