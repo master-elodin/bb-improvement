@@ -30,7 +30,6 @@ const defaultInPlaceFilters: IInPlaceFilters = {
   needsReview: 'any',
   repo: 'any',
   branch: 'any',
-  author: 'any',
   build: 'any',
 };
 

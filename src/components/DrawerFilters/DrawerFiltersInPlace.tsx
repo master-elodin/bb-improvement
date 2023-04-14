@@ -55,7 +55,6 @@ const DrawerFiltersInPlace = ({ rowFilters, summarized, onFilterSelect, clearFil
     ],
     [summarized.repos],
   );
-  const authors = useMemo(() => [{ label: 'All', value: 'any' }, ...summarized.authors], [summarized.authors]);
 
   return (
     <div className={'drawer-filters__root'}>
@@ -96,14 +95,6 @@ const DrawerFiltersInPlace = ({ rowFilters, summarized, onFilterSelect, clearFil
         options={repos}
         defaultValue={rowFilters.repo}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'repo')}
-        disabled={isLoading}
-      />
-      <FilterDropdown
-        label={'Author'}
-        options={authors}
-        defaultValue={rowFilters.author}
-        onSelect={(newVal: string) => onFilterSelect(newVal, 'author')}
-        allowFilter={true}
         disabled={isLoading}
       />
       <FilterDropdown

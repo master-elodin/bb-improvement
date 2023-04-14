@@ -120,10 +120,17 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
   };
 
   const onFilterSelect = (newVal: string, filterType: keyof IRowFilters) => {
-    setRowFilters((prevState: IRowFilters) => ({
-      ...prevState,
-      [filterType]: newVal,
-    }));
+    setRowFilters((prevState: IRowFilters) => {
+      const nextState = {
+        ...prevState,
+        [filterType]: newVal,
+      };
+      // TODO: make generic
+      if (filterType === 'role' || filterType === 'state') {
+        nextState.pageNum = 1;
+      }
+      return nextState;
+    });
   };
 
   const onGoClick = async () => {

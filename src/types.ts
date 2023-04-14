@@ -111,7 +111,6 @@ export interface IInPlaceFilters {
   needsReview: 'any' | 'yes' | 'no' | 'changesRequested';
   branch: 'any' | string;
   repo: 'any' | string;
-  author: 'any' | string;
   build: 'any' | BuildState;
 }
 

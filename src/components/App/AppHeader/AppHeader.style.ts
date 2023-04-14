@@ -12,8 +12,8 @@ export const appHeaderStyle = {
     'flex-basis': '180px',
   },
   '.app-header__refresh-btn.button': {
-    height: '20px',
-    'line-height': '20px',
+    height: '18px',
+    'line-height': '18px',
     padding: '2px 8px',
   },
   '.app-header__page-selector': {

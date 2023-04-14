@@ -39,10 +39,6 @@ const passesRepo = (row: IRow, filters: IRowFilters) => {
   return filters.repo === 'any' || filters.repo === row.destination.repository.slug;
 };
 
-const passesAuthor = (row: IRow, filters: IRowFilters) => {
-  return filters.author === 'any' || filters.author === row.author.uuid;
-};
-
 const getRegexFieldString = (row: IRow) =>
   [row.author.display_name, row.title, row.destination.branch.name, row.destination.repository.slug].join('');
 const passesRegex = (row: IRow, filters: IRowFilters) => {
@@ -58,7 +54,6 @@ const allFilters: RowFilter[] = [
   passesNeedsReview,
   passesBranch,
   passesRepo,
-  passesAuthor,
   passesRegex,
   passesBuild,
 ];
