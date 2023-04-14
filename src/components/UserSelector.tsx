@@ -34,6 +34,7 @@ const UserSelector = ({ onUserChange, loggedInUserUuid, allUsersById }: IProps) 
       options={userOptions}
       allowFilter={true}
       defaultValue={loggedInUserUuid}
+      width={'180px'}
     />
   );
 };

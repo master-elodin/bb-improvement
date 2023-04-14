@@ -8,12 +8,11 @@ import { DownArrow, UpArrow } from '../Icons/Icons';
 import DrawerFiltersInPlace from '../DrawerFilters/DrawerFiltersInPlace';
 import Spinner from '../Spinner/Spinner';
 import Drawer from '../Drawer/Drawer';
-import Button from '../Button/Button';
 import useData from '../../hooks/useData';
 import { passesFilters } from '../../filters';
 import { cx, sanitizeRegex } from '../../utils';
 import DrawerFiltersReload from '../DrawerFilters/DrawerFiltersReload';
-import DarkModeToggle from './DarkModeToggle';
+import AppHeader from './AppHeader/AppHeader';
 
 const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
   const getValue = columns.find((col) => col.label === colType)?.getValue ?? (() => 'zzzz');
@@ -80,7 +79,6 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
   }, [pullRequests, sortType]);
 
   useEffect(() => {
-    console.log('real user changed')
     setRowFilters((prevState) => {
       const newFilters = {
         ...prevState,
@@ -160,43 +158,27 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
     }));
   };
 
+  const userSelector = (
+    <UserSelector loggedInUserUuid={loggedInUserUuid} onUserChange={setCurrentUser} allUsersById={allUsersById} />
+  );
+
   return (
     <div className={cx('app__root', isDarkMode && 'app__root--dark')}>
-      <div className={'app__header'}>
-        <div className={'app__user-section'}>
-          <UserSelector loggedInUserUuid={loggedInUserUuid} onUserChange={setCurrentUser} allUsersById={allUsersById} />
-          <DarkModeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
-          {/*{!loading && (*/}
-          {/*  <UserStats userUuid={currentUser.uuid} />*/}
-          {/*)}*/}
-        </div>
-        <div className={'app__header-action-container'}>
-          {sortedRows.length > 0 && (
-            <>
-              <span>Page</span>
-              <div className={'app__page-selector'}>
-                {possiblePages.map((pageNum) => (
-                  <span
-                    key={pageNum}
-                    className={cx(
-                      'app__page-selector__page',
-                      'link',
-                      summarized.pageNum === pageNum && 'app__page-selector__page--current',
-                    )}
-                    onClick={() => onPageClick(pageNum)}>
-                    {pageNum}
-                  </span>
-                ))}
-              </div>
-            </>
-          )}
-          <Button onClick={() => refresh(rowFilters)} className={'app__refresh-btn'}>
-            <span>&#8635; Refresh</span>
-          </Button>
-        </div>
-      </div>
+      <AppHeader
+        onRefreshClick={() => refresh(rowFilters)}
+        isDarkMode={isDarkMode}
+        setIsDarkMode={setIsDarkMode}
+        pageNum={summarized.pageNum}
+        possiblePages={possiblePages}
+        onPageClick={onPageClick}
+        userSelector={userSelector}
+      />
       <div className={'app__content'}>
-        <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} numVisible={visibleRows.length} numTotal={sortedRows.length}>
+        <Drawer
+          open={drawerOpen}
+          onOpenChange={setDrawerOpen}
+          numVisible={visibleRows.length}
+          numTotal={sortedRows.length}>
           <DrawerFiltersInPlace
             defaultFilters={defaultInPlaceFilters}
             rowFilters={rowFilters}

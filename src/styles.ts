@@ -11,6 +11,7 @@ import { appStyle } from './components/App/App.style';
 import { drawerStyle } from './components/Drawer/Drawer.style';
 import { darkModeToggleStyle } from './components/App/DarkModeToggle.style';
 import { regexFilterStyle } from './components/DrawerFilters/RegexFilter/RegexFilter.style';
+import { appHeaderStyle } from './components/App/AppHeader/AppHeader.style';
 
 export const initStyles = () => {
   InlineStyle({
@@ -97,6 +98,7 @@ export const initStyles = () => {
       'padding-left': '8px',
     },
     ...appStyle,
+    ...appHeaderStyle,
     ...darkModeToggleStyle,
     ...drawerStyle,
     ...dropdownStyle,

@@ -43,16 +43,6 @@ export const appStyle = {
   '.app__root.app__root--dark': {
     ...darkModeVars,
   },
-  '.app__header': {
-    'border-bottom': '1px solid var(--color-border)',
-    display: 'flex',
-    height: '42px',
-    'justify-content': 'space-between',
-    padding: '10px',
-  },
-  '.app__user-section': {
-    display: 'flex',
-  },
   '.app__content': {
     'background-color': 'var(--color-background)',
     display: 'flex',
@@ -91,15 +81,6 @@ export const appStyle = {
     display: 'flex',
     'padding-right': '8px',
   },
-  '.app__header-action-container': {
-    display: 'flex',
-    'align-items': 'center',
-  },
-  '.app__refresh-btn.button': {
-    height: '20px',
-    'line-height': '20px',
-    padding: '2px 8px',
-  },
   '.app__content-body': {
     display: 'flex',
     'flex-direction': 'column',
@@ -117,19 +98,5 @@ export const appStyle = {
   '.app__sort-arrows': {
     display: 'flex',
     'justify-content': 'flex-end',
-  },
-  '.app__page-selector': {
-    'margin': '0 24px 0 8px',
-  },
-  '.app__page-selector__page': {
-    padding: '0 2px',
-  },
-  '.app__page-selector__page:not(.app__page-selector__page--current)': {
-    color: 'blue',
-    cursor: 'pointer',
-  },
-  '.app__page-selector__page--current': {
-    color: 'var(--color-text) !important',
-    'font-weight': 'bold',
   },
 };
