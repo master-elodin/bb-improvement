@@ -107,13 +107,6 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
     localStorage.setItem(DRAWER_KEY, JSON.stringify(drawerOpen));
   }, [drawerOpen]);
 
-  useEffect(() => {
-    // only refresh if user actually changed from the original user *or* if not in prod
-    if (!isProd || currentUser.links) {
-      refresh(rowFilters);
-    }
-  }, [rowFilters.pageNum]);
-
   const onHeaderClick = (colType: string) => {
     const isAsc = sortType === `${colType}:asc`;
     setSortType(`${colType}:${isAsc ? 'desc' : 'asc'}`);
@@ -159,10 +152,14 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
       return;
     }
     summarized.pageNum = pageNum;
-    setRowFilters((prevState) => ({
-      ...prevState,
-      pageNum,
-    }));
+    setRowFilters((prevState) => {
+      const newFilters = {
+        ...prevState,
+        pageNum,
+      };
+      refresh(newFilters);
+      return newFilters;
+    });
   };
 
   const userSelector = (
