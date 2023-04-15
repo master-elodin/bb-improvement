@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MouseEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Dropdown from '../../Dropdown/Dropdown';
 import { IOption, ISavedRegex } from '../../../types';
 import Modal from '../../Modal/Modal';
@@ -142,7 +142,7 @@ const SavedRegexDropdown = ({ onValueChange, currentRegex }: IProps) => {
       return [...prevState];
     });
     setSelected(nextRegex);
-    onValueChange(nextRegex.value);
+    onValueChange(nextRegex.value.trim().replace(/\n?\r?/g, ''));
     setNextRegex(getNewRegex());
 
     setShowModal(false);
@@ -174,12 +174,25 @@ const SavedRegexDropdown = ({ onValueChange, currentRegex }: IProps) => {
         <div className={'saved-regex__add-new'}>
           <div className={'saved-regex__add-new-wrapper'}>
             <div className={'saved-regex__input-wrapper'}>
-              <label>Name</label>
-              <input autoFocus={true} value={nextRegex.name} onChange={onNameInputChange} />
+              <label htmlFor={'regex-name'}>Name</label>
+              <input
+                id={'regex-name'}
+                autoFocus={true}
+                value={nextRegex.name}
+                onChange={onNameInputChange}
+                placeholder={'Name of regex'}
+              />
             </div>
             <div className={'saved-regex__input-wrapper'}>
-              <label>Regex</label>
-              <textarea value={nextRegex.value} onChange={onValueInputChange} />
+              <label htmlFor={'regex-value'}>Regex</label>
+              <textarea
+                id={'regex-value'}
+                value={nextRegex.value}
+                onChange={onValueInputChange}
+                cols={50}
+                rows={10}
+                placeholder={'Any valid regex - multi-line is okay'}
+              />
             </div>
           </div>
           <div className={'saved-regex__actions'}>
@@ -189,7 +202,7 @@ const SavedRegexDropdown = ({ onValueChange, currentRegex }: IProps) => {
               </Button>
             )}
             <Button onClick={onCancel}>Cancel</Button>
-            <Button onClick={onSave} type={'primary'}>
+            <Button onClick={onSave} type={'primary'} disabled={!nextRegex.key || !nextRegex.value}>
               Save
             </Button>
           </div>

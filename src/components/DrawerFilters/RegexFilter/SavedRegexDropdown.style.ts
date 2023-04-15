@@ -20,7 +20,6 @@ export const savedRegexDropdownStyle = {
   },
   '.saved-regex__input-wrapper input,.saved-regex__input-wrapper textarea': {
     'margin-bottom': '16px',
-    padding: '2px 8px',
   },
   '.saved-regex__input-wrapper input': {
     padding: '4px 6px',

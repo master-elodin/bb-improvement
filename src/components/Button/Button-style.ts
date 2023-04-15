@@ -1,5 +1,3 @@
-import { HOVER_COLOR } from '../../style-constants';
-
 export const buttonStyle = {
   '.button': {
     '--button-border': '1px solid var(--color-border)',
@@ -10,8 +8,7 @@ export const buttonStyle = {
     'text-align': 'center',
   },
   '.button:hover': {
-    'background-color': HOVER_COLOR, // TODO
-    'box-shadow': '0 0 3px 1px rgba(150, 150, 150, .2)',
+    'box-shadow': '0 0 2px var(--color-border)',
   },
   '.button--primary': {
     '--button-border': '#3773eb',
@@ -35,4 +32,8 @@ export const buttonStyle = {
   '.button--danger:hover': {
     'background-color': '#E23936',
   },
+  '.button--disabled': {
+    'background-color': 'var(--color-disabled)',
+    'pointer-events': 'none',
+  }
 };

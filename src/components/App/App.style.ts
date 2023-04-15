@@ -1,10 +1,3 @@
-const shadowVars = {
-  '--shadow-elevation-medium': `0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.36),
-0.8px 1.6px 2px -0.8px hsl(var(--shadow-color) / 0.36),
-2.1px 4.1px 5.2px -1.7px hsl(var(--shadow-color) / 0.36),
-5px 10px 12.6px -2.5px hsl(var(--shadow-color) / 0.36)`,
-};
-
 const lightModeVars = {
   '--color-background': '#F5F6FF',
   '--color-background-alt': '#FCFDFF',
@@ -15,7 +8,6 @@ const lightModeVars = {
   '--color-input-background': '#FCFDFF',
   '--color-input-icon': '#0A1E47',
   '--color-highlight': '#ff1ff8',
-  '--color-shadow': '229deg 24% 61%',
   '--shadow-filter-highlight': '0 0 7px var(--color-highlight)',
 };
 const darkModeVars = {
@@ -27,7 +19,6 @@ const darkModeVars = {
   '--color-border': '#ecf0f1',
   '--color-input-background': '#ecf0f1',
   '--color-input-icon': '#0A1E47',
-  '--color-shadow': '225deg 100% 0%',
   '--shadow-filter-highlight':
     '0 0 7px var(--color-highlight), 0 1px 6px var(--color-highlight), 0 1px 6px var(--color-highlight)',
 };
@@ -35,7 +26,6 @@ const darkModeVars = {
 export const appStyle = {
   '.app__root': {
     ...lightModeVars,
-    ...shadowVars,
     'background-color': 'var(--color-background)',
     color: 'var(--color-text)',
     height: '100vh',
