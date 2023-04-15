@@ -24,4 +24,15 @@ export const buttonStyle = {
   '.button--primary:hover': {
     'background-color': '#417DF5',
   },
+  '.button--danger': {
+    '--button-border': '#d82f2c',
+    'background-color': 'var(--button-border)',
+    border: 'none',
+    color: 'white',
+    'font-weight': 'bold',
+    padding: '4px 8px',
+  },
+  '.button--danger:hover': {
+    'background-color': '#E23936',
+  },
 };

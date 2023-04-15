@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import Dropdown from '../../Dropdown/Dropdown';
 import { IOption, ISavedRegex } from '../../../types';
 import Modal from '../../Modal/Modal';
@@ -38,10 +38,14 @@ interface ISavedRegexOptionProps {
 }
 
 const SavedRegexOption = ({ regex, onEditClick }: ISavedRegexOptionProps) => {
+  const onClick = (e: React.MouseEvent<HTMLSpanElement>) => {
+    e.stopPropagation();
+    onEditClick(regex);
+  };
   return (
     <div className={'saved-regex__option'}>
       <span>{regex.name}</span>
-      <span className={'link'} onClick={() => onEditClick(regex)}>
+      <span className={'link'} onClick={onClick}>
         edit
       </span>
     </div>
@@ -104,6 +108,20 @@ const SavedRegexDropdown = ({ onValueChange, currentRegex }: IProps) => {
     setShowModal(true);
   };
 
+  const onDelete = () => {
+    // TODO: confirm
+    setRegexes((prevState) => {
+      const existingIndex = prevState.findIndex((r) => r.key === nextRegex.key);
+      if (existingIndex > -1) {
+        prevState.splice(existingIndex, 1);
+      }
+      return [...prevState];
+    });
+    onValueChange('');
+    setNextRegex(getNewRegex());
+    setShowModal(false);
+  };
+
   const onCancel = () => {
     // TODO: reset values
     setShowModal(false);
@@ -161,6 +179,11 @@ const SavedRegexDropdown = ({ onValueChange, currentRegex }: IProps) => {
             </div>
           </div>
           <div className={'saved-regex__actions'}>
+            {regexes.findIndex((r) => r.key === nextRegex.key) > -1 && (
+              <Button onClick={onDelete} type={'danger'}>
+                Delete
+              </Button>
+            )}
             <Button onClick={onCancel}>Cancel</Button>
             <Button onClick={onSave} type={'primary'}>
               Save

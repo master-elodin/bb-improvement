@@ -4,7 +4,7 @@ import { cx } from '../../utils';
 interface IProps {
   onClick: () => void;
   className?: string;
-  type?: 'primary';
+  type?: 'primary' | 'danger';
 }
 
 const Button = ({ children, onClick, className, type }: React.PropsWithChildren<IProps>) => {
