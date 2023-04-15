@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { cx } from '../../../utils';
 import Dropdown from '../../Dropdown/Dropdown';
 import { IOption, ISavedRegex } from '../../../types';
 import Modal from '../../Modal/Modal';
@@ -9,9 +8,8 @@ import { SAVED_REGEX_KEY } from '../../../api';
 
 interface IProps {
   onValueChange: (newVal: string) => void;
+  currentRegex?: string;
 }
-
-const ADD_NEW_VALUE = 'add-new';
 
 const allOption = {
   label: 'None',
@@ -20,23 +18,42 @@ const allOption = {
 
 const addOption: IOption = {
   label: 'Add new',
-  value: ADD_NEW_VALUE,
+  value: 'add-new',
 };
 
-// TODO: load saved
-
 const loadList = () => {
-  const saved = JSON.parse(localStorage.getItem(SAVED_REGEX_KEY) ?? '[]') as ISavedRegex[];
-  return saved.map((savedRegex) => ({ label: savedRegex.name, value: savedRegex.value }));
+  return JSON.parse(localStorage.getItem(SAVED_REGEX_KEY) ?? '[]') as ISavedRegex[];
 };
 const saveList = (value: ISavedRegex[]) => localStorage.setItem(SAVED_REGEX_KEY, JSON.stringify(value));
 
-const SavedRegexDropdown = ({ onValueChange }: IProps) => {
-  const [options, setOptions] = useState<IOption[]>([allOption, addOption, ...loadList()]);
-  const [selected, setSelected] = useState(allOption.value);
+const getNewRegex = (): ISavedRegex => ({
+  key: window.self.crypto.randomUUID(),
+  name: '',
+  value: '',
+});
+
+interface ISavedRegexOptionProps {
+  regex: ISavedRegex;
+  onEditClick: (regex: ISavedRegex) => void;
+}
+
+const SavedRegexOption = ({ regex, onEditClick }: ISavedRegexOptionProps) => {
+  return (
+    <div className={'saved-regex__option'}>
+      <span>{regex.name}</span>
+      <span className={'link'} onClick={() => onEditClick(regex)}>
+        edit
+      </span>
+    </div>
+  );
+};
+
+const SavedRegexDropdown = ({ onValueChange, currentRegex }: IProps) => {
+  const [regexes, setRegexes] = useState<ISavedRegex[]>(loadList());
+  const [options, setOptions] = useState<IOption[]>([allOption, addOption]);
+  const [selected, setSelected] = useState<ISavedRegex>();
+  const [nextRegex, setNextRegex] = useState<ISavedRegex>(getNewRegex());
   const [showModal, setShowModal] = useState(false);
-  const [newRegexName, setNewRegexName] = useState('');
-  const [newRegexValue, setNewRegexValue] = useState('');
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -50,43 +67,83 @@ const SavedRegexDropdown = ({ onValueChange }: IProps) => {
     };
   }, []);
 
+  const regexToOption = (regex: ISavedRegex): IOption => ({
+    label: regex.name,
+    value: regex.key,
+    rendered: <SavedRegexOption regex={regex} onEditClick={onEditClick} />,
+  });
+
   useEffect(() => {
-    if (selected !== ADD_NEW_VALUE) {
-      onValueChange(selected);
+    if (currentRegex?.length === 0) {
+      setSelected(undefined);
     }
-  }, [selected]);
+  }, [currentRegex]);
+
+  useEffect(() => {
+    setOptions([allOption, addOption, ...regexes.map(regexToOption)]);
+    saveList(regexes);
+  }, [regexes]);
 
   const onSelect = (newVal: string) => {
-    if (newVal === ADD_NEW_VALUE) {
+    if (newVal === addOption.value) {
+      setNextRegex(getNewRegex());
       setShowModal(true);
+    } else if (newVal === '') {
+      onValueChange('');
     } else {
-      setSelected(newVal);
+      const existing = regexes.find((r) => r.key === newVal);
+      if (existing) {
+        setSelected(existing);
+        onValueChange(existing.value);
+      }
     }
   };
 
+  const onEditClick = (regex: ISavedRegex) => {
+    setNextRegex(regex);
+    setShowModal(true);
+  };
+
   const onCancel = () => {
-    // TODO: reset selected
+    // TODO: reset values
     setShowModal(false);
   };
 
   const onSave = () => {
-    const newOption = { label: newRegexName, value: newRegexValue };
-    setOptions((prevState) => {
-      const newOptions = [...prevState, newOption];
-      saveList(newOptions.slice(2).map((o) => ({ name: o.label, value: o.value })));
-      return newOptions;
+    setRegexes((prevState) => {
+      const existingIndex = prevState.findIndex((r) => r.key === nextRegex.key);
+      if (existingIndex > -1) {
+        prevState.splice(existingIndex, 1, nextRegex);
+      } else {
+        prevState.push(nextRegex);
+      }
+      return [...prevState];
     });
-    setSelected(newRegexValue);
+    setSelected(nextRegex);
+    onValueChange(nextRegex.value);
+    setNextRegex(getNewRegex());
+
     setShowModal(false);
   };
+
+  const onNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setNextRegex((prevState) => ({
+      ...prevState,
+      name: e.target.value,
+    }));
+  const onValueInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+    setNextRegex((prevState) => ({
+      ...prevState,
+      value: e.target.value,
+    }));
 
   return (
     <div className={'drawer-filters__filter'}>
       <span className={'drawer-filters__label'}>Saved regexes</span>
       <Dropdown
         options={options}
-        value={selected}
         onSelect={onSelect}
+        value={selected?.key ?? ''}
         defaultValue={allOption.value}
         shadowChanged={true}
         selectOnOptionsChange={false}
@@ -96,11 +153,11 @@ const SavedRegexDropdown = ({ onValueChange }: IProps) => {
           <div className={'saved-regex__add-new-wrapper'}>
             <div className={'saved-regex__input-wrapper'}>
               <label>Name</label>
-              <input autoFocus={true} value={newRegexName} onChange={(e) => setNewRegexName(e.target.value)} />
+              <input autoFocus={true} value={nextRegex.name} onChange={onNameInputChange} />
             </div>
             <div className={'saved-regex__input-wrapper'}>
               <label>Regex</label>
-              <textarea value={newRegexValue} onChange={(e) => setNewRegexValue(e.target.value)} />
+              <textarea value={nextRegex.value} onChange={onValueInputChange} />
             </div>
           </div>
           <div className={'saved-regex__actions'}>

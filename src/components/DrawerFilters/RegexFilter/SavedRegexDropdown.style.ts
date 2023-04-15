@@ -36,5 +36,9 @@ export const savedRegexDropdownStyle = {
   },
   '.saved-regex__actions .button': {
     width: '80px',
-  }
+  },
+  '.saved-regex__option': {
+    display: 'flex',
+    'justify-content': 'space-between',
+  },
 };

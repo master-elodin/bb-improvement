@@ -69,7 +69,10 @@ const DrawerFiltersInPlace = ({ rowFilters, summarized, onFilterSelect, clearFil
         defaultValue={rowFilters.regex}
         onValueChange={(newVal: string) => onFilterSelect(newVal, 'regex')}
       />
-      <SavedRegexDropdown onValueChange={(newVal: string) => onFilterSelect(newVal, 'regex')} />
+      <SavedRegexDropdown
+        currentRegex={rowFilters.regex}
+        onValueChange={(newVal: string) => onFilterSelect(newVal, 'regex')}
+      />
       <FilterDropdown
         label={'I have...'}
         options={needsApprovalOptions}

@@ -41,7 +41,10 @@ const Dropdown = ({
   };
 
   useEffect(() => {
-    setSelected(options.find((o) => o.value === value));
+    const option = options.find((o) => o.value === value);
+    if (option) {
+      setSelected(option);
+    }
   }, [options, value]);
 
   useEffect(() => {
@@ -128,7 +131,7 @@ const Dropdown = ({
               onClick={(e) => onOptionSelect(e, option)}
               tabIndex={index}
               title={option.label}>
-              {option.label}
+              {option.rendered ?? option.label}
             </div>
           ))}
         </div>

@@ -119,6 +119,7 @@ export interface IRowFilters extends IRefreshableFilters, IInPlaceFilters {
 }
 
 export interface ISavedRegex {
+  key: string;
   name: string;
   value: string;
 }
@@ -126,6 +127,7 @@ export interface ISavedRegex {
 export interface IOption {
   value: string;
   label: string;
+  rendered?: React.ReactNode;
 }
 
 export interface IPRSummarized {

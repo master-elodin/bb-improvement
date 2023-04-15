@@ -1,12 +1,3 @@
-// TODO:
-// @media (prefers-color-scheme: dark) {
-//   /* Dark theme styles go here */
-// }
-//
-// @media (prefers-color-scheme: light) {
-//   /* Light theme styles go here */
-// }
-
 const shadowVars = {
   '--shadow-elevation-medium': `0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.36),
 0.8px 1.6px 2px -0.8px hsl(var(--shadow-color) / 0.36),
