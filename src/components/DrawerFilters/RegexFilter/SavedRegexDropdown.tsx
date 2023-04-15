@@ -19,6 +19,7 @@ const allOption = {
 const addOption: IOption = {
   label: 'Add new',
   value: 'add-new',
+  rendered: <span className={'saved-regex__add-new-option link'}>Add new</span>,
 };
 
 const loadList = () => {
@@ -51,11 +52,14 @@ const SavedRegexOption = ({ regex, onEditClick }: ISavedRegexOptionProps) => {
     </div>
   );
 };
+const loadedRegexes = loadList();
 
 const SavedRegexDropdown = ({ onValueChange, currentRegex }: IProps) => {
-  const [regexes, setRegexes] = useState<ISavedRegex[]>(loadList());
+  const [regexes, setRegexes] = useState<ISavedRegex[]>(loadedRegexes);
   const [options, setOptions] = useState<IOption[]>([allOption, addOption]);
-  const [selected, setSelected] = useState<ISavedRegex>();
+  const [selected, setSelected] = useState<ISavedRegex | undefined>(
+    loadedRegexes.find((r) => r.value === currentRegex),
+  );
   const [nextRegex, setNextRegex] = useState<ISavedRegex>(getNewRegex());
   const [showModal, setShowModal] = useState(false);
 

@@ -41,4 +41,7 @@ export const savedRegexDropdownStyle = {
     display: 'flex',
     'justify-content': 'space-between',
   },
+  '.saved-regex__add-new-option': {
+    'font-weight': 'bold',
+  },
 };

@@ -79,6 +79,10 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
   }, [pullRequests, sortType]);
 
   useEffect(() => {
+    if(isProd && !currentUser.links) {
+      // not a real user yet
+      return;
+    }
     setRowFilters((prevState) => {
       const newFilters = {
         ...prevState,
