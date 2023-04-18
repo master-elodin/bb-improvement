@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { IOption, IUser, UserRecord } from '../types';
+import { useMemo } from 'react';
+import { IUser, UserRecord } from '../types';
 import FilterDropdown from './DrawerFilters/FilterDropdown';
 
 interface IProps {
@@ -10,8 +10,7 @@ interface IProps {
 }
 
 const UserSelector = ({ onUserChange, loggedInUserUuid, allUsersById }: IProps) => {
-  const [userOptions, setUserOptions] = useState<IOption[]>([]);
-  useEffect(() => {
+  const userOptions = useMemo(() => {
     const realCurrentUser = allUsersById[loggedInUserUuid];
 
     const options = Object.values(allUsersById)
@@ -20,11 +19,7 @@ const UserSelector = ({ onUserChange, loggedInUserUuid, allUsersById }: IProps) 
     // handle hardcoded data
     const meLabel = !realCurrentUser ? 'Me' : `Me (${realCurrentUser.display_name})`;
     options.unshift({ label: meLabel, value: loggedInUserUuid });
-    setUserOptions(options);
-
-    if (realCurrentUser) {
-      onUserChange(realCurrentUser);
-    }
+    return options;
   }, [allUsersById]);
 
   return (

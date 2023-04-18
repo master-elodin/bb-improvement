@@ -73,13 +73,20 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
   }, [isDarkMode]);
 
   useEffect(() => {
+    const realCurrentUser = allUsersById[loggedInUserUuid];
+    if (realCurrentUser) {
+      setCurrentUser(realCurrentUser);
+    }
+  }, [allUsersById]);
+
+  useEffect(() => {
     const nextSortType = sortType;
     const sortColumn = nextSortType.split(':')[0];
     setSortedRows(getSortedRows(pullRequests, sortColumn, nextSortType.split(':')[1] === 'asc'));
   }, [pullRequests, sortType]);
 
   useEffect(() => {
-    if(isProd && !currentUser.links) {
+    if (isProd && !currentUser.links) {
       // not a real user yet
       return;
     }
@@ -184,6 +191,7 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
         possiblePages={possiblePages}
         onPageClick={onPageClick}
         userSelector={userSelector}
+        isUserChanged={currentUser?.uuid !== loggedInUserUuid}
       />
       <div className={'app__content'}>
         <Drawer

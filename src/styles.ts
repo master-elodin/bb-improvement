@@ -14,6 +14,7 @@ import { regexFilterStyle } from './components/DrawerFilters/RegexFilter/RegexFi
 import { appHeaderStyle } from './components/App/AppHeader/AppHeader.style';
 import { modalStyle } from './components/Modal/Modal.style';
 import { savedRegexDropdownStyle } from './components/DrawerFilters/RegexFilter/SavedRegexDropdown.style';
+import { popoverStyle } from './components/Popover/Popover.style';
 
 export const initStyles = () => {
   InlineStyle({
@@ -108,6 +109,7 @@ export const initStyles = () => {
     ...dropdownStyle,
     ...iconsStyle,
     ...modalStyle,
+    ...popoverStyle,
     ...regexFilterStyle,
     ...reviewersStyle,
     ...rowTitleStyles,

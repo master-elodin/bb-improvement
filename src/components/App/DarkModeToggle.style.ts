@@ -5,7 +5,6 @@ export const darkModeToggleStyle = {
     'border-radius': '10px',
     cursor: 'pointer',
     height: '20px',
-    margin: '22px 0 0 30px',
     position: 'relative',
     width: '40px',
   },

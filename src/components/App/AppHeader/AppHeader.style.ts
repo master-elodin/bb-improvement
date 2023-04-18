@@ -4,9 +4,9 @@ export const appHeaderStyle = {
     'border-bottom': '1px solid var(--color-border)',
     display: 'flex',
     gap: '20px',
-    height: '42px',
+    height: '25px',
     'justify-content': 'flex-start',
-    padding: '10px',
+    padding: '5px 10px',
   },
   '.app-header__root .drawer-filters__filter': {
     'flex-basis': '180px',
@@ -40,5 +40,29 @@ export const appHeaderStyle = {
   '.app-header__page-selector__page--disabled': {
     color: 'var(--color-text)',
     cursor: 'default',
+  },
+  '.app-header__config': {
+    display: 'flex',
+  },
+  '.app-header__user-button': {
+    'border-radius': '.5em',
+    color: 'var(--color-text)',
+    cursor: 'pointer',
+    display: 'flex',
+    'font-size': '24px',
+    height: '1em',
+    width: '1em',
+  },
+  '.app-header__user-button--changed': {
+    'box-shadow': 'var(--shadow-filter-highlight)',
+  },
+  '.app-header__user-config-content': {
+    'align-items': 'flex-end',
+    display: 'flex',
+    'flex-direction': 'column',
+    gap: '15px',
+  },
+  '.app-header__user-config-content .drawer-filters__filter': {
+    'flex-basis': 'unset',
   },
 };
