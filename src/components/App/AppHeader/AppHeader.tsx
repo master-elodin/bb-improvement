@@ -111,6 +111,8 @@ const AppHeader = ({
       <DownArrow />
     </div>
   );
+  const onTextChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    onFilterSelect(e.currentTarget.value.replace(/"/g, ''), 'text');
   const loadContent = (
     <div className={'app-header__request-content'}>
       <UserSelector loggedInUserUuid={loggedInUserUuid} onUserChange={setCurrentUser} allUsersById={allUsersById} />
@@ -128,6 +130,22 @@ const AppHeader = ({
         onSelect={(newVal: string) => onFilterSelect(newVal, 'state')}
         shadowChanged={false}
       />
+      <div className={'drawer-filters__filter'}>
+        <span className={'drawer-filters__label'}>Freeform text</span>
+        <div className={'dropdown-input'}>
+          <input
+            value={apiFilters.text}
+            onChange={onTextChange}
+            placeholder={'PR title or description'}
+            autoFocus={true}
+          />
+          {apiFilters.text && (
+            <div className={'app-header__text-clear-btn'} onClick={() => onFilterSelect('', 'text')}>
+              &times;
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 

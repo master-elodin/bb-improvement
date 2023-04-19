@@ -10,6 +10,7 @@ const lightModeVars = {
   '--color-highlight': '#ff1ff8',
   '--color-btn-primary': '#3773eb',
   '--color-btn-danger': '#d82f2c',
+  '--dropdown-border-radius': '3px',
   '--shadow-filter-highlight': '0 0 7px var(--color-highlight)',
 };
 const darkModeVars = {

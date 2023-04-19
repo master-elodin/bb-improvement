@@ -58,9 +58,7 @@ const Dropdown = ({
     }
   }, [defaultValue, options]);
 
-  const onFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterVal(e.currentTarget.value);
-  };
+  const onFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => setFilterVal(e.currentTarget.value);
 
   const onClearClick = () => {
     setFilterVal('');

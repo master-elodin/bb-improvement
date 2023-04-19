@@ -1,6 +1,5 @@
 export const dropdownStyle = {
   '.dropdown-root': {
-    '--dropdown-border-radius': '3px',
     'border-radius': 'var(--dropdown-border-radius)',
     cursor: 'pointer',
     position: 'relative',

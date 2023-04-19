@@ -104,6 +104,7 @@ export interface IAPIFilters {
   state: PRState;
   userUuid: string;
   pageNum: number;
+  text?: string;
 }
 
 export interface IInPlaceFilters {

@@ -90,4 +90,10 @@ export const appHeaderStyle = {
   '.app-header__request-trigger--open .icon': {
     transform: 'rotate(180deg)',
   },
+  '.app-header__text-clear-btn': {
+    cursor: 'pointer',
+    position: 'absolute',
+    right: '7px',
+    top: '2px',
+  },
 };

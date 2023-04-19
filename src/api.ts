@@ -43,9 +43,10 @@ export const getPullRequests = async (filters: IAPIFilters): Promise<IPullReques
   }
   // TODO: use filter for what repo
   const reviewerQ = filters.role === 'all' ? '' : ` AND ${filters.role}.uuid="${filters.userUuid}"`;
+  const textQ = filters.text ? ` AND (description~"${filters.text}" OR title~"${filters.text}")` : '';
   const params: Record<string, string> = {
     ...reviewingPRs,
-    q: `state="${filters.state}"${reviewerQ}`,
+    q: `state="${filters.state}"${reviewerQ}${textQ}`,
     page: `${filters.pageNum ?? 1}`,
   };
   const url =
