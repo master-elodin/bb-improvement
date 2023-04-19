@@ -53,6 +53,8 @@ const RegexFilter = ({ defaultValue, onValueChange }: IProps) => {
             placeholder={'(4.2.0)|(lukasz)'}
             autoFocus={true}
           />
+          <div className={'regex-filter-input__prefix'}>/</div>
+          <div className={'regex-filter-input__postfix'}>/<span>gi</span></div>
         </div>
       </div>
     </div>
