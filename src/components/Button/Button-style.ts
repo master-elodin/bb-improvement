@@ -7,9 +7,6 @@ export const buttonStyle = {
     padding: '3px',
     'text-align': 'center',
   },
-  '.button:hover': {
-    'box-shadow': '0 0 2px var(--color-border)',
-  },
   '.button--primary': {
     '--button-border': 'var(--color-btn-primary)',
     'background-color': 'var(--color-btn-primary)',

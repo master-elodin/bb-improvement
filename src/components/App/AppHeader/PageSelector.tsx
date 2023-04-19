@@ -15,7 +15,7 @@ const PageSelector = ({ visible, currentPage, possiblePages, onPageClick }: IPro
   return (
     <div className={cx('app-header__page-selector', !visible && 'app-header__page-selector--hidden')}>
       <PageArrow pageNum={currentPage} onPageClick={onPageClick} limit={1} direction={'<'} />
-      {currentPage > 4 && (
+      {currentPage > 3 && (
         <>
           <PageNumber pageNum={1} currentPage={currentPage} onPageClick={onPageClick} />
           {'...'}

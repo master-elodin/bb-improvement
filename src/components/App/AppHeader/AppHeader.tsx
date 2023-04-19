@@ -68,10 +68,11 @@ const AppHeader = ({
         userUuid: realCurrentUser.uuid,
       });
     }
-  }, [allUsersById, apiFilters]);
+  }, [allUsersById]);
 
   useEffect(() => {
     onFilterSelect(currentUser.uuid, 'userUuid');
+    // TODO: don't actually update until requesting data, so approval doesn't change
     onUserChange(currentUser.uuid);
   }, [currentUser]);
 

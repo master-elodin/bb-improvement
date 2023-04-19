@@ -2,7 +2,6 @@ export const popoverStyle = {
   '.popover__root': {
     position: 'relative',
   },
-  '.popover__trigger': {},
   '.popover__content': {
     border: '1px solid var(--color-border)',
     'background-color': 'var(--color-background-alt)',

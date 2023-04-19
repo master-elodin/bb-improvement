@@ -76,9 +76,9 @@ export const appHeaderStyle = {
     color: 'white',
     cursor: 'pointer',
     display: 'flex',
-    height: '25px',
     'justify-content': 'center',
     'margin-left': '-2px',
+    padding: '4px 0',
     width: '27px',
   },
   '.app-header__request-content': {
