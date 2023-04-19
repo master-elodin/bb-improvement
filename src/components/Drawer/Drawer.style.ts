@@ -9,7 +9,6 @@ export const drawerStyle = {
     overflow: 'hidden',
     position: 'relative',
     transition: 'flex-basis 100ms ease-out',
-    '--drawer-header-height': '30px',
   },
   '.drawer__root--open': {
     cursor: 'default',
@@ -19,7 +18,7 @@ export const drawerStyle = {
     'align-items': 'center',
     cursor: 'pointer',
     display: 'flex',
-    'flex-basis': 'var(--drawer-header-height)',
+    'flex-basis': '30px',
     'justify-content': 'space-between',
     'padding': '0 20px 0 10px',
     position: 'relative',
@@ -56,8 +55,8 @@ export const drawerStyle = {
   '.drawer__content': {
     display: 'flex',
     gap: '15px',
-    'flex-basis': 'calc(100% - var(--drawer-header-height) - 35px)',
     'flex-direction': 'column',
+    'flex-grow': 1,
     'overflow-y': 'auto',
     padding: '10px',
   },

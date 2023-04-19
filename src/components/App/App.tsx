@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { IInPlaceFilters, IRefreshableFilters, IRow, IRowFilters, IUser } from '../../types';
+import { IInPlaceFilters, IRow } from '../../types';
 import Row, { columns } from '../Row';
-import { DARK_MODE_KEY, DRAWER_KEY, FILTER_KEY, RESULTS_PER_PAGE } from '../../api';
-import UserSelector from '../UserSelector';
+import { DARK_MODE_KEY, DRAWER_KEY, IN_PLACE_FILTER_KEY, RESULTS_PER_PAGE } from '../../api';
 import { DownArrow, UpArrow } from '../Icons/Icons';
 import DrawerFiltersInPlace from '../DrawerFilters/DrawerFiltersInPlace';
 import Spinner from '../Spinner/Spinner';
@@ -11,7 +10,6 @@ import Drawer from '../Drawer/Drawer';
 import useData from '../../hooks/useData';
 import { passesFilters } from '../../filters';
 import { cx, sanitizeRegex } from '../../utils';
-import DrawerFiltersReload from '../DrawerFilters/DrawerFiltersReload';
 import AppHeader from './AppHeader/AppHeader';
 
 const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
@@ -28,9 +26,9 @@ const getSortedRows = (rows: IRow[], colType: string, isAsc?: boolean) => {
   return [...rows];
 };
 
-const saveFilters = (newVal: IRowFilters) => {
+const saveFilters = (newVal: IInPlaceFilters) => {
   localStorage.setItem(
-    FILTER_KEY,
+    IN_PLACE_FILTER_KEY,
     JSON.stringify({
       ...newVal,
       compiledRegex: undefined,
@@ -38,20 +36,26 @@ const saveFilters = (newVal: IRowFilters) => {
   );
 };
 
+const defaultInPlaceFilter: Partial<IInPlaceFilters> = {
+  regex: '',
+  compiledRegex: undefined,
+  tasks: 'any',
+  needsReview: 'any',
+  branch: 'any',
+  repo: 'any',
+  build: 'any',
+};
+
 interface IProps {
-  isProd: boolean;
   loggedInUserUuid: string;
-  defaultRefreshableFilters: IRefreshableFilters;
-  defaultInPlaceFilters: IInPlaceFilters;
-  savedFilters: IRowFilters;
+  savedInPlaceFilters: IInPlaceFilters;
 }
 
-function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPlaceFilters, savedFilters }: IProps) {
+function App({ loggedInUserUuid, savedInPlaceFilters }: IProps) {
   const [sortType, setSortType] = useState<string>(`${columns[columns.length - 1].label}:asc`);
   const [sortedRows, setSortedRows] = useState<IRow[]>([]);
-  const [currentUser, setCurrentUser] = useState<IUser>({ uuid: loggedInUserUuid, display_name: 'Me' } as IUser);
   const [drawerOpen, setDrawerOpen] = useState(localStorage.getItem(DRAWER_KEY) !== 'false');
-  const [rowFilters, setRowFilters] = useState<IRowFilters>(savedFilters);
+  const [inPlaceFilters, setInPlaceFilters] = useState<IInPlaceFilters>(savedInPlaceFilters);
   const [isDarkMode, setIsDarkMode] = useState(JSON.parse(localStorage.getItem(DARK_MODE_KEY) ?? 'false'));
 
   const { isLoading, summarized, pullRequests, allUsersById, refresh } = useData();
@@ -73,46 +77,23 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
   }, [isDarkMode]);
 
   useEffect(() => {
-    const realCurrentUser = allUsersById[loggedInUserUuid];
-    if (realCurrentUser) {
-      setCurrentUser(realCurrentUser);
-    }
-  }, [allUsersById]);
-
-  useEffect(() => {
     const nextSortType = sortType;
     const sortColumn = nextSortType.split(':')[0];
     setSortedRows(getSortedRows(pullRequests, sortColumn, nextSortType.split(':')[1] === 'asc'));
   }, [pullRequests, sortType]);
 
   useEffect(() => {
-    if (isProd && !currentUser.links) {
-      // not a real user yet
-      return;
-    }
-    setRowFilters((prevState) => {
-      const newFilters = {
-        ...prevState,
-        userUuid: currentUser.uuid,
-      };
-      // if user changes, refresh data as well
-      refresh(newFilters);
-      return newFilters;
-    });
-  }, [currentUser]);
+    saveFilters(inPlaceFilters);
+  }, [inPlaceFilters]);
 
   useEffect(() => {
-    saveFilters(rowFilters);
-  }, [rowFilters]);
-
-  useEffect(() => {
-    setRowFilters((prevState: IRowFilters) => {
+    setInPlaceFilters((prevState: IInPlaceFilters) => {
       return {
         ...prevState,
         compiledRegex: sanitizeRegex(prevState.regex),
       };
     });
-  }, [rowFilters.regex]);
+  }, [inPlaceFilters.regex]);
 
   useEffect(() => {
     localStorage.setItem(DRAWER_KEY, JSON.stringify(drawerOpen));
@@ -123,75 +104,40 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
     setSortType(`${colType}:${isAsc ? 'desc' : 'asc'}`);
   };
 
-  const onFilterSelect = (newVal: string, filterType: keyof IRowFilters) => {
-    if (rowFilters[filterType] === newVal) {
+  const onFilterSelect = (newVal: string, filterType: keyof IInPlaceFilters) => {
+    if (inPlaceFilters[filterType] === newVal) {
       // nothing to do
       return;
     }
-    setRowFilters((prevState: IRowFilters) => {
-      const nextState = {
-        ...prevState,
-        [filterType]: newVal,
-      };
-      // TODO: make generic
-      if (filterType === 'role' || filterType === 'state') {
-        nextState.pageNum = 1;
-      }
-      return nextState;
-    });
-  };
-
-  const onGoClick = async () => {
-    await refresh(rowFilters);
+    setInPlaceFilters((prevState) => ({
+      ...prevState,
+      [filterType]: newVal,
+    }));
   };
 
   const clearInPlaceFilters = () =>
-    setRowFilters((prevState) => ({
-      ...prevState,
-      ...defaultInPlaceFilters,
-      compiledRegex: undefined,
-    }));
+    setInPlaceFilters({
+      ...defaultInPlaceFilter,
+      userUuid: loggedInUserUuid,
+    } as IInPlaceFilters);
 
-  const clearReloadFilters = () =>
-    setRowFilters((prevState) => ({
-      ...prevState,
-      ...defaultRefreshableFilters,
-    }));
-
-  const visibleRows = sortedRows.filter((row) => passesFilters(row, rowFilters));
+  const visibleRows = sortedRows.filter((row) => passesFilters(row, inPlaceFilters));
   const possiblePages = Array.from({ length: Math.ceil(summarized.totalNumResults / RESULTS_PER_PAGE) }).map(
     (_, pageNum) => pageNum + 1,
   );
-  const onPageClick = (pageNum: number) => {
-    if (pageNum === summarized.pageNum) {
-      return;
-    }
-    summarized.pageNum = pageNum;
-    setRowFilters((prevState) => {
-      const newFilters = {
-        ...prevState,
-        pageNum,
-      };
-      refresh(newFilters);
-      return newFilters;
-    });
-  };
 
-  const userSelector = (
-    <UserSelector loggedInUserUuid={loggedInUserUuid} onUserChange={setCurrentUser} allUsersById={allUsersById} />
-  );
+  const onUserChange = (newUuid: string) => onFilterSelect(newUuid, 'userUuid');
 
   return (
     <div className={cx('app__root', isDarkMode && 'app__root--dark')}>
       <AppHeader
-        onRefreshClick={() => refresh(rowFilters)}
+        refresh={refresh}
+        onUserChange={onUserChange}
+        loggedInUserUuid={loggedInUserUuid}
+        allUsersById={allUsersById}
         isDarkMode={isDarkMode}
         setIsDarkMode={setIsDarkMode}
-        currentPage={summarized.pageNum}
         possiblePages={possiblePages}
-        onPageClick={onPageClick}
-        userSelector={userSelector}
-        isUserChanged={currentUser?.uuid !== loggedInUserUuid}
       />
       <div className={'app__content'}>
         <Drawer
@@ -200,19 +146,10 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
           numVisible={visibleRows.length}
           numTotal={sortedRows.length}>
           <DrawerFiltersInPlace
-            defaultFilters={defaultInPlaceFilters}
-            rowFilters={rowFilters}
+            inPlaceFilters={inPlaceFilters}
             summarized={summarized}
             onFilterSelect={onFilterSelect}
             clearFilters={clearInPlaceFilters}
-            isLoading={isLoading}
-          />
-          <DrawerFiltersReload
-            defaultFilters={defaultRefreshableFilters}
-            rowFilters={rowFilters}
-            onFilterSelect={onFilterSelect}
-            clearFilters={clearReloadFilters}
-            onGoClick={onGoClick}
             isLoading={isLoading}
           />
         </Drawer>
@@ -238,7 +175,9 @@ function App({ isProd, loggedInUserUuid, defaultRefreshableFilters, defaultInPla
           {!isLoading && (
             <div className={'app__content-rows'}>
               {!isLoading &&
-                visibleRows.map((val: IRow, index) => <Row key={index} val={val} currentUser={currentUser} />)}
+                visibleRows.map((val: IRow, index) => (
+                  <Row key={index} val={val} currentUser={allUsersById[inPlaceFilters.userUuid]} />
+                ))}
             </div>
           )}
         </div>

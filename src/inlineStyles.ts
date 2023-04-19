@@ -2,6 +2,16 @@ export type IStyle = { [selector: string]: Record<string, string | number> };
 
 /** Preventing needing to write style={} for all components, but still having styling in the js file. */
 export const InlineStyle = (styleConfig: IStyle) => {
+  const sheets = [...document.getElementsByTagName('link')];
+  // clear any existing styles first to prevent Bitbucket styles from messing with the script
+  // https://stackoverflow.com/a/9252908
+  sheets.forEach((x) => {
+    const type = x.getAttribute('type');
+    if (type?.toLowerCase() === 'text/css' || x.getAttribute('rel') === 'stylesheet') {
+      x.parentNode?.removeChild(x);
+    }
+  });
+
   let styleString = '';
   Object.keys(styleConfig).forEach((selector) => {
     const selectorStyle = styleConfig[selector];
@@ -15,7 +25,7 @@ export const InlineStyle = (styleConfig: IStyle) => {
   styleString += `@keyframes rotate {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-  }`
+  }`;
 
   const style = document.createElement('style');
   style.type = 'text/css';

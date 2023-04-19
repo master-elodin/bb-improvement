@@ -38,9 +38,8 @@ export const appStyle = {
   '.app__content': {
     'background-color': 'var(--color-background)',
     display: 'flex',
-    height: 'calc(100% - 60px)',
-    padding: '10px 10px 0 0',
-    width: 'calc(100% - 10px)',
+    height: 'calc(100% - 34px)',
+    width: '100%',
     '--header-height': '30px',
   },
   '.app__content-loading-container': {

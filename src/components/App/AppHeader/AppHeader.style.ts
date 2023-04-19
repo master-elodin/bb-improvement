@@ -1,20 +1,22 @@
 export const appHeaderStyle = {
   '.app-header__root': {
-    'align-items': 'end',
+    'align-items': 'center',
     'border-bottom': '1px solid var(--color-border)',
     display: 'flex',
     gap: '20px',
-    height: '25px',
+    height: '23px',
     'justify-content': 'flex-start',
     padding: '5px 10px',
   },
-  '.app-header__root .drawer-filters__filter': {
-    'flex-basis': '180px',
+  '.app-header__title': {
+    display: 'flex',
+    'font-size': '1.6em',
   },
-  '.app-header__refresh-btn.button': {
-    height: '18px',
-    'line-height': '18px',
-    padding: '2px 8px',
+  '.app-header__title svg': {
+    'padding-top': '2px',
+  },
+  '.app-header__title .app-header__title-text': {
+    'padding-left': '.5em',
   },
   '.app-header__page-selector': {
     'align-items': 'end',
@@ -43,6 +45,7 @@ export const appHeaderStyle = {
   },
   '.app-header__config': {
     display: 'flex',
+    gap: '15px',
   },
   '.app-header__user-button': {
     'border-radius': '.5em',
@@ -53,16 +56,38 @@ export const appHeaderStyle = {
     height: '1em',
     width: '1em',
   },
-  '.app-header__user-button--changed': {
-    'box-shadow': 'var(--shadow-filter-highlight)',
-  },
   '.app-header__user-config-content': {
     'align-items': 'flex-end',
     display: 'flex',
     'flex-direction': 'column',
     gap: '15px',
   },
-  '.app-header__user-config-content .drawer-filters__filter': {
-    'flex-basis': 'unset',
+  '.app-header__request-container': {
+    display: 'flex',
+  },
+  '.app-header__request-trigger': {
+    'align-items': 'center',
+    'background-color': '#3773eb', // TODO: extract?
+    'border-left': '1px solid white',
+    'border-radius': '0 3px 3px 0',
+    color: 'white',
+    cursor: 'pointer',
+    display: 'flex',
+    height: '25px',
+    'justify-content': 'center',
+    'margin-left': '-2px',
+    width: '27px',
+  },
+  '.app-header__request-content': {
+    display: 'flex',
+    'flex-direction': 'column',
+    gap: '15px',
+    width: '200px',
+  },
+  '.app-header__request-trigger .icon': {
+    transition: 'transform 200ms',
+  },
+  '.app-header__request-trigger--open .icon': {
+    transform: 'rotate(180deg)',
   },
 };

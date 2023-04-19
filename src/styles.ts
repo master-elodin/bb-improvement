@@ -23,6 +23,7 @@ export const initStyles = () => {
       'font-family':
         '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Fira Sans,Droid Sans,Helvetica Neue,sans-serif',
       'font-size': '14px',
+      margin: 0,
     },
     'a, .link': {
       color: 'var(--color-link) !important',

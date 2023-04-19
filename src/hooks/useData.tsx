@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { getAllUsers, getPullRequests, getStatuses } from '../api';
-import { IPRSummarized, IRow, IRowFilters, UserRecord } from '../types';
+import { IPRSummarized, IAPIFilters, IRow, UserRecord } from '../types';
 
 const useData = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -42,7 +42,7 @@ const useData = () => {
       .catch((err) => console.error('Failed fetching users', err));
   }, []);
 
-  const refresh = useCallback(async (filters: IRowFilters) => {
+  const refresh = useCallback(async (filters: IAPIFilters) => {
     setIsLoading(true);
     const response = await getPullRequests(filters);
     const { pullRequests, pageNum, totalNumResults } = response;

@@ -1,7 +1,8 @@
 import { allUsers as mockUsers, rawData, statuses } from './data';
-import { IPullRequestResponse, IRow, IRowFilters, IStatusResponse, IUser } from './types';
+import { IPullRequestResponse, IAPIFilters, IRow, IStatusResponse, IUser } from './types';
 
-export const FILTER_KEY = 'bb-script-filters';
+export const API_FILTER_KEY = 'bb-script-refresh-filters';
+export const IN_PLACE_FILTER_KEY = 'bb-script-in-place-filters';
 export const DRAWER_KEY = 'bb-script-drawer-open';
 export const DARK_MODE_KEY = 'bb-script-dark-mode';
 export const SAVED_REGEX_KEY = 'bb-script-saved-regex';
@@ -32,7 +33,7 @@ const reviewingPRs: Record<string, string> = {
 let isProd = false;
 export const setIsProd = (newVal: boolean) => (isProd = newVal);
 
-export const getPullRequests = async (filters: IRowFilters): Promise<IPullRequestResponse> => {
+export const getPullRequests = async (filters: IAPIFilters): Promise<IPullRequestResponse> => {
   if (!isProd) {
     return {
       pullRequests: rawData.values as unknown as IRow[],

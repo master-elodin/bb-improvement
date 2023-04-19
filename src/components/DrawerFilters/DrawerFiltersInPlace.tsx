@@ -1,16 +1,15 @@
 import * as React from 'react';
 import FilterDropdown from './FilterDropdown';
-import { IInPlaceFilters, IPRSummarized, IRowFilters } from '../../types';
+import { IInPlaceFilters, IPRSummarized } from '../../types';
 import { useMemo } from 'react';
 import { cx } from '../../utils';
 import RegexFilter from './RegexFilter/RegexFilter';
 import SavedRegexDropdown from './RegexFilter/SavedRegexDropdown';
 
 interface IProps {
-  defaultFilters: IInPlaceFilters;
-  rowFilters: IRowFilters;
+  inPlaceFilters: IInPlaceFilters;
   summarized: IPRSummarized;
-  onFilterSelect: (newVal: string, filterType: keyof IRowFilters) => void;
+  onFilterSelect: (newVal: string, filterType: keyof IInPlaceFilters) => void;
   clearFilters: () => void;
   isLoading: boolean;
 }
@@ -35,7 +34,7 @@ const buildOptions: { label: string; value: IInPlaceFilters['build'] }[] = [
   { label: 'Failed', value: 'FAILED' },
 ];
 
-const DrawerFiltersInPlace = ({ rowFilters, summarized, onFilterSelect, clearFilters, isLoading }: IProps) => {
+const DrawerFiltersInPlace = ({ inPlaceFilters, summarized, onFilterSelect, clearFilters, isLoading }: IProps) => {
   const targets = useMemo(
     () => [
       { label: 'All', value: 'any' },
@@ -66,31 +65,31 @@ const DrawerFiltersInPlace = ({ rowFilters, summarized, onFilterSelect, clearFil
         </span>
       </div>
       <RegexFilter
-        defaultValue={rowFilters.regex}
+        defaultValue={inPlaceFilters.regex}
         onValueChange={(newVal: string) => onFilterSelect(newVal, 'regex')}
       />
       <SavedRegexDropdown
-        currentRegex={rowFilters.regex}
+        currentRegex={inPlaceFilters.regex}
         onValueChange={(newVal: string) => onFilterSelect(newVal, 'regex')}
       />
       <FilterDropdown
         label={'I have...'}
         options={needsApprovalOptions}
-        defaultValue={rowFilters.needsReview}
+        defaultValue={inPlaceFilters.needsReview}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'needsReview')}
         disabled={isLoading}
       />
       <FilterDropdown
         label={'Open tasks'}
         options={taskOptions}
-        defaultValue={rowFilters.tasks}
+        defaultValue={inPlaceFilters.tasks}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'tasks')}
         disabled={isLoading}
       />
       <FilterDropdown
         label={'Target'}
         options={targets}
-        defaultValue={rowFilters.branch}
+        defaultValue={inPlaceFilters.branch}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'branch')}
         allowFilter={true}
         disabled={isLoading}
@@ -98,14 +97,14 @@ const DrawerFiltersInPlace = ({ rowFilters, summarized, onFilterSelect, clearFil
       <FilterDropdown
         label={'Repository'}
         options={repos}
-        defaultValue={rowFilters.repo}
+        defaultValue={inPlaceFilters.repo}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'repo')}
         disabled={isLoading}
       />
       <FilterDropdown
         label={'Build status'}
         options={buildOptions}
-        defaultValue={rowFilters.build}
+        defaultValue={inPlaceFilters.build}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'build')}
         disabled={isLoading}
       />

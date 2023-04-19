@@ -1,8 +1,8 @@
-import { IParticipantState, IRow, IRowFilters } from './types';
+import { IInPlaceFilters, IParticipantState, IRow } from './types';
 
-type RowFilter = (row: IRow, filters: IRowFilters) => boolean;
+type RowFilter = (row: IRow, filters: IInPlaceFilters) => boolean;
 
-const passesTasks = (row: IRow, filters: IRowFilters) => {
+const passesTasks = (row: IRow, filters: IInPlaceFilters) => {
   switch (filters.tasks) {
     case 'yes':
       return row.task_count > 0;
@@ -18,7 +18,7 @@ const rowHasExpectedState = (row: IRow, userUuid: string, expectedState: IPartic
     return participant.user.uuid === userUuid && participant.state === expectedState;
   });
 
-const passesNeedsReview = (row: IRow, filters: IRowFilters) => {
+const passesNeedsReview = (row: IRow, filters: IInPlaceFilters) => {
   switch (filters.needsReview) {
     case 'yes':
       return rowHasExpectedState(row, filters.userUuid, null);
@@ -31,21 +31,21 @@ const passesNeedsReview = (row: IRow, filters: IRowFilters) => {
   }
 };
 
-const passesBranch = (row: IRow, filters: IRowFilters) => {
+const passesBranch = (row: IRow, filters: IInPlaceFilters) => {
   return filters.branch === 'any' || filters.branch === row.destination.branch.name;
 };
 
-const passesRepo = (row: IRow, filters: IRowFilters) => {
+const passesRepo = (row: IRow, filters: IInPlaceFilters) => {
   return filters.repo === 'any' || filters.repo === row.destination.repository.slug;
 };
 
 const getRegexFieldString = (row: IRow) =>
   [row.author.display_name, row.title, row.destination.branch.name, row.destination.repository.slug].join('');
-const passesRegex = (row: IRow, filters: IRowFilters) => {
+const passesRegex = (row: IRow, filters: IInPlaceFilters) => {
   return filters.compiledRegex?.test(getRegexFieldString(row)) ?? true;
 };
 
-const passesBuild = (row: IRow, filters: IRowFilters) => {
+const passesBuild = (row: IRow, filters: IInPlaceFilters) => {
   return filters.build === 'any' || filters.build === row.buildStatus?.state;
 };
 
@@ -58,6 +58,6 @@ const allFilters: RowFilter[] = [
   passesBuild,
 ];
 
-export const passesFilters = (row: IRow, filters: IRowFilters) => {
+export const passesFilters = (row: IRow, filters: IInPlaceFilters) => {
   return allFilters.every((f) => f(row, filters));
 };

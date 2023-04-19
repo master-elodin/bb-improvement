@@ -66,6 +66,7 @@ export interface IPullRequestResponse {
 }
 
 type BuildState = 'SUCCESSFUL' | 'INPROGRESS' | 'FAILED';
+
 export interface IStatus {
   state: BuildState;
   commit_status: {
@@ -98,9 +99,11 @@ export interface ICol {
   colClass?: string;
 }
 
-export interface IRefreshableFilters {
+export interface IAPIFilters {
   role: 'reviewers' | 'author' | 'all';
   state: PRState;
+  userUuid: string;
+  pageNum: number;
 }
 
 export interface IInPlaceFilters {
@@ -114,9 +117,7 @@ export interface IInPlaceFilters {
   build: 'any' | BuildState;
 }
 
-export interface IRowFilters extends IRefreshableFilters, IInPlaceFilters {
-  pageNum?: number;
-}
+export interface IRowFilters extends IAPIFilters, IInPlaceFilters {}
 
 export interface ISavedRegex {
   key: string;

@@ -1,7 +1,6 @@
 export const popoverStyle = {
   '.popover__root': {
     position: 'relative',
-    'z-index': 2,
   },
   '.popover__trigger': {},
   '.popover__content': {
@@ -17,5 +16,6 @@ export const popoverStyle = {
   },
   '.popover__content--visible': {
     opacity: 1,
+    'z-index': 2,
   },
 };

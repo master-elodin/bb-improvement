@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './components/App/App';
-import { FILTER_KEY, setIsProd } from './api';
+import { IN_PLACE_FILTER_KEY, setIsProd } from './api';
 import { initStyles } from './styles';
-import { IInPlaceFilters, IRefreshableFilters, IRowFilters } from './types';
+import { IInPlaceFilters } from './types';
 import { sanitizeRegex } from './utils';
 
 initStyles();
@@ -16,40 +15,23 @@ setIsProd(isProd);
 const loggedInUserUuid = isProd
   ? // @ts-ignore: this will work in actual bitbucket but not locally
     JSON.parse(jQuery('#bb-bootstrap').attr('data-current-user')).uuid
-  : '{2f8139ca-b887-4d13-a41f-ed7f0fe31022}';
+  : '{d1b86571-abc6-4eae-a638-6b0826c01498}';
 
-const defaultRefreshableFilters: IRefreshableFilters = {
-  role: 'reviewers',
-  state: 'OPEN',
-};
-
+const savedInPlaceFilters = JSON.parse(localStorage.getItem(IN_PLACE_FILTER_KEY) ?? '{}');
 const defaultInPlaceFilters: IInPlaceFilters = {
-  userUuid: loggedInUserUuid,
   regex: '',
   tasks: 'any',
   needsReview: 'any',
   repo: 'any',
   branch: 'any',
   build: 'any',
-};
-
-let savedFilters = JSON.parse(localStorage.getItem(FILTER_KEY) ?? '{}');
-const initialFilters: IRowFilters = {
-  ...defaultInPlaceFilters,
-  ...defaultRefreshableFilters,
-  ...savedFilters,
-  pageNum: 1, // always use page 1 on page reload,
-  compiledRegex: sanitizeRegex(savedFilters.regex ?? ''),
+  ...savedInPlaceFilters,
+  userUuid: loggedInUserUuid,
+  compiledRegex: sanitizeRegex(savedInPlaceFilters.regex ?? ''),
 };
 
 root.render(
   <React.StrictMode>
-    <App
-      isProd={isProd}
-      loggedInUserUuid={loggedInUserUuid}
-      defaultRefreshableFilters={defaultRefreshableFilters}
-      defaultInPlaceFilters={defaultInPlaceFilters}
-      savedFilters={initialFilters}
-    />
+    <App loggedInUserUuid={loggedInUserUuid} savedInPlaceFilters={defaultInPlaceFilters} />
   </React.StrictMode>,
 );
