@@ -67,7 +67,7 @@ export const appHeaderStyle = {
   },
   '.app-header__request-trigger': {
     'align-items': 'center',
-    'background-color': '#3773eb', // TODO: extract?
+    'background-color': 'var(--color-btn-primary)',
     'border-left': '1px solid white',
     'border-radius': '0 3px 3px 0',
     color: 'white',

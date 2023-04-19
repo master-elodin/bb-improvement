@@ -11,8 +11,8 @@ export const buttonStyle = {
     'box-shadow': '0 0 2px var(--color-border)',
   },
   '.button--primary': {
-    '--button-border': '#3773eb',
-    'background-color': 'var(--button-border)',
+    '--button-border': 'var(--color-btn-primary)',
+    'background-color': 'var(--color-btn-primary)',
     border: 'none',
     color: 'white',
     'font-weight': 'bold',
@@ -22,8 +22,8 @@ export const buttonStyle = {
     'background-color': '#417DF5',
   },
   '.button--danger': {
-    '--button-border': '#d82f2c',
-    'background-color': 'var(--button-border)',
+    '--button-border': 'var(--color-btn-danger)',
+    'background-color': 'var(--color-btn-danger)',
     border: 'none',
     color: 'white',
     'font-weight': 'bold',

@@ -8,6 +8,8 @@ const lightModeVars = {
   '--color-input-background': '#FCFDFF',
   '--color-input-icon': '#0A1E47',
   '--color-highlight': '#ff1ff8',
+  '--color-btn-primary': '#3773eb',
+  '--color-btn-danger': '#d82f2c',
   '--shadow-filter-highlight': '0 0 7px var(--color-highlight)',
 };
 const darkModeVars = {

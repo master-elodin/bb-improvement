@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { cx } from '../../utils';
+import { FocusEvent, useEffect, useState } from 'react';
+import { cx, handleBlur } from '../../utils';
 
 interface IProps {
   trigger: React.ReactNode;
@@ -11,7 +11,6 @@ interface IProps {
 
 const Popover = ({ trigger, content, visible, onVisibleChange }: IProps) => {
   const [show, setShow] = useState(false);
-  // TODO: handle blur
 
   useEffect(() => {
     if (typeof visible !== 'undefined') {
@@ -19,14 +18,21 @@ const Popover = ({ trigger, content, visible, onVisibleChange }: IProps) => {
     }
   }, [visible]);
 
-  const handleClick = () => {
-    const newVal = !(visible === undefined ? show : visible);
+  const updateShow = (newVal: boolean) => {
     setShow(newVal);
     onVisibleChange?.(newVal);
   };
 
+  const handleClick = () => updateShow(!(visible === undefined ? show : visible));
+
+  const onBlur = (e: FocusEvent<HTMLDivElement>) => {
+    handleBlur(e, () => {
+      updateShow(false);
+    });
+  };
+
   return (
-    <div className={'popover__root'}>
+    <div className={'popover__root'} onBlur={onBlur} tabIndex={-1}>
       <div className={'popover__trigger'} onClick={handleClick}>
         {trigger}
       </div>
