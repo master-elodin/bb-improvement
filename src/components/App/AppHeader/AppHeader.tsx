@@ -55,6 +55,7 @@ const AppHeader = ({
     ...savedApiFilters,
     userUuid: loggedInUserUuid,
   });
+  const [showPages, setShowPages] = useState(true);
   const [currentUser, setCurrentUser] = useState<IUser>({ uuid: loggedInUserUuid, display_name: 'Me' } as IUser);
 
   useEffect(() => {
@@ -86,7 +87,6 @@ const AppHeader = ({
     setApiFilters((prevState: IAPIFilters) => ({
       ...prevState,
       [filterType]: newVal,
-      pageNum: 1,
     }));
   };
 
@@ -160,9 +160,11 @@ const AppHeader = ({
     </div>
   );
 
-  const onRequestClick = () => {
+  const onRequestClick = async () => {
     setLoadVisible(false);
-    refresh(apiFilters);
+    setShowPages(false);
+    await refresh({ ...apiFilters, pageNum: 1 });
+    setShowPages(true);
   };
 
   return (
@@ -175,7 +177,12 @@ const AppHeader = ({
       {/*{!loading && (*/}
       {/*  <UserStats userUuid={currentUser.uuid} />*/}
       {/*)}*/}
-      <PageSelector currentPage={apiFilters.pageNum} possiblePages={possiblePages} onPageClick={onPageClick} />
+      <PageSelector
+        visible={showPages}
+        currentPage={apiFilters.pageNum}
+        possiblePages={possiblePages}
+        onPageClick={onPageClick}
+      />
       <div className={'app-header__config'}>
         <div className={'app-header__request-container'}>
           <Button onClick={onRequestClick} type={'primary'}>

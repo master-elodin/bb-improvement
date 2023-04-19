@@ -28,6 +28,9 @@ export const appHeaderStyle = {
     padding: '4px 0',
     'text-align': 'center',
   },
+  '.app-header__page-selector--hidden': {
+    opacity: 0,
+  },
   '.app-header__page-selector__page': {
     'font-size': '1.2em',
   },

@@ -141,10 +141,11 @@ function App({ loggedInUserUuid, savedInPlaceFilters }: IProps) {
       />
       <div className={'app__content'}>
         <Drawer
+          isLoading={isLoading}
           open={drawerOpen}
           onOpenChange={setDrawerOpen}
           numVisible={visibleRows.length}
-          numTotal={sortedRows.length}>
+          numTotal={summarized.totalNumResults}>
           <DrawerFiltersInPlace
             inPlaceFilters={inPlaceFilters}
             summarized={summarized}

@@ -2,13 +2,14 @@ import * as React from 'react';
 import { cx } from '../../utils';
 
 interface IProps {
+  isLoading: boolean;
   open: boolean;
   onOpenChange: (newVal: boolean) => void;
   numVisible: number;
   numTotal: number;
 }
 
-const Drawer = ({ open, onOpenChange, numVisible, numTotal, children }: React.PropsWithChildren<IProps>) => {
+const Drawer = ({ isLoading, open, onOpenChange, numVisible, numTotal, children }: React.PropsWithChildren<IProps>) => {
   const onDrawerClick = () => {
     if (!open) {
       onOpenChange(true);
@@ -23,7 +24,7 @@ const Drawer = ({ open, onOpenChange, numVisible, numTotal, children }: React.Pr
           </div>
           {open && <h3 className={'drawer__title'}>Filters</h3>}
         </div>
-        {open && numTotal > 0 && (
+        {!isLoading && open && numTotal > 0 && (
           <div className={'drawer__num-visible'}>
             {numVisible} of {numTotal} visible
           </div>
