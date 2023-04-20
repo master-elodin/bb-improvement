@@ -72,8 +72,6 @@ const AppHeader = ({
 
   useEffect(() => {
     onFilterSelect(currentUser.uuid, 'userUuid');
-    // TODO: don't actually update until requesting data, so approval doesn't change
-    onUserChange(currentUser.uuid);
   }, [currentUser]);
 
   useEffect(() => {
@@ -106,10 +104,9 @@ const AppHeader = ({
   };
 
   // TODO: don't show pages if there's nothing loaded yet?
-  // TODO: disable button on load
   const loadTrigger = (
     <div className={cx('app-header__request-trigger', loadVisible && 'app-header__request-trigger--open')}>
-      <DownArrow />
+      <DownArrow selected={true} />
     </div>
   );
   const onTextChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -165,6 +162,8 @@ const AppHeader = ({
     setLoadVisible(false);
     setShowPages(false);
     await refresh({ ...apiFilters, pageNum: 1 });
+    // only notify main app after refresh so that approvals etc don't get shown incorrectly
+    onUserChange(apiFilters.userUuid);
     setShowPages(true);
   };
 
