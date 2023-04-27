@@ -99,4 +99,15 @@ export const appHeaderStyle = {
     right: '7px',
     top: '2px',
   },
+  '.app-header__dropdown-header': {
+    display: 'flex',
+    'justify-content': 'space-between',
+  },
+  '.app-header__dropdown-title': {
+    'font-weight': 'bold',
+  },
+  '.app-header__clear-btn': {
+    cursor: 'pointer',
+    'padding-right': '4px',
+  },
 };

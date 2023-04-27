@@ -5,11 +5,12 @@ import FilterDropdown from './DrawerFilters/FilterDropdown';
 
 interface IProps {
   loggedInUserUuid: string;
+  selectedUserUuid: string;
   onUserChange: (newUser: IUser) => void;
   allUsersById: UserRecord;
 }
 
-const UserSelector = ({ onUserChange, loggedInUserUuid, allUsersById }: IProps) => {
+const UserSelector = ({ onUserChange, loggedInUserUuid, selectedUserUuid, allUsersById }: IProps) => {
   const userOptions = useMemo(() => {
     const realCurrentUser = allUsersById[loggedInUserUuid];
 
@@ -28,6 +29,7 @@ const UserSelector = ({ onUserChange, loggedInUserUuid, allUsersById }: IProps) 
       onSelect={(newId: string) => onUserChange(allUsersById[newId])}
       options={userOptions}
       allowFilter={true}
+      value={selectedUserUuid}
       defaultValue={loggedInUserUuid}
     />
   );

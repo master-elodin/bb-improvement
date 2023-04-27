@@ -103,6 +103,17 @@ const AppHeader = ({
     });
   };
 
+  const clearFilters = () => {
+    console.log('click?');
+    setApiFilters({
+      role: 'reviewers',
+      state: 'OPEN',
+      userUuid: loggedInUserUuid,
+      pageNum: 1,
+      text: '',
+    });
+  };
+
   // TODO: don't show pages if there's nothing loaded yet?
   const loadTrigger = (
     <div className={cx('app-header__request-trigger', loadVisible && 'app-header__request-trigger--open')}>
@@ -113,20 +124,31 @@ const AppHeader = ({
     onFilterSelect(e.currentTarget.value.replace(/"/g, ''), 'text');
   const loadContent = (
     <div className={'app-header__request-content'}>
-      <UserSelector loggedInUserUuid={loggedInUserUuid} onUserChange={setCurrentUser} allUsersById={allUsersById} />
+      <div className={'app-header__dropdown-header'}>
+        <span className={'app-header__dropdown-title'}>Request Filters</span>
+        <span className={cx('app-header__clear-btn', 'link')} onClick={clearFilters}>
+          clear
+        </span>
+      </div>
+      <UserSelector
+        loggedInUserUuid={loggedInUserUuid}
+        selectedUserUuid={apiFilters.userUuid}
+        onUserChange={setCurrentUser}
+        allUsersById={allUsersById}
+      />
       <FilterDropdown
         label={'Selected user is...'}
         options={prTypeOptions}
+        value={apiFilters.role}
         defaultValue={savedApiFilters.role}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'role')}
-        shadowChanged={false}
       />
       <FilterDropdown
         label={'PR state'}
         options={prStateOptions}
+        value={apiFilters.state}
         defaultValue={savedApiFilters.state}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'state')}
-        shadowChanged={false}
       />
       <div className={'drawer-filters__filter'}>
         <span className={'drawer-filters__label'}>Freeform text</span>
