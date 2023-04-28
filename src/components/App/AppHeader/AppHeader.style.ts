@@ -9,6 +9,7 @@ export const appHeaderStyle = {
     padding: '5px 10px',
   },
   '.app-header__title': {
+    'align-items': 'center',
     display: 'flex',
     'font-size': '1.6em',
   },
@@ -17,6 +18,12 @@ export const appHeaderStyle = {
   },
   '.app-header__title .app-header__title-text': {
     'padding-left': '.5em',
+  },
+  '.app-header__title .app-header__version-number': {
+    'font-size': '.5em',
+    opacity: '.6',
+    'padding-left': '1em',
+    'padding-top': '8px',
   },
   '.app-header__page-selector': {
     'align-items': 'end',

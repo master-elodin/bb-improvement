@@ -32,7 +32,7 @@ export const columns: ICol[] = [
   },
   {
     label: 'Reviewers',
-    getValue: (val: IRow) => val.participants.filter((p) => p.role === 'REVIEWER' && p.approved).length,
+    getValue: (val: IRow) => val.participants.filter((p) => p.approved).length,
     getRendered: (val: IRow, currentUser: IUser) => <Reviewers val={val} currentUser={currentUser} />,
     colClass: 'reviewers-col',
   },

@@ -9,7 +9,7 @@ interface IProps {
 
 const Reviewers = ({ val, currentUser }: IProps) => {
   const reviewers = val.participants
-    .filter((p) => p.role === 'REVIEWER')
+    .filter((p) => p.role === 'REVIEWER' || p.approved)
     .sort((a, b) => {
       if (a.state !== b.state) {
         if (a.state === 'changes_requested') {

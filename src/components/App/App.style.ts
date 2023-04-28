@@ -57,6 +57,7 @@ export const appStyle = {
     height: 'var(--header-height)',
     'justify-content': 'space-around',
     'line-height': 'var(--header-height)',
+    'min-width': '1260px',
     width: '100%',
   },
   '.app__content-header .icon': {
@@ -82,10 +83,11 @@ export const appStyle = {
     'flex-shrink': 1,
     height: 'calc(100% - 20px)',
     'min-width': 0,
+    'overflow-x': 'auto',
     width: '100%',
   },
   '.app__content-rows': {
-    'overflow-x': 'hidden',
+    'min-width': '1260px',
     'overflow-y': 'auto',
     width: '100%',
   },

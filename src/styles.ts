@@ -41,7 +41,7 @@ export const initStyles = () => {
       display: 'flex',
       height: '40px',
       'justify-content': 'space-around',
-      width: '100%',
+      width: 'calc(100% - 16px)',
     },
     '.row:nth-child(odd)': {
       '--color-background-alt': 'var(--color-background)',

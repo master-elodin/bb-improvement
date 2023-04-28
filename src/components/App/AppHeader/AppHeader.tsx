@@ -11,6 +11,8 @@ import FilterDropdown from '../../DrawerFilters/FilterDropdown';
 import UserSelector from '../../UserSelector';
 import { API_FILTER_KEY } from '../../../api';
 
+const buildNumber = process.env.REACT_APP_BB_BUILD_NUMBER ?? '42.0';
+
 const prTypeOptions = [
   { label: 'Reviewing', value: 'reviewers' },
   { label: 'Author', value: 'author' },
@@ -195,6 +197,7 @@ const AppHeader = ({
         <PoopIcon />
         <BucketIcon />
         <span className={'app-header__title-text'}>List Improver</span>
+        <span className={'app-header__version-number'}>v{buildNumber}</span>
       </div>
       {/*{!loading && (*/}
       {/*  <UserStats userUuid={currentUser.uuid} />*/}
