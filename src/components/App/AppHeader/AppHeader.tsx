@@ -142,14 +142,14 @@ const AppHeader = ({
         label={'Selected user is...'}
         options={prTypeOptions}
         value={apiFilters.role}
-        defaultValue={savedApiFilters.role}
+        defaultValue={'reviewers'}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'role')}
       />
       <FilterDropdown
         label={'PR state'}
         options={prStateOptions}
         value={apiFilters.state}
-        defaultValue={savedApiFilters.state}
+        defaultValue={'OPEN'}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'state')}
       />
       <div className={'drawer-filters__filter'}>

@@ -54,9 +54,9 @@ const Dropdown = ({
 
   useEffect(() => {
     if (selectOnOptionsChange || !selected) {
-      setSelected(options.find((o) => o.value === defaultValue));
+      setSelected(options.find((o) => o.value === (value ?? defaultValue)));
     }
-  }, [defaultValue, options]);
+  }, [value, defaultValue, options]);
 
   const onFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => setFilterVal(e.currentTarget.value);
 
