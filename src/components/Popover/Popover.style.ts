@@ -12,6 +12,7 @@ export const popoverStyle = {
     right: 0,
     top: '2em',
     transition: 'opacity 100ms ease-in',
+    'z-index': -1,
   },
   '.popover__content--visible': {
     opacity: 1,
