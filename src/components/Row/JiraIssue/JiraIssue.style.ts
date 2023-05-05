@@ -1,12 +1,11 @@
+import { flexCentered } from '../../../styleUtils';
+
 export const jiraIssueStyle = {
   '.jira-issue': {
-    'align-items': 'center',
-    display: 'flex',
+    ...flexCentered,
     height: '100%',
+    'justify-content': 'flex-start',
     'padding-left': '16px',
-  },
-  '.jira-issue--loading': {
-    'padding-left': '30px',
   },
   '.jira-issue .spinner': {
     border: '2px solid var(--color-disabled)',
@@ -14,16 +13,19 @@ export const jiraIssueStyle = {
     width: '3em',
   },
   '.jira-issue__trigger': {
+    display: 'flex',
     cursor: 'pointer',
   },
   '.jira-issue__key': {
     'padding-right': '4px',
   },
-  // popover
-  '.jira-issue-popover': {
+  '.jira-issue__popover-content': {
+    ...flexCentered,
+    'flex-direction': 'column',
     'white-space': 'pre-wrap',
     width: '300px',
   },
+  // popover
   '.jira-issue-popover:not(:first-child)': {
     'border-top': '1px solid var(--color-border)',
     'margin-top': '12px',
@@ -36,7 +38,7 @@ export const jiraIssueStyle = {
     'vertical-align': 'bottom',
   },
   '.jira-issue-popover p a': {
-    padding: '0 4px 0 8px',
+    padding: '0 8px',
   },
   '.jira-issue-popover__assignee': {
     display: 'flex',

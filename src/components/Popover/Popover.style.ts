@@ -6,6 +6,7 @@ export const popoverStyle = {
     border: '1px solid var(--color-border)',
     'background-color': 'var(--color-background-alt)',
     'border-radius': '5px',
+    'box-shadow': 'var(--shadow-basic)',
     padding: '8px',
     position: 'absolute',
     right: 0,

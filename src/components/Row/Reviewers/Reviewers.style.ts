@@ -1,7 +1,9 @@
 export const reviewersStyle = {
   '.reviewers__root': {
+    'background-color': '',
     height: '100%',
     position: 'relative',
+    overflow: 'hidden',
     width: '100%',
   },
   '.reviewers__avatar': {
@@ -17,8 +19,8 @@ export const reviewersStyle = {
     'border-radius': '12px',
   },
   '.reviewers__fade': {
-    background: 'linear-gradient(to right, transparent 5%, var(--color-background-alt)), ' +
-      'linear-gradient(to right, transparent 5%, var(--color-background-alt))',
+    background: 'linear-gradient(to right, transparent 5%, var(--color-row-background)), ' +
+      'linear-gradient(to right, transparent 5%, var(--color-row-background))',
     height: '100%',
     position: 'absolute',
     right: 0,

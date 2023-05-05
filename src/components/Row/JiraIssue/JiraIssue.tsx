@@ -3,7 +3,6 @@ import { IJiraData } from '../../../types';
 import { useMemo, useState } from 'react';
 import { getJiraIssues } from '../../../api';
 import Spinner from '../../Spinner/Spinner';
-import { cx } from '../../../utils';
 import Popover from '../../Popover/Popover';
 import { DownArrow } from '../../Icons/Icons';
 import JiraIssuePopover from './JiraIssuePopover';
@@ -40,16 +39,16 @@ const JiraIssue = ({ prId }: IProps) => {
   }, [issues, isLoading, hasLoaded]);
 
   return (
-    <div className={cx('jira-issue', isLoading && 'jira-issue--loading')}>
+    <div className={'jira-issue'}>
       <Popover
         trigger={
-          <>
-            <span className={'jira-issue__key jira-issue__trigger'}>View info</span>
+          <div className={'jira-issue__trigger'}>
+            <div className={'jira-issue__key'}>View info</div>
             <DownArrow />
-          </>
+          </div>
         }
         onVisibleChange={onPopoverVisibleChanged}
-        content={popoverContent}
+        content={<div className={'jira-issue__popover-content'}>{popoverContent}</div>}
       />
     </div>
   );

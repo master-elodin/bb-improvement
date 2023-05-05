@@ -1,3 +1,5 @@
+import { flexCentered } from '../../styleUtils';
+
 const lightModeVars = {
   '--color-background': '#F5F6FF',
   '--color-background-alt': '#FCFDFF',
@@ -5,6 +7,7 @@ const lightModeVars = {
   '--color-text': '#0A1E47',
   '--color-link': '#3764eb',
   '--color-border': '#0A1E47',
+  '--color-box-shadow': 'rgba(0, 0, 0, 0.35)',
   '--color-input-background': '#FCFDFF',
   '--color-input-icon': '#0A1E47',
   '--color-highlight': '#ff1ff8',
@@ -12,10 +15,12 @@ const lightModeVars = {
   '--color-btn-danger': '#d82f2c',
   '--dropdown-border-radius': '3px',
   '--shadow-filter-highlight': '0 0 7px var(--color-highlight)',
+  '--shadow-basic': 'var(--color-box-shadow) 3px 6px 6px, var(--color-box-shadow) -3px 3px 5px',
 };
 const darkModeVars = {
   '--color-background': '#000a1f',
   '--color-background-alt': '#0A1429',
+  '--color-box-shadow': 'rgba(255, 255, 255, 0.35)',
   '--color-disabled': '#8597A9',
   '--color-text': '#ecf0f1',
   '--color-link': '#5271D1',
@@ -59,9 +64,7 @@ export const appStyle = {
     '--header-height': '30px',
   },
   '.app__content-loading-container': {
-    'align-items': 'center',
-    display: 'flex',
-    'justify-content': 'center',
+    ...flexCentered,
     height: '100%',
     width: '100%',
   },

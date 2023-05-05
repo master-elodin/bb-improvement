@@ -1,9 +1,9 @@
+import { flexCentered } from '../../styleUtils';
+
 export const modalStyle = {
   '.modal__root': {
-    'align-items': 'center',
-    display: 'flex',
+    ...flexCentered,
     height: '100vh',
-    'justify-content': 'center',
     left: 0,
     position: 'fixed',
     top: 0,
@@ -21,7 +21,7 @@ export const modalStyle = {
   '.modal__body': {
     'background-color': 'var(--color-background)',
     'border-radius': '5px',
-    'box-shadow': 'var(--shadow-elevation-medium)',
+    'box-shadow': 'var(--shadow-basic)',
     display: 'flex',
     'flex-direction': 'column',
     height: '400px',

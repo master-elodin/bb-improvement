@@ -1,3 +1,5 @@
+import { flexCentered } from '../../../styleUtils';
+
 export const appHeaderStyle = {
   '.app-header__root': {
     'align-items': 'center',
@@ -26,11 +28,10 @@ export const appHeaderStyle = {
     'padding-top': '8px',
   },
   '.app-header__page-selector': {
+    ...flexCentered,
     'align-items': 'end',
-    display: 'flex',
     'flex-grow': 1,
     gap: '14px',
-    'justify-content': 'center',
     height: '100%',
     padding: '4px 0',
     'text-align': 'center',
@@ -76,14 +77,12 @@ export const appHeaderStyle = {
     display: 'flex',
   },
   '.app-header__request-trigger': {
-    'align-items': 'center',
+    ...flexCentered,
     'background-color': 'var(--color-btn-primary)',
     'border-left': '1px solid white',
     'border-radius': '0 3px 3px 0',
     color: 'white',
     cursor: 'pointer',
-    display: 'flex',
-    'justify-content': 'center',
     'margin-left': '-2px',
     padding: '4px 0',
     width: '27px',

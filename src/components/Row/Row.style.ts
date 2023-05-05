@@ -1,3 +1,5 @@
+import { flexCentered } from '../../styleUtils';
+
 export const rowStyle = {
   '.row': {
     'background-color': 'var(--color-background-alt)',
@@ -8,16 +10,15 @@ export const rowStyle = {
     width: 'calc(100% - 16px)',
   },
   '.row:nth-child(odd)': {
-    '--color-background-alt': 'var(--color-background)',
+    '--color-row-background': 'var(--color-background)',
+    'background-color': 'var(--color-background)',
   },
   '.tasks-col': {
     width: '100px',
   },
   '.row__number': {
-    'align-items': 'center',
-    display: 'flex',
+    ...flexCentered,
     height: '100%',
-    'justify-content': 'center',
   },
   '.row__build-status': {
     'align-items': 'center',
