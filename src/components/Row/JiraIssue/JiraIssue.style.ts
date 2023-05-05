@@ -3,6 +3,7 @@ export const jiraIssueStyle = {
     'align-items': 'center',
     display: 'flex',
     height: '100%',
+    'padding-left': '16px',
   },
   '.jira-issue--loading': {
     'padding-left': '30px',

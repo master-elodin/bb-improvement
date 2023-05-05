@@ -1,54 +1,55 @@
 import * as React from 'react';
-import { ICol, IRow, IUser } from '../types';
+import { ICol, IRow, IUser } from '../../types';
 import RowTitle from './RowTitle/RowTitle';
 import LastActivity from './LastActivity';
 import Reviewers from './Reviewers/Reviewers';
 import BuildStatus from './BuildStatus/BuildStatus';
-import JiraIssue from './Row/JiraIssue/JiraIssue';
+import JiraIssue from './JiraIssue/JiraIssue';
+import RowNumber from './RowNumber';
 
 export const columns: ICol[] = [
   {
+    id: 'name',
     label: 'Name',
     getValue: (val: IRow) => val.title,
     getRendered: (val: IRow) => <RowTitle val={val} />,
-    colClass: 'name-col',
   },
   {
+    id: 'jira',
     label: 'Jira',
-    getValue: (val: IRow) => -1,
+    getValue: () => -1,
     getRendered: (val: IRow) => <JiraIssue prId={val.id} />,
-    colClass: 'jira-col',
     hideSort: true,
   },
   {
+    id: 'tasks',
     label: 'Tasks',
     getValue: (val: IRow) => val.task_count,
-    getRendered: (val: IRow) => <span>{val.task_count || ''}</span>,
-    colClass: 'tasks-col',
+    getRendered: (val: IRow) => <RowNumber value={val.task_count} />,
   },
   {
+    id: 'comments',
     label: 'Comments',
     getValue: (val: IRow) => val.comment_count,
-    getRendered: (val: IRow) => <span>{val.comment_count || ''}</span>,
-    colClass: 'comments-col',
+    getRendered: (val: IRow) => <RowNumber value={val.comment_count} />,
   },
   {
+    id: 'build',
     label: 'Build',
     getValue: (val: IRow) => (val.buildStatus?.state === 'SUCCESSFUL' ? 1 : 0),
     getRendered: (val: IRow) => <BuildStatus val={val} />,
-    colClass: 'build-col',
   },
   {
+    id: 'reviewers',
     label: 'Reviewers',
     getValue: (val: IRow) => val.participants.filter((p) => p.approved).length,
     getRendered: (val: IRow, currentUser: IUser) => <Reviewers val={val} currentUser={currentUser} />,
-    colClass: 'reviewers-col',
   },
   {
+    id: 'activity',
     label: 'Last activity',
     getValue: (val: IRow) => val.updated_on,
     getRendered: (val: IRow) => <LastActivity val={val} />,
-    colClass: 'activity-col',
   },
 ];
 
@@ -61,8 +62,8 @@ const Row = ({ val, currentUser }: IProps) => {
   return (
     <div className={'row'}>
       {columns.map((col) => (
-        <div key={col.label} className={`row-col ${col.colClass}`}>
-          {(col.getRendered ?? col.getValue)(val, currentUser)}
+        <div key={col.label} className={`row-col`} style={{width: `var(--width-${col.id})`}}>
+          {col.getRendered (val, currentUser)}
         </div>
       ))}
     </div>

@@ -1,15 +1,16 @@
+import { overflowEllipsis } from '../../../styleUtils';
+
 export const rowTitleStyles = {
   '.row-title': {
     display: 'flex',
-    'flex-direction': 'column',
-    'padding-left': '35px',
-    position: 'relative',
+    gap: '12px',
+  },
+  '.row-title__text': {
+    overflow: 'hidden',
   },
   '.row-title__pr-name': {
-    overflow: 'hidden',
+    ...overflowEllipsis,
     'padding-bottom': '3px',
-    'text-overflow': 'ellipsis',
-    'white-space': 'nowrap',
   },
   '.row-title img': {
     'clip-path': 'circle()',
@@ -17,11 +18,9 @@ export const rowTitleStyles = {
     width: '30px',
     border: '1px solid black',
     'border-radius': '15px',
-    position: 'absolute',
-    left: 0,
-    top: '4px',
   },
   '.row-title__extra-info': {
+    ...overflowEllipsis,
     'font-size': '0.8em',
   },
   '.row-title__extra-info a': {

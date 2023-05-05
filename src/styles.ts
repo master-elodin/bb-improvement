@@ -1,11 +1,11 @@
 import { InlineStyle } from './inlineStyles';
-import { rowTitleStyles } from './components/RowTitle/RowTitle.style';
+import { rowTitleStyles } from './components/Row/RowTitle/RowTitle.style';
 import { drawerFiltersStyle } from './components/DrawerFilters/DrawerFilters.style';
 import { dropdownStyle } from './components/Dropdown/Dropdown-style';
 import { buttonStyle } from './components/Button/Button-style';
 import { iconsStyle } from './components/Icons/Icons.style';
 import { spinnerStyle } from './components/Spinner/Spinner.style';
-import { reviewersStyle } from './components/Reviewers/Reviewers.style';
+import { reviewersStyle } from './components/Row/Reviewers/Reviewers.style';
 import { appStyle } from './components/App/App.style';
 import { drawerStyle } from './components/Drawer/Drawer.style';
 import { darkModeToggleStyle } from './components/App/DarkModeToggle.style';
@@ -14,8 +14,9 @@ import { appHeaderStyle } from './components/App/AppHeader/AppHeader.style';
 import { modalStyle } from './components/Modal/Modal.style';
 import { savedRegexDropdownStyle } from './components/DrawerFilters/RegexFilter/SavedRegexDropdown.style';
 import { popoverStyle } from './components/Popover/Popover.style';
-import { buildStatusStyle } from './components/BuildStatus/BuildStatus.style';
+import { buildStatusStyle } from './components/Row/BuildStatus/BuildStatus.style';
 import { jiraIssueStyle } from './components/Row/JiraIssue/JiraIssue.style';
+import { rowStyle } from './components/Row/Row.style';
 
 export const initStyles = () => {
   InlineStyle({
@@ -36,73 +37,6 @@ export const initStyles = () => {
       height: '24px',
       cursor: 'pointer',
     },
-    '.row': {
-      'background-color': 'var(--color-background-alt)',
-      padding: '4px 8px',
-      display: 'flex',
-      height: '40px',
-      'justify-content': 'space-around',
-      width: 'calc(100% - 16px)',
-    },
-    '.row:nth-child(odd)': {
-      '--color-background-alt': 'var(--color-background)',
-    },
-    '.row-col': {
-      overflow: 'hidden',
-      'text-overflow': 'ellipsis',
-      'white-space': 'nowrap',
-    },
-    '.name-col': {
-      'min-width': '720px',
-      width: '60%',
-    },
-    '.row-col.jira-col': {
-      overflow: 'unset',
-      width: '130px',
-    },
-    '.tasks-col': {
-      width: '100px',
-    },
-    '.row-col.tasks-col': {
-      'line-height': '40px;',
-    },
-    '.row-col.tasks-col span': {
-      'padding-left': '12px;',
-    },
-    '.comments-col': {
-      width: '130px',
-    },
-    '.row-col.comments-col': {
-      'line-height': '40px;',
-    },
-    '.row-col.comments-col span': {
-      'padding-left': '12px;',
-    },
-    '.build-col': {
-      width: '100px',
-    },
-    '.row .build-col': {
-      'align-items': 'center',
-      display: 'flex',
-      'justify-content': 'center',
-    },
-    '.reviewers-col': {
-      width: '180px',
-    },
-    '.row-col.reviewers-col': {
-      position: 'relative',
-    },
-    '.activity-col': {
-      width: '190px',
-    },
-    '.row-col.activity-col': {
-      display: 'flex',
-      'flex-direction': 'column',
-      'padding-top': '4px',
-    },
-    '.last-activity': {
-      'padding-left': '8px',
-    },
     ...appStyle,
     ...appHeaderStyle,
     ...buildStatusStyle,
@@ -117,6 +51,7 @@ export const initStyles = () => {
     ...popoverStyle,
     ...regexFilterStyle,
     ...reviewersStyle,
+    ...rowStyle,
     ...rowTitleStyles,
     ...savedRegexDropdownStyle,
     ...spinnerStyle,

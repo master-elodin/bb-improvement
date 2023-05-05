@@ -17,8 +17,6 @@ const JiraIssue = ({ prId }: IProps) => {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [issues, setIssues] = useState<IJiraData[]>([]);
 
-  // TODO: header doesn't line up
-
   const onPopoverVisibleChanged = async (newVal: boolean) => {
     if (newVal && !hasLoaded) {
       setIsLoading(true);

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { formatDate, msToTime } from '../utils';
-import { IRow } from '../types';
+import { formatDate, msToTime } from '../../utils';
+import { IRow } from '../../types';
 
 interface IProps {
   val: IRow;
@@ -8,7 +8,7 @@ interface IProps {
 
 const LastActivity = ({ val }: IProps) => {
   return (
-    <div className={'last-activity'}>
+    <div className={'row__last-activity'}>
       <div style={{ fontSize: '.9em' }} title={formatDate(val.updated_on)}>
         {msToTime(Date.now() - new Date(val.updated_on).getTime())} ago
       </div>

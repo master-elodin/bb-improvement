@@ -1,5 +1,5 @@
-import { ApprovedIcon, RequestChangesIcon } from '../../img/icons';
-import { IRow, IUser } from '../../types';
+import { ApprovedIcon, RequestChangesIcon } from '../../../img/icons';
+import { IRow, IUser } from '../../../types';
 import * as React from 'react';
 
 interface IProps {

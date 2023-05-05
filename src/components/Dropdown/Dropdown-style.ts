@@ -1,3 +1,5 @@
+import { overflowEllipsis } from '../../styleUtils';
+
 export const dropdownStyle = {
   '.dropdown-root': {
     'border-radius': 'var(--dropdown-border-radius)',
@@ -46,12 +48,11 @@ export const dropdownStyle = {
     position: 'relative',
   },
   '.dropdown-input input': {
+    ...overflowEllipsis,
     'background-color': 'var(--color-input-background)',
     border: '1px solid var(--color-border)',
     'border-radius': 'var(--dropdown-border-radius)',
-    overflow: 'hidden',
     padding: '3px 20px 3px 8px',
-    'text-overflow': 'ellipsis',
     width: '100%',
   },
   '.dropdown-input input:read-only': {
@@ -71,9 +72,8 @@ export const dropdownStyle = {
   '.dropdown-option': {
     'flex-shrink': 0,
     padding: '2px 8px',
+    ...overflowEllipsis,
     'overflow-x': 'hidden',
-    'text-overflow': 'ellipsis',
-    'white-space': 'nowrap',
   },
   '.dropdown-option:not(.dropdown-option--no-results):hover': {
     'background-color': 'var(--color-background)',

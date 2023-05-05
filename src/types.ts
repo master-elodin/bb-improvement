@@ -93,10 +93,10 @@ export interface IRow extends IPullRequest {
 }
 
 export interface ICol {
+  id: string;
   getValue: (val: IRow) => string | number;
-  getRendered?: (val: IRow, currentUser: IUser) => React.ReactNode;
+  getRendered: (val: IRow, currentUser: IUser) => React.ReactNode;
   label: string;
-  colClass?: string;
   hideSort?: boolean;
 }
 

@@ -26,9 +26,23 @@ const darkModeVars = {
     '0 0 7px var(--color-highlight), 0 1px 6px var(--color-highlight), 0 1px 6px var(--color-highlight)',
 };
 
+const colWidthsFixed = {
+  '--width-jira': '100px',
+  '--width-tasks': '100px',
+  '--width-comments': '130px',
+  '--width-build': '100px',
+  '--width-reviewers': '180px',
+  '--width-activity': '190px',
+}
+const colWidths = {
+  '--width-name': `calc(100% - ${Object.keys(colWidthsFixed).map(key => `var(${key})`).join(' - ')})`,
+  ...colWidthsFixed,
+}
+
 export const appStyle = {
   '.app__root': {
     ...lightModeVars,
+    ...colWidths,
     'background-color': 'var(--color-background)',
     color: 'var(--color-text)',
     height: '100vh',

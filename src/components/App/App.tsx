@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { IInPlaceFilters, IRow } from '../../types';
-import Row, { columns } from '../Row';
+import Row, { columns } from '../Row/Row';
 import { DARK_MODE_KEY, DRAWER_KEY, IN_PLACE_FILTER_KEY, RESULTS_PER_PAGE } from '../../api';
 import { DownArrow, UpArrow } from '../Icons/Icons';
 import DrawerFiltersInPlace from '../DrawerFilters/DrawerFiltersInPlace';
@@ -157,7 +157,7 @@ function App({ loggedInUserUuid, savedInPlaceFilters }: IProps) {
         <div className={'app__content-body'}>
           <div className={'app__content-header'}>
             {columns.map((col) => (
-              <div key={col.label} className={`app__content-header-col ${col.colClass}`}>
+              <div key={col.label} className={`app__content-header-col`} style={{width: `var(--width-${col.id})`}}>
                 <span className={'app__content-header-label'}>{col.label}</span>
                 {!col.hideSort && (
                   <div className={'app__content-header-col-actions'}>

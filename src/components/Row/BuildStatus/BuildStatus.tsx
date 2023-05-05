@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { IRow } from '../../types';
-import { ApprovedIcon, FailedIcon } from '../../img/icons';
-import Spinner from '../Spinner/Spinner';
+import { IRow } from '../../../types';
+import { ApprovedIcon, FailedIcon } from '../../../img/icons';
+import Spinner from '../../Spinner/Spinner';
 
 interface IProps {
   val: IRow;
@@ -12,7 +12,7 @@ const BuildStatus = ({ val }: IProps) => {
     return null;
   }
   // TODO: better time
-  return (
+  return (<div className={'row__build-status'}>
     <a href={val.buildStatus.commit_status.url} target={'_blank'} rel={'noreferrer'}>
       <span
         title={`${val.buildStatus.commit_status.description} (${val.buildStatus.commit_status.updated_on})`}>
@@ -21,6 +21,7 @@ const BuildStatus = ({ val }: IProps) => {
         {val.buildStatus.state === 'INPROGRESS' && <Spinner size={'5px'} className={'build-status__in-progress'} />}
       </span>
     </a>
+    </div>
   );
 };
 
