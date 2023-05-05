@@ -1,5 +1,5 @@
-import { allUsers as mockUsers, rawData, statuses } from './data';
-import { IPullRequestResponse, IAPIFilters, IRow, IStatusResponse, IUser } from './types';
+import { allUsers as mockUsers, jiraIssues, rawData, statuses } from './data';
+import { IPullRequestResponse, IAPIFilters, IRow, IStatusResponse, IUser, IJiraData } from './types';
 
 export const API_FILTER_KEY = 'bb-script-refresh-filters';
 export const IN_PLACE_FILTER_KEY = 'bb-script-in-place-filters';
@@ -110,4 +110,23 @@ export const getAllUsers = async (): Promise<IUser[]> => {
     allUsers.push(...JSON.parse(fallbackMembers ?? '[]'));
   }
   return allUsers;
+};
+
+export const getJiraIssues = async (prId: number): Promise<IJiraData[]> => {
+  if (!isProd) {
+    return jiraIssues.values!.map((v) => v.issue) as IJiraData[];
+  }
+
+  try {
+    const res = await fetch(
+      // TODO: handle multiple repos in same workspace
+      `https://bitbucket.org/!api/internal/repositories/${workspace}/${workspace}/pullrequests/${prId}/jira/issues?page=1`,
+    );
+    const values = (await res.json()).values as any[];
+    return values.map((v) => v.issue);
+    //
+  } catch (e) {
+    console.error('Failed to get jira issues for ', prId);
+  }
+  return [];
 };

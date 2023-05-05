@@ -97,6 +97,7 @@ export interface ICol {
   getRendered?: (val: IRow, currentUser: IUser) => React.ReactNode;
   label: string;
   colClass?: string;
+  hideSort?: boolean;
 }
 
 export interface IAPIFilters {
@@ -118,8 +119,6 @@ export interface IInPlaceFilters {
   build: 'any' | BuildState;
 }
 
-export interface IRowFilters extends IAPIFilters, IInPlaceFilters {}
-
 export interface ISavedRegex {
   key: string;
   name: string;
@@ -138,4 +137,26 @@ export interface IPRSummarized {
   authors: IOption[];
   pageNum: number;
   totalNumResults: number;
+}
+
+// TODO: remove real data
+export interface IJiraData {
+  key: string; // 'CRIBL-16175';
+  summary: string; // 'Create util for input autofocus hack';
+  issueType: {
+    name: string; // 'Story';
+    iconUrl: string; // 'https://taktak.atlassian.net/images/icons/issuetypes/story.svg';
+  };
+  status: {
+    name: string; // 'In Review';
+  };
+  site: {
+    cloudUrl: string;
+  }
+  assignee: {
+    displayName: string; // 'Tim VanDoren';
+    avatarUrls: {
+      '128x128': 'https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/5ff31b56849d640111331a31/8d8fb9af-35cb-4ae7-b9aa-2a9260446957/128';
+    };
+  };
 }

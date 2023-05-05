@@ -159,12 +159,14 @@ function App({ loggedInUserUuid, savedInPlaceFilters }: IProps) {
             {columns.map((col) => (
               <div key={col.label} className={`app__content-header-col ${col.colClass}`}>
                 <span className={'app__content-header-label'}>{col.label}</span>
-                <div className={'app__content-header-col-actions'}>
-                  <SortArrow
-                    onClick={() => onHeaderClick(col.label)}
-                    sort={sortType?.substring(col.label.length + 1) as any}
-                  />
-                </div>
+                {!col.hideSort && (
+                  <div className={'app__content-header-col-actions'}>
+                    <SortArrow
+                      onClick={() => onHeaderClick(col.label)}
+                      sort={sortType?.substring(col.label.length + 1) as any}
+                    />
+                  </div>
+                )}
               </div>
             ))}
           </div>

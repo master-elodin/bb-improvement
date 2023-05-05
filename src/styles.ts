@@ -4,7 +4,6 @@ import { drawerFiltersStyle } from './components/DrawerFilters/DrawerFilters.sty
 import { dropdownStyle } from './components/Dropdown/Dropdown-style';
 import { buttonStyle } from './components/Button/Button-style';
 import { iconsStyle } from './components/Icons/Icons.style';
-import { userStatsStyle } from './components/UserStats/UserStats.style';
 import { spinnerStyle } from './components/Spinner/Spinner.style';
 import { reviewersStyle } from './components/Reviewers/Reviewers.style';
 import { appStyle } from './components/App/App.style';
@@ -16,6 +15,7 @@ import { modalStyle } from './components/Modal/Modal.style';
 import { savedRegexDropdownStyle } from './components/DrawerFilters/RegexFilter/SavedRegexDropdown.style';
 import { popoverStyle } from './components/Popover/Popover.style';
 import { buildStatusStyle } from './components/BuildStatus/BuildStatus.style';
+import { jiraIssueStyle } from './components/Row/JiraIssue/JiraIssue.style';
 
 export const initStyles = () => {
   InlineStyle({
@@ -53,8 +53,12 @@ export const initStyles = () => {
       'white-space': 'nowrap',
     },
     '.name-col': {
-      'min-width': '750px',
-      width: '65%',
+      'min-width': '720px',
+      width: '60%',
+    },
+    '.row-col.jira-col': {
+      overflow: 'unset',
+      width: '130px',
     },
     '.tasks-col': {
       width: '100px',
@@ -108,6 +112,7 @@ export const initStyles = () => {
     ...drawerStyle,
     ...dropdownStyle,
     ...iconsStyle,
+    ...jiraIssueStyle,
     ...modalStyle,
     ...popoverStyle,
     ...regexFilterStyle,
@@ -115,6 +120,5 @@ export const initStyles = () => {
     ...rowTitleStyles,
     ...savedRegexDropdownStyle,
     ...spinnerStyle,
-    ...userStatsStyle,
   });
 };

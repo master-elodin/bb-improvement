@@ -32,7 +32,6 @@ export const appStyle = {
     'background-color': 'var(--color-background)',
     color: 'var(--color-text)',
     height: '100vh',
-    overflow: 'hidden',
     width: '100vw',
   },
   '.app__root.app__root--dark': {
@@ -87,6 +86,7 @@ export const appStyle = {
     width: '100%',
   },
   '.app__content-rows': {
+    height: 'calc(100% - var(--header-height))',
     'min-width': '1260px',
     'overflow-y': 'auto',
     width: '100%',

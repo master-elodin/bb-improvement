@@ -36,7 +36,7 @@ const Popover = ({ trigger, content, visible, onVisibleChange }: IProps) => {
       <div className={'popover__trigger'} onClick={handleClick}>
         {trigger}
       </div>
-      <div className={cx('popover__content', show && 'popover__content--visible')}>{content}</div>
+      {show && <div className={'popover__content'}>{content}</div>}
     </div>
   );
 };

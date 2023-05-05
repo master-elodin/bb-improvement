@@ -6,16 +6,11 @@ export const popoverStyle = {
     border: '1px solid var(--color-border)',
     'background-color': 'var(--color-background-alt)',
     'border-radius': '5px',
-    opacity: '0',
     padding: '8px',
     position: 'absolute',
     right: 0,
     top: '2em',
     transition: 'opacity 100ms ease-in',
-    'z-index': -1,
-  },
-  '.popover__content--visible': {
-    opacity: 1,
     'z-index': 2,
   },
 };

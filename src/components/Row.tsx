@@ -4,6 +4,7 @@ import RowTitle from './RowTitle/RowTitle';
 import LastActivity from './LastActivity';
 import Reviewers from './Reviewers/Reviewers';
 import BuildStatus from './BuildStatus/BuildStatus';
+import JiraIssue from './Row/JiraIssue/JiraIssue';
 
 export const columns: ICol[] = [
   {
@@ -11,6 +12,13 @@ export const columns: ICol[] = [
     getValue: (val: IRow) => val.title,
     getRendered: (val: IRow) => <RowTitle val={val} />,
     colClass: 'name-col',
+  },
+  {
+    label: 'Jira',
+    getValue: (val: IRow) => -1,
+    getRendered: (val: IRow) => <JiraIssue prId={val.id} />,
+    colClass: 'jira-col',
+    hideSort: true,
   },
   {
     label: 'Tasks',
