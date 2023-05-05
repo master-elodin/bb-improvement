@@ -15,6 +15,7 @@ import { appHeaderStyle } from './components/App/AppHeader/AppHeader.style';
 import { modalStyle } from './components/Modal/Modal.style';
 import { savedRegexDropdownStyle } from './components/DrawerFilters/RegexFilter/SavedRegexDropdown.style';
 import { popoverStyle } from './components/Popover/Popover.style';
+import { buildStatusStyle } from './components/BuildStatus/BuildStatus.style';
 
 export const initStyles = () => {
   InlineStyle({
@@ -77,12 +78,9 @@ export const initStyles = () => {
       width: '100px',
     },
     '.row .build-col': {
-      position: 'relative',
-    },
-    '.row .build-col svg': {
-      left: 'calc(50% - 20px)',
-      position: 'absolute',
-      top: '10px',
+      'align-items': 'center',
+      display: 'flex',
+      'justify-content': 'center',
     },
     '.reviewers-col': {
       width: '180px',
@@ -103,6 +101,7 @@ export const initStyles = () => {
     },
     ...appStyle,
     ...appHeaderStyle,
+    ...buildStatusStyle,
     ...buttonStyle,
     ...darkModeToggleStyle,
     ...drawerFiltersStyle,

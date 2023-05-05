@@ -3,7 +3,7 @@ import { ICol, IRow, IUser } from '../types';
 import RowTitle from './RowTitle/RowTitle';
 import LastActivity from './LastActivity';
 import Reviewers from './Reviewers/Reviewers';
-import BuildStatus from './BuildStatus';
+import BuildStatus from './BuildStatus/BuildStatus';
 
 export const columns: ICol[] = [
   {

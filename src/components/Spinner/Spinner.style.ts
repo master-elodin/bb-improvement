@@ -1,10 +1,10 @@
 export const spinnerStyle = {
   '.spinner': {
+    animation: 'rotate 1s linear infinite',
     border: '6px solid var(--color-disabled)',
     'border-radius': '50%',
-    width: '1em',
+    'border-top-color': 'var(--color-text) !important',
     height: '1em',
-    'border-top-color': 'var(--color-text)',
-    animation: 'rotate 1s linear infinite',
+    width: '1em',
   },
 };
