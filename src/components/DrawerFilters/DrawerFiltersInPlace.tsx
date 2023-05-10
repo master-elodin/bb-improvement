@@ -75,21 +75,21 @@ const DrawerFiltersInPlace = ({ inPlaceFilters, summarized, onFilterSelect, clea
       <FilterDropdown
         label={'I have...'}
         options={needsApprovalOptions}
-        defaultValue={inPlaceFilters.needsReview}
+        value={inPlaceFilters.needsReview}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'needsReview')}
         disabled={isLoading}
       />
       <FilterDropdown
         label={'Open tasks'}
         options={taskOptions}
-        defaultValue={inPlaceFilters.tasks}
+        value={inPlaceFilters.tasks}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'tasks')}
         disabled={isLoading}
       />
       <FilterDropdown
         label={'Target'}
         options={targets}
-        defaultValue={inPlaceFilters.branch}
+        value={inPlaceFilters.branch}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'branch')}
         allowFilter={true}
         disabled={isLoading}
@@ -97,14 +97,14 @@ const DrawerFiltersInPlace = ({ inPlaceFilters, summarized, onFilterSelect, clea
       <FilterDropdown
         label={'Repository'}
         options={repos}
-        defaultValue={inPlaceFilters.repo}
+        value={inPlaceFilters.repo}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'repo')}
         disabled={isLoading}
       />
       <FilterDropdown
         label={'Build status'}
         options={buildOptions}
-        defaultValue={inPlaceFilters.build}
+        value={inPlaceFilters.build}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'build')}
         disabled={isLoading}
       />

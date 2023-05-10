@@ -18,7 +18,7 @@ export interface IProps {
 
 const Dropdown = ({
   options,
-  defaultValue,
+  defaultValue = options[0]?.value,
   value,
   onSelect,
   allowFilter = false,
