@@ -30,3 +30,10 @@ export const statuses = {
 export const allUsers = {
   values: [],
 };
+
+export const jiraIssues = {
+  size: 1,
+  page: 1,
+  pagelen: 50,
+  values: []
+};

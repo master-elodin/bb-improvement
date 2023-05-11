@@ -10,8 +10,9 @@ import { IAPIFilters, IUser, UserRecord } from '../../../types';
 import FilterDropdown from '../../DrawerFilters/FilterDropdown';
 import UserSelector from '../../UserSelector';
 import { API_FILTER_KEY } from '../../../api';
+import Version from "../../../../package.json";
 
-const buildNumber = process.env.REACT_APP_BB_BUILD_NUMBER ?? '42.0';
+const buildNumber = Version.version ?? '42.0';
 
 const prTypeOptions = [
   { label: 'Reviewing', value: 'reviewers' },
@@ -79,6 +80,19 @@ const AppHeader = ({
   useEffect(() => {
     saveFilters(apiFilters);
   }, [apiFilters]);
+
+  // Refresh/reload data when 'r' key is pressed
+  useEffect(() => {
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'r' && !document.querySelector('input:focus')) {
+        refresh({ ...apiFilters, pageNum: 1 });
+      }
+    };
+    document.addEventListener('keyup', onKeyUp);
+    return () => {
+      document.removeEventListener('keyup', onKeyUp);
+    };
+  }, [refresh, apiFilters]);
 
   const onFilterSelect = (newVal: string, filterType: keyof IAPIFilters) => {
     if (apiFilters[filterType] === newVal) {
