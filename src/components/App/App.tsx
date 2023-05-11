@@ -62,7 +62,7 @@ function App({ loggedInUserUuid, savedInPlaceFilters }: IProps) {
 
   useEffect(() => {
     const onKeyUp = (e: KeyboardEvent) => {
-      if (e.key === '[') {
+      if (e.key === '[' && !document.querySelector('input:focus')) {
         setDrawerOpen(!drawerOpen);
       }
     };

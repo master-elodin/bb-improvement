@@ -10,9 +10,9 @@ import { IAPIFilters, IUser, UserRecord } from '../../../types';
 import FilterDropdown from '../../DrawerFilters/FilterDropdown';
 import UserSelector from '../../UserSelector';
 import { API_FILTER_KEY } from '../../../api';
-import { version } from '../../../../package.json';
+import Version from "../../../../package.json";
 
-const buildNumber = version ?? '42.0';
+const buildNumber = Version.version ?? '42.0';
 
 const prTypeOptions = [
   { label: 'Reviewing', value: 'reviewers' },
@@ -84,7 +84,7 @@ const AppHeader = ({
   // Refresh/reload data when 'r' key is pressed
   useEffect(() => {
     const onKeyUp = (e: KeyboardEvent) => {
-      if (e.key === 'r') {
+      if (e.key === 'r' && !document.querySelector('input:focus')) {
         refresh({ ...apiFilters, pageNum: 1 });
       }
     };

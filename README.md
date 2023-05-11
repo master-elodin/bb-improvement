@@ -14,7 +14,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `REACT_APP_BB_WORKSPACE=myworkspace npm run build`
+### `REACT_APP_BB_WORKSPACE=cribl npm run build`
 
 After the build is complete, add the script (located at `build/static/js/main.{rand}.js`) to the Tampermonkey script to be able to replace the Bitbucket PR page.
 
