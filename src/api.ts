@@ -42,11 +42,13 @@ export const getPullRequests = async (filters: IAPIFilters): Promise<IPullReques
     };
   }
   // TODO: use filter for what repo
-  const reviewerQ = filters.role === 'all' ? '' : ` AND ${filters.role}.uuid="${filters.userUuid}"`;
-  const textQ = filters.text ? ` AND (description~"${filters.text}" OR title~"${filters.text}")` : '';
+  const stateQ = !filters.state ? '' : `state="${filters.state}"`;
+  const reviewerQ = filters.role === 'all' ? '' : `${filters.role}.uuid="${filters.userUuid}"`;
+  const textQ = filters.text ? `(description~"${filters.text}" OR title~"${filters.text}")` : '';
+  const q = [stateQ, reviewerQ, textQ].filter(Boolean).join(' AND ');
   const params: Record<string, string> = {
     ...reviewingPRs,
-    q: `state="${filters.state}"${reviewerQ}${textQ}`,
+    q,
     page: `${filters.pageNum ?? 1}`,
   };
   const url =

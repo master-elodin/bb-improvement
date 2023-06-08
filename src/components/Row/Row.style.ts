@@ -26,7 +26,4 @@ export const rowStyle = {
     height: '100%',
     'padding-left': '30px',
   },
-  '.row__last-activity': {
-    'padding': '4px 0 0 16px',
-  }
 };
