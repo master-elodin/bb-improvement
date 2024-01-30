@@ -116,6 +116,7 @@ export const getAllUsers = async (): Promise<IUser[]> => {
 
 export const getJiraIssues = async (prId: number): Promise<IJiraData[]> => {
   if (!isProd) {
+    // @ts-ignore: issue actually does exist, but typescript doesn't think it does
     return jiraIssues.values!.map((v) => v.issue) as IJiraData[];
   }
 
