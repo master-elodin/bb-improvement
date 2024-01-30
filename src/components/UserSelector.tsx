@@ -21,7 +21,7 @@ const UserSelector = ({ onUserChange, loggedInUserUuid, selectedUserUuid, allUse
     const meLabel = !realCurrentUser ? 'Me' : `Me (${realCurrentUser.display_name})`;
     options.unshift({ label: meLabel, value: loggedInUserUuid });
     return options;
-  }, [allUsersById]);
+  }, [allUsersById, loggedInUserUuid]);
 
   return (
     <FilterDropdown

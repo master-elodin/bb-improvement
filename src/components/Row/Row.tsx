@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ICol, IRow, IUser } from '../../types';
 import RowTitle from './RowTitle/RowTitle';
-import LastActivity from './LastActivity';
+import LastActivity from './LastActivity/LastActivity';
 import Reviewers from './Reviewers/Reviewers';
 import BuildStatus from './BuildStatus/BuildStatus';
 import JiraIssue from './JiraIssue/JiraIssue';

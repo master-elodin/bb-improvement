@@ -24,6 +24,7 @@ const prStateOptions = [
   { label: 'Open', value: 'OPEN' },
   { label: 'Merged', value: 'MERGED' },
   { label: 'Declined', value: 'DECLINED' },
+  { label: 'Any', value: '' },
 ];
 
 interface IProps {
@@ -213,9 +214,6 @@ const AppHeader = ({
         <span className={'app-header__title-text'}>List Improver</span>
         <span className={'app-header__version-number'}>v{buildNumber}</span>
       </div>
-      {/*{!loading && (*/}
-      {/*  <UserStats userUuid={currentUser.uuid} />*/}
-      {/*)}*/}
       <PageSelector
         visible={showPages}
         currentPage={apiFilters.pageNum}

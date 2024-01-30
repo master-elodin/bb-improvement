@@ -17,6 +17,7 @@ import { popoverStyle } from './components/Popover/Popover.style';
 import { buildStatusStyle } from './components/Row/BuildStatus/BuildStatus.style';
 import { jiraIssueStyle } from './components/Row/JiraIssue/JiraIssue.style';
 import { rowStyle } from './components/Row/Row.style';
+import { lastActivityStyle } from './components/Row/LastActivity/LastActivity.style';
 
 export const initStyles = () => {
   InlineStyle({
@@ -47,6 +48,7 @@ export const initStyles = () => {
     ...dropdownStyle,
     ...iconsStyle,
     ...jiraIssueStyle,
+    ...lastActivityStyle,
     ...modalStyle,
     ...popoverStyle,
     ...regexFilterStyle,
