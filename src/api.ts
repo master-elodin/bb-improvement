@@ -84,6 +84,28 @@ export const getStatuses = async (commits: string[]): Promise<IStatusResponse> =
   return (await res.json()) as IStatusResponse;
 };
 
+export interface ISyncInfo {
+  behind: number;
+  behind_truncated: boolean;
+}
+
+export const getCommitsBehind = async (prId: number): Promise<ISyncInfo> => {
+  if (!isProd) {
+    return { behind: 0, behind_truncated: false } as ISyncInfo;
+  }
+  const res = await fetch(
+    `https://bitbucket.org/!api/internal/repositories/${workspace}/${workspace}/pullrequests/${prId}/branch-sync-info`,
+    {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'X-Bitbucket-Frontend': 'frontbucket',
+      },
+    },
+  );
+  return (await res.json()) as ISyncInfo;
+};
+
 interface IMemberResponse {
   values: IUser[];
   next?: string;

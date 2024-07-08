@@ -27,4 +27,10 @@ export const rowTitleStyles = {
     'font-style': 'italic',
     'text-decoration': 'none !important',
   },
+  '.row-title__branch-sync-info': {
+    'padding-left': '8px',
+  },
+  '.row-title__branch-sync-info--warn': {
+    color: 'red',
+  },
 };
