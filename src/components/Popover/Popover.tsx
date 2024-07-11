@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FocusEvent, useEffect, useState } from 'react';
-import { cx, handleBlur } from '../../utils';
+import { handleBlur } from '../../utils';
 
 interface IProps {
   trigger: React.ReactNode;

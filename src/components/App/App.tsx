@@ -157,7 +157,7 @@ function App({ loggedInUserUuid, savedInPlaceFilters }: IProps) {
         <div className={'app__content-body'}>
           <div className={'app__content-header'}>
             {columns.map((col) => (
-              <div key={col.label} className={`app__content-header-col`} style={{width: `var(--width-${col.id})`}}>
+              <div key={col.label} className={`app__content-header-col`} style={{ width: `var(--width-${col.id})` }}>
                 <span className={'app__content-header-label'}>{col.label}</span>
                 {!col.hideSort && (
                   <div className={'app__content-header-col-actions'}>
@@ -177,10 +177,10 @@ function App({ loggedInUserUuid, savedInPlaceFilters }: IProps) {
           )}
           {!isLoading && (
             <div className={'app__content-rows'}>
-              {!isLoading &&
-                visibleRows.map((val: IRow, index) => (
-                  <Row key={index} val={val} currentUser={allUsersById[inPlaceFilters.userUuid]} />
-                ))}
+              {visibleRows.map((val: IRow, index) => (
+                <Row key={index} val={val} currentUser={allUsersById[inPlaceFilters.userUuid]} />
+              ))}
+              {visibleRows.length === 0 && <div className={'app__content-empty'}>Nothing to see here!</div>}
             </div>
           )}
         </div>

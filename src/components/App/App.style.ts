@@ -108,6 +108,13 @@ export const appStyle = {
     'overflow-y': 'auto',
     width: '100%',
   },
+  '.app__content-empty': {
+    'align-items': 'center',
+    display: 'flex',
+    'font-size': '4em',
+    height: '100%',
+    'justify-content': 'center',
+  },
   '.app__sort-arrows': {
     display: 'flex',
     'justify-content': 'flex-end',
