@@ -34,6 +34,9 @@ export interface IPullRequest {
     commit: {
       hash: string;
     };
+    branch: {
+      name: string;
+    };
   };
   destination: {
     branch: {
@@ -152,7 +155,7 @@ export interface IJiraData {
   };
   site: {
     cloudUrl: string;
-  }
+  };
   assignee: {
     displayName: string; // 'Tim VanDoren';
     avatarUrls: {

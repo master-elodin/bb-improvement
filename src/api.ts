@@ -32,6 +32,17 @@ const reviewingPRs: Record<string, string> = {
 
 let isProd = false;
 export const setIsProd = (newVal: boolean) => (isProd = newVal);
+const getCsrfToken = (): string => {
+  return (
+    document.cookie
+      .split(';')
+      .map((v) => {
+        const parts = v.split('=');
+        return { key: parts[0], value: parts[1] };
+      })
+      .find((v) => v.key === 'csrftoken')?.value ?? ''
+  );
+};
 
 export const getPullRequests = async (filters: IAPIFilters): Promise<IPullRequestResponse> => {
   if (!isProd) {
@@ -91,7 +102,7 @@ export interface ISyncInfo {
 
 export const getCommitsBehind = async (prId: number): Promise<ISyncInfo> => {
   if (!isProd) {
-    return { behind: 0, behind_truncated: false } as ISyncInfo;
+    return { behind: 3, behind_truncated: false } as ISyncInfo;
   }
   const res = await fetch(
     `https://bitbucket.org/!api/internal/repositories/${workspace}/${workspace}/pullrequests/${prId}/branch-sync-info`,
@@ -104,6 +115,79 @@ export const getCommitsBehind = async (prId: number): Promise<ISyncInfo> => {
     },
   );
   return (await res.json()) as ISyncInfo;
+};
+
+interface ICompareResponse {
+  taskId: string;
+  url: string;
+}
+
+export const syncWithDest = async (sourceBranchName: string, destBranchName: string): Promise<ICompareResponse> => {
+  const data = {
+    commit_message: `Merged ${destBranchName} into ${sourceBranchName}`,
+    close_branch: false,
+    source: `${workspace}/${workspace}::${destBranchName}`,
+    dest: `${workspace}/${workspace}::${sourceBranchName}`,
+    event: 'list:sync',
+  };
+
+  if (!isProd) {
+    return { taskId: '', url: '' };
+  }
+  const res = await fetch(`https://bitbucket.org/${workspace}/${workspace}/compare`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      'X-Bitbucket-Frontend': 'frontbucket',
+      'X-CSRFToken': getCsrfToken(),
+    },
+    body: Object.entries(data)
+      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+      .join('&'),
+  });
+
+  return (await res.json()) as ICompareResponse;
+};
+
+interface ISyncStatus {
+  complete: boolean;
+}
+
+export const getSyncStatus = async (url: string): Promise<boolean> => {
+  if (!isProd) {
+    return true;
+  }
+  const res = await fetch(`https://bitbucket.org${url}`, {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      'X-Bitbucket-Frontend': 'frontbucket',
+    },
+  });
+  return ((await res.json()) as ISyncStatus).complete;
+};
+
+export interface IConflictsResponse {
+  path: string;
+  message: string;
+  scenario: string;
+}
+
+export const getConflicts = async (prId: number): Promise<IConflictsResponse[]> => {
+  if (!isProd) {
+    return [];
+  }
+  const res = await fetch(
+    `https://bitbucket.org/!api/internal/repositories/${workspace}/${workspace}/pullrequests/${prId}/conflicts`,
+    {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'X-Bitbucket-Frontend': 'frontbucket',
+      },
+    },
+  );
+  return (await res.json()) as IConflictsResponse[];
 };
 
 interface IMemberResponse {

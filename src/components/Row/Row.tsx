@@ -12,7 +12,7 @@ export const columns: ICol[] = [
     id: 'name',
     label: 'Name',
     getValue: (val: IRow) => val.title,
-    getRendered: (val: IRow) => <RowTitle val={val} />,
+    getRendered: (val: IRow) => <RowTitle row={val} />,
   },
   {
     id: 'jira',

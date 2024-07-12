@@ -18,14 +18,17 @@ import { buildStatusStyle } from './components/Row/BuildStatus/BuildStatus.style
 import { jiraIssueStyle } from './components/Row/JiraIssue/JiraIssue.style';
 import { rowStyle } from './components/Row/Row.style';
 import { lastActivityStyle } from './components/Row/LastActivity/LastActivity.style';
+import { branchSyncInfoStyles } from './components/Row/RowTitle/BranchSyncInfo.style';
 
 export const initStyles = () => {
   InlineStyle({
     body: {
+      '--spacing-md': '12px',
+      '--text-size': '14px',
       'background-color': 'var(--color-background-alt)',
       'font-family':
         '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Fira Sans,Droid Sans,Helvetica Neue,sans-serif',
-      'font-size': '14px',
+      'font-size': 'var(--text-size)',
       margin: 0,
     },
     'a, .link': {
@@ -41,6 +44,7 @@ export const initStyles = () => {
     ...appStyle,
     ...appHeaderStyle,
     ...buildStatusStyle,
+    ...branchSyncInfoStyles,
     ...buttonStyle,
     ...darkModeToggleStyle,
     ...drawerFiltersStyle,
