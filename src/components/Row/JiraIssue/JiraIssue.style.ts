@@ -28,8 +28,8 @@ export const jiraIssueStyle = {
   // popover
   '.jira-issue-popover:not(:first-child)': {
     'border-top': '1px solid var(--color-border)',
-    'margin-top': '12px',
-    'padding-top': '12px',
+    'margin-top': 'var(--spacing-md)',
+    'padding-top': 'var(--spacing-md)',
   },
   '.jira-issue-popover p': {
     margin: '0 0 8px 0',

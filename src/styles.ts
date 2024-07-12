@@ -24,6 +24,7 @@ export const initStyles = () => {
   InlineStyle({
     body: {
       '--spacing-md': '12px',
+      '--spacing-lg': '16px',
       '--text-size': '14px',
       'background-color': 'var(--color-background-alt)',
       'font-family':

@@ -3,7 +3,7 @@ import { overflowEllipsis } from '../../../styleUtils';
 export const rowTitleStyles = {
   '.row-title': {
     display: 'flex',
-    gap: '12px',
+    gap: 'var(--spacing-md)',
   },
   '.row-title__text': {
     overflow: 'hidden',

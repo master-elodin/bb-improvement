@@ -30,7 +30,7 @@ export const savedRegexDropdownStyle = {
   '.saved-regex__actions': {
     display: 'flex',
     'flex-basis': '27px',
-    gap: '12px',
+    gap: 'var(--spacing-md)',
     'justify-content': 'flex-end',
   },
   '.saved-regex__actions .button': {

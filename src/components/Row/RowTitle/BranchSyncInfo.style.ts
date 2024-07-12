@@ -10,7 +10,7 @@ export const branchSyncInfoStyles = {
     display: 'flex',
     'flex-direction': 'column',
     'font-size': 'var(--text-size)',
-    gap: '12px',
+    gap: 'var(--spacing-md)',
     height: '100%',
   },
   '.branch-sync__loading-indicator': {
@@ -28,7 +28,10 @@ export const branchSyncInfoStyles = {
     'white-space': 'nowrap',
   },
   '.branch-sync__content': {
+    display: 'flex',
+    'flex-direction': 'column',
     'flex-grow': 1,
+    height: 'calc(100% - 50px)',
   },
   '.branch-sync__detail': {
     display: 'flex',
@@ -36,13 +39,16 @@ export const branchSyncInfoStyles = {
   },
   '.branch-sync__actions': {
     display: 'flex',
-    gap: '12px',
+    gap: 'var(--spacing-md)',
     'justify-content': 'flex-end',
   },
   '.branch-sync__conflicts-container': {
     display: 'flex',
     'flex-direction': 'column',
-    gap: '12px',
+    'flex-grow': 1,
+    gap: 'var(--spacing-md)',
+    'overflow-y': 'auto',
+    'padding-top': 'var(--spacing-lg)',
   },
   '.branch-sync__conflicts-container > div': {
     color: 'red',
