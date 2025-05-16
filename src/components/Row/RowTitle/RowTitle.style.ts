@@ -10,7 +10,23 @@ export const rowTitleStyles = {
   },
   '.row-title__pr-name': {
     ...overflowEllipsis,
+    'align-items': 'center',
+    'display': 'flex',
+    'gap': '4px',
     'padding-bottom': '3px',
+  },
+  '.row-title__draft': {
+    'align-items': 'center',
+    'background': 'var(--tag-background)',
+    'border-radius': '3px',
+    'box-sizing': 'border-box',
+    'color': 'var(--tag-color)',
+    'display': 'inline-flex',
+    'font-size': '11px',
+    'font-weight': '700',
+    'height': '16px',
+    'padding': '2px 4px',
+    'white-space': 'nowrap',
   },
   '.row-title img': {
     'clip-path': 'circle()',

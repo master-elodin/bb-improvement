@@ -16,6 +16,8 @@ const lightModeVars = {
   '--dropdown-border-radius': '3px',
   '--shadow-filter-highlight': '0 0 7px var(--color-highlight)',
   '--shadow-basic': 'var(--color-box-shadow) 3px 6px 6px, var(--color-box-shadow) -3px 3px 5px',
+  '--tag-background': '#44546f',
+  '--tag-color': '#ffffff',
 };
 const darkModeVars = {
   '--color-background': '#000a1f',
@@ -29,6 +31,8 @@ const darkModeVars = {
   '--color-input-icon': '#0A1E47',
   '--shadow-filter-highlight':
     '0 0 7px var(--color-highlight), 0 1px 6px var(--color-highlight), 0 1px 6px var(--color-highlight)',
+  '--tag-background': '#9fadbc',
+  '--tag-color': '#1d2125',
 };
 
 const colWidthsFixed = {

@@ -60,6 +60,7 @@ export interface IPullRequest {
     self: ILink;
     html: ILink;
   };
+  draft: boolean;
 }
 
 export interface IPullRequestResponse {
