@@ -14,6 +14,7 @@ const RowTitle = ({ row }: IProps) => {
       <img src={row.author.links.avatar.href} alt={row.author.display_name} />
       <div className={'row-title__text'}>
         <div className={'row-title__pr-name'}>
+          {row.draft && <span className={'row-title__draft'}>DRAFT</span>}
           <a href={row.links.html.href} target={'_blank'} rel='noreferrer'>
             {row.title}
           </a>

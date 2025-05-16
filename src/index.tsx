@@ -25,6 +25,7 @@ const defaultInPlaceFilters: IInPlaceFilters = {
   repo: 'any',
   branch: 'any',
   build: 'any',
+  draft: 'any',
   ...savedInPlaceFilters,
   userUuid: loggedInUserUuid,
   compiledRegex: sanitizeRegex(savedInPlaceFilters.regex ?? ''),

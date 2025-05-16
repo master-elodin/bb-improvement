@@ -49,6 +49,17 @@ const passesBuild = (row: IRow, filters: IInPlaceFilters) => {
   return filters.build === 'any' || filters.build === row.buildStatus?.state;
 };
 
+const passesDraft = (row: IRow, filters: IInPlaceFilters) => {
+  switch (filters.draft) {
+    case 'any':
+      return true;
+    case 'hide':
+      return !row.draft;
+    case 'only':
+      return row.draft;
+  }
+};
+
 const allFilters: RowFilter[] = [
   passesTasks,
   passesNeedsReview,
@@ -56,6 +67,7 @@ const allFilters: RowFilter[] = [
   passesRepo,
   passesRegex,
   passesBuild,
+  passesDraft,
 ];
 
 export const passesFilters = (row: IRow, filters: IInPlaceFilters) => {
