@@ -121,6 +121,7 @@ export interface IInPlaceFilters {
   branch: 'any' | string;
   repo: 'any' | string;
   build: 'any' | BuildState;
+  draft: 'any' | 'hide' | 'only';
 }
 
 export interface ISavedRegex {

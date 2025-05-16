@@ -34,6 +34,12 @@ const buildOptions: { label: string; value: IInPlaceFilters['build'] }[] = [
   { label: 'Failed', value: 'FAILED' },
 ];
 
+const draftOptions: { label: string; value: IInPlaceFilters['draft'] }[] = [
+  { label: 'All', value: 'any' },
+  { label: 'Hide drafts', value: 'hide' },
+  { label: 'Only drafts', value: 'only' },
+];
+
 const DrawerFiltersInPlace = ({ inPlaceFilters, summarized, onFilterSelect, clearFilters, isLoading }: IProps) => {
   const targets = useMemo(
     () => [
@@ -106,6 +112,13 @@ const DrawerFiltersInPlace = ({ inPlaceFilters, summarized, onFilterSelect, clea
         options={buildOptions}
         value={inPlaceFilters.build}
         onSelect={(newVal: string) => onFilterSelect(newVal, 'build')}
+        disabled={isLoading}
+      />
+      <FilterDropdown
+        label={'Draft'}
+        options={draftOptions}
+        value={inPlaceFilters.draft}
+        onSelect={(newVal: string) => onFilterSelect(newVal, 'draft')}
         disabled={isLoading}
       />
     </div>

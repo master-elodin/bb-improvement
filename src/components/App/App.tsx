@@ -44,6 +44,7 @@ const defaultInPlaceFilter: Partial<IInPlaceFilters> = {
   branch: 'any',
   repo: 'any',
   build: 'any',
+  draft: 'any',
 };
 
 interface IProps {
