@@ -11,6 +11,8 @@ export const InlineStyle = (styleConfig: IStyle) => {
       x.parentNode?.removeChild(x);
     }
   });
+  // @ts-ignore: this will work in actual bitbucket but not locally
+  jQuery('html').attr('data-theme', '');
 
   let styleString = '';
   Object.keys(styleConfig).forEach((selector) => {
